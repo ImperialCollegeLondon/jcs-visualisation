@@ -1,0 +1,31 @@
+function visualiseCoordinateSystem(T, colors)
+    % Extract the rotational part (3x3 matrix) from the 4x4 transformation matrix
+    rotationMatrix = T(1:3, 1:3);
+    
+    % Extract the translational part (column vector) from the 4x4 transformation matrix
+    translationVector = T(1:3, 4);
+    % Define original unit vectors
+    unitVectors = eye(3);
+
+    % Apply the rotation matrix to the unit vectors
+    transformedVectors = rotationMatrix * unitVectors;
+
+    % Translate the vectors by the translation component
+    transformedVectors = transformedVectors + translationVector';
+%     transformedVectors=transformedVectors;
+    
+    % Plot the transformed coordinate axes
+    hold on;
+
+    for i = 1:3
+        quiver3(translationVector(1), translationVector(2), translationVector(3), transformedVectors(1, i), transformedVectors(2, i), transformedVectors(3, i), colors{i}, 'LineWidth', 2); % Transformed axes
+    end
+
+    xlabel('X');
+    ylabel('Y');
+    zlabel('Z');
+    legend('T(X)', 'T(Y)', 'T(Z)');
+    hold off;
+    axis equal;
+    grid on;
+end
