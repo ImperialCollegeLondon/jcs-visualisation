@@ -35,6 +35,14 @@ function matrix = config_matrix(file_path, target_string)
         % Split the found line into numeric values and convert into a 4x4 matrix
         values = regexp(found_line, '[" ]', 'split');
 
+        if strcmp(values(end-1), 'Right')
+            matrix = true;
+            return
+        elseif strcmp(values(end-1), 'Left')
+            matrix = false;
+            return
+        end
+
         % Remove empty strings and convert to numeric values
         values = str2double(values(~cellfun('isempty', values)));
 
