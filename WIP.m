@@ -8,27 +8,27 @@ clear
 % [config_file,config_path] = uigetfile('C:\Users\sholthof\Desktop\Imperial\PHD\Data\SH2627\SH27\005_Optimised_dynamic_lax_1BW\Configuration\Project');
 
 %% Load in Setup cfg file
-Intact_folderPath = ['C:\Users\sholthof\OneDrive - Imperial College London\Imperial\PHD\Matlab\CS calculations\SH38\008_Native_Flexion 0-90\Configuration\Project.sVprj'];
-Attune_folderPath='C:\Users\sholthof\OneDrive - Imperial College London\Imperial\PHD\Matlab\CS calculations\SH38\014_Attune_optimised_dynamic_lax_1BW\Configuration\Project.sVprj';
-Persona_folderPath='C:\Users\sholthof\Desktop\Imperial\PHD\Matlab\CS calculations\SH25\035_Persona_optimised_dynamic_lax_1BW\Configuration\Project.sVprj';
-Triathlon_folderPath='C:\Users\sholthof\Desktop\Imperial\PHD\Matlab\CS calculations\SH25\039_Triathlon_optimised_dynamic_lax_1BW\Configuration\Project.sVprj';
+% Intact_folderPath = ['C:\Users\sholthof\OneDrive - Imperial College London\Imperial\PHD\Matlab\CS calculations\SH38\008_Native_Flexion 0-90\Configuration\Project.sVprj'];
+
+Attune_folderPath='../data-processing/data/JJH15/075_UKA+ACL_flex-ext_1BW_5IE_90AP/Configuration/Project.sVprj';
+% Persona_folderPath='C:\Users\sholthof\Desktop\Imperial\PHD\Matlab\CS calculations\SH25\035_Persona_optimised_dynamic_lax_1BW\Configuration\Project.sVprj';
+% Triathlon_folderPath='C:\Users\sholthof\Desktop\Imperial\PHD\Matlab\CS calculations\SH25\039_Triathlon_optimised_dynamic_lax_1BW\Configuration\Project.sVprj';
 % Define the filter to show all files using the wildcard '*.*'
 [config_file, config_path] = uigetfile(fullfile(Attune_folderPath, '*.*'), 'Select a file');
 
 %% Extract relevant static matrices from cfg file
-T_W1_W2=Config_matrix(append(config_path,config_file),'T_World1_World2'); % Transformation matrix between World 1 (Certus camera) and World 2 (Robot)
-T_S1_RB1=Config_matrix(append(config_path,config_file),'T_Sensor1_RB1'); %Transformation from Certus to Rigid Body 1 (Femur)
-T_S2_RB2=Config_matrix(append(config_path,config_file),'T_Sensor2_RB2'); %Transformation from Sensor 2 (Load Cell/Robot end effector) to Rigid Body 2 (Tibia)
-T_S1_RB1_Orig=Config_matrix(append(config_path,config_file),'Initial T Sen1_RB1');
-T_S2_RB2_Orig=Config_matrix(append(config_path,config_file),'Initial T Sen2_RB2');
-Position_offset=Config_matrix(append(config_path,config_file),'Position Offset'); %Neutral position offset, defined as the zero point to calculate kinematics
-Position_offset_orig=Config_matrix('C:\Users\sholthof\OneDrive - Imperial College London\Imperial\PHD\Matlab\CS calculations\SH38\008_Native_Flexion 0-90\Configuration\Project.sVprj\State.cfg','Position Offset');
+T_W1_W2=Config_matrix(fullfile(config_path,config_file),'T_World1_World2'); % Transformation matrix between World 1 (Certus camera) and World 2 (Robot)
+T_S1_RB1=Config_matrix(fullfile(config_path,config_file),'T_Sensor1_RB1'); %Transformation from Certus to Rigid Body 1 (Femur)
+T_S2_RB2=Config_matrix(fullfile(config_path,config_file),'T_Sensor2_RB2'); %Transformation from Sensor 2 (Load Cell/Robot end effector) to Rigid Body 2 (Tibia)
+T_S1_RB1_Orig=Config_matrix(fullfile(config_path,config_file),'Initial T Sen1_RB1');
+T_S2_RB2_Orig=Config_matrix(fullfile(config_path,config_file),'Initial T Sen2_RB2');
+Position_offset=Config_matrix(fullfile(config_path,config_file),'Position Offset'); %Neutral position offset, defined as the zero point to calculate kinematics
+Position_offset_orig=Config_matrix(fullfile(config_path, config_path),'Position Offset');
 Position_offset=[Position_offset(1:3)*1000;Position_offset(4:6)*180/pi];
 Position_offset_orig=[Position_offset_orig(1:3)*1000;Position_offset_orig(4:6)*180/pi];
 
 %% load in experiment run
-input_file=tdmsread(['C:\Users\sholthof\OneDrive - Imperial College London\Imperial\PHD\Matlab\CS calculations\SH38\014_Attune_optimised_dynamic_lax_1BW\Data\012_Attune_optimised_dynamic_lax_1BW_90N_ant_flex_1of1_1_Main_processed.tdms']);
-
+input_file=tdmsread("/home/jj/Documents/Education/doctorate/uka-aclr/data-processing/data/JJH15/075_UKA+ACL_flex-ext_1BW_5IE_90AP/Data/test.tdms");
 %% Extract JCS kinematics and robot positions
 [JCS_flex,JCS_ext,RP_flex,RP_ext]=tdms_extraction(input_file);
 [JCS_flex_test,JCS_ext_test,JCS_flex_dig,JCS_ext_dig]=tdms_data_extraction_optvsdig(input_file);
