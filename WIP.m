@@ -24,7 +24,7 @@ Position_offset=[Position_offset(1:3)*1000;Position_offset(4:6)*180/pi];
 %% Determine if left or right knee:
 setup = fullfile(config, "Setup.cfg");
 right = Config_matrix(setup, 'Specimen Side');
-
+clear setup state config 
 %% Generate list of all trajectories
 [root, ~, ~] = fileparts(digitised_root);
 % trajectories = dir(fullfile(root, "**/*.tdms"));
@@ -44,15 +44,17 @@ is_run = contains(run_conditions, desiredOrder);
 %% load in experiment run
 
 for j = 1:length(input_path)
-    if ~is_run % These are usually runs pre optimisation. Comment out this block if all data should be processed.
-        break
+    if ~is_run(j) || contains(file_name{j}, "IE_optimise") % These are usually runs pre optimisation. Comment out this block if all data should be processed.
+        disp(strcat("Skipping: ", file_name{j}));
+        continue
     end
+    disp(strcat("Running: ", file_name{j}));
     input_file = tdmsread(input_path{j});
 
     %% Extract JCS kinematics and robot positions
     [JCS_flex,JCS_ext,RP_flex,RP_ext]=tdms_extraction(input_file);
     JCS_dig = [JCS_flex; JCS_ext];
-    robot_pos = [RP_flex, RP_ext];
+    robot_pos = [RP_flex; RP_ext];
     T_W2_S2=coordinate2matrix(robot_pos);
 
     %% calculate TIBIA FROM ABOVE+JCS
@@ -77,7 +79,7 @@ for j = 1:length(input_path)
 
     columnNames = {'Flexion', 'Posterior', 'Medial', 'Superior', 'Internal', 'Valgus'};
     kinematics_final=horzcat(final_XYZ,angles_dig);
-%     kinematics_final=[flex_kinematics;ext_kinematics];
+    % kinematics_final=[flex_kinematics;ext_kinematics];
     kinematics_final=kinematics_final(:,new_order);
     kinematics_final=kinematics_final(1:length(JCS_dig),:);
 
@@ -87,9 +89,9 @@ for j = 1:length(input_path)
     JCS_final=array2table(JCS_dig,'VariableNames', columnNames); 
     error=array2table(error,'VariableNames', columnNames); 
 
-    all_kinematics{i} = kinematics_final;
-    all_JCS{i}=JCS_final;
-    all_error{i}=error;
+    all_kinematics{j} = kinematics_final;
+    all_JCS{j}=JCS_final;
+    all_error{j}=error;
 
 
     % Create a table with the combined matrix and assign column names
@@ -100,10 +102,10 @@ for j = 1:length(input_path)
     % error=array2table(error, 'VariableNames', columnNames);
 
 %% Write to CSV
-
-    writetable(JCS_final, fullfile(file_path, file_name{j} + "_jcs_final.csv"))
-    writetable(JCS_flex, fullfile(file_path, file_name{j} + "_jcs_flex.csv"))
-    writetable(JCS_ext, fullfile(file_path, file_name{j} + "_jcs_ext.csv"))
+    traj_folder = {trajectories.folder}';
+    writetable(all_kinematics{j}, fullfile(traj_folder{j}, file_name{j} + "_kinematics.csv"))
+    writetable(all_JCS{j}, fullfile(traj_folder{j}, file_name{j} + "_jcs.csv"))
+    writetable(all_error{j}, fullfile(traj_folder{j}, file_name{j} + "_error.csv"))
 end
 
 function term = extract_condition(names)
