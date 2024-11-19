@@ -11,9 +11,11 @@ unzip(fullfile(config, 'Project.sVprj'), config);
 state = fullfile(config, "State.cfg");
 
 %% Extract relevant static matrices from cfg file
-T_W1_W2=Config_matrix(state,'T_World1_World2'); % Transformation matrix between World 1 (Certus camera) and World 2 (Robot)
-T_S1_RB1=Config_matrix(state,'T_Sensor1_RB1'); %Transformation from Certus to Rigid Body 1 (Femur)
-T_S2_RB2=Config_matrix(state,'T_Sensor2_RB2'); %Transformation from Sensor 2 (Load Cell/Robot end effector) to Rigid Body 2 (Tibia)
+W1_T_W2=Config_matrix(state,'T_World1_World2'); % Transformation matrix between World 1 (Certus camera) and World 2 (Robot)
+S1_T_RB1=Config_matrix(state,'T_Sensor1_RB1'); %Transformation from Certus to Rigid Body 1 (Femur)
+S2_T_RB2=Config_matrix(state,'T_Sensor2_RB2'); %Transformation from Sensor 2 (Load Cell/Robot end effector) to Rigid Body 2 (Tibia)
+RB2opt_T_RB2orig=Config_matrix(state,'T RB2-OPT_RB2-Orig'); % Transformation matrix 
+RB1opt_T_RB1orig=Config_matrix(state,'T RB1-OPT_RB1-Orig');
 % T_S1_RB1_Orig=Config_matrix(state,'Initial T Sen1_RB1');
 % T_S2_RB2_Orig=Config_matrix(state,'Initial T Sen2_RB2');
 Position_offset=Config_matrix(state,'Position Offset'); %Neutral position offset, defined as the zero point to calculate kinematics
@@ -53,59 +55,37 @@ for j = 1:length(input_path)
 
     %% Extract JCS kinematics and robot positions
     [JCS_flex,JCS_ext,RP_flex,RP_ext]=tdms_extraction(input_file);
-    JCS_dig = [JCS_flex; JCS_ext];
+
     robot_pos = [RP_flex; RP_ext];
-    T_W2_S2=coordinate2matrix(robot_pos);
+    W2_T_S2=coordinate2matrix(robot_pos); % End effector in Robot coordinate system
 
-    %% calculate TIBIA FROM ABOVE+JCS
-    for i=1:size(T_W2_S2,1)
-        T_RB1_RB2{i,1}=T_S1_RB1\T_W1_W2*T_W2_S2{i,1}*T_S2_RB2; %calculate transform from TIBIA (RB2) to FEMUR (RB1) 
-        T_RB2_RB1{i,1}=T_RB1_RB2{i,1}^-1;
-        [angles_dig(i,:),XYZ_dig(i,:)]=rotationsAndTranslations_v2(T_RB1_RB2{i,1},right);
-
-        final_XYZ(i,:) = XYZ_dig(i,:)*1000; % Convert translation from m to mm
-        % Tibia_W2{i,1}=T_W2_S2{i,1}*T_S2_RB2;
-        % Femur_W2{i,1}=T_W1_W2\T_S1_RB1;
-        %
-        % Tibia_W2_dig{i,1}=T_W2_S2{i,1}*T_S2_RB2_Orig;
-        % Femur_W2_dig{i,1}=T_W1_W2\T_S1_RB1_Orig;
-
+    %% calculate transform from TIBIA (RB2) to FEMUR (RB1).
+     % i.e., femur in tibial frame of reference.
+    for i=1:size(W2_T_S2,1)
+        t_T_f{i,1} = ...
+            S1_T_RB1 \ W1_T_W2 * ... % == RB1_T_W2; Robot in tibia frame of reference
+            W2_T_S2{i,1}*S2_T_RB2; % == W2_T_RB2; Tibia in Robot frame of reference
+                                    % Inverting the optimisation would go here
+        kinematics_local(i,:) = rotationsAndTranslations_v3(t_T_f{i,1},right);
+        
     end
+    %% Calculate kinematics
+    JCS{j} = [struct2table(JCS_flex); struct2table(JCS_ext)];
+    kinematics_local=kinematics_local(1:height(JCS{j}),:);
+    kinematics{j}= struct2table(kinematics_local);
+    % Evidence of two errors:
+    % 1: Kinematics flexion angle is negative
+    % 2: kinematics translations were being multiplied by 1000 (m => mm),
+    % which resulted in meaningless error. JCS is still in supposedly m,
+    % but the values line up with expectations in mm.
+    error{j}=kinematics{j}-JCS{j}; 
 
-    %% Calculate JCS kinematics
-
-    % Combine the matrices horizontally
-    new_order=[4,2,1,3,6,5]; %change order of columns
-
-    columnNames = {'Flexion', 'Posterior', 'Medial', 'Superior', 'Internal', 'Valgus'};
-    kinematics_final=horzcat(final_XYZ,angles_dig);
-    % kinematics_final=[flex_kinematics;ext_kinematics];
-    kinematics_final=kinematics_final(:,new_order);
-    kinematics_final=kinematics_final(1:length(JCS_dig),:);
-
-    error=kinematics_final-JCS_dig;
-
-    kinematics_final= array2table(kinematics_final, 'VariableNames', columnNames); 
-    JCS_final=array2table(JCS_dig,'VariableNames', columnNames); 
-    error=array2table(error,'VariableNames', columnNames); 
-
-    all_kinematics{j} = kinematics_final;
-    all_JCS{j}=JCS_final;
-    all_error{j}=error;
-
-
-    % Create a table with the combined matrix and assign column names
-    JCS_final = array2table(JCS_final, 'VariableNames', columnNames);
-    % JCS_dig_final= array2table(JCS_dig_final, 'VariableNames', columnNames);
-    JCS_flex = array2table(JCS_flex, 'VariableNames', columnNames);
-    JCS_ext =array2table(JCS_ext, 'VariableNames', columnNames);
-    % error=array2table(error, 'VariableNames', columnNames);
 
 %% Write to CSV
     traj_folder = {trajectories.folder}';
-    writetable(all_kinematics{j}, fullfile(traj_folder{j}, file_name{j} + "_kinematics.csv"))
-    writetable(all_JCS{j}, fullfile(traj_folder{j}, file_name{j} + "_jcs.csv"))
-    writetable(all_error{j}, fullfile(traj_folder{j}, file_name{j} + "_error.csv"))
+    writetable(kinematics{j}, fullfile(traj_folder{j}, file_name{j} + "_kinematics.csv"))
+    writetable(JCS{j}, fullfile(traj_folder{j}, file_name{j} + "_jcs.csv"))
+    writetable(error{j}, fullfile(traj_folder{j}, file_name{j} + "_error.csv"))
 end
 
 function term = extract_condition(names)

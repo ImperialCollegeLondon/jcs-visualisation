@@ -124,8 +124,23 @@ function [JCS_flex,JCS_ext,robot_pos_flex,robot_pos_ext] = tdms_extraction(data_
             robot_pos_yaw_flex = [robot_pos_yaw_flex,robot_pos_yaw_all(flex_ind)];
             robot_pos_yaw_ext = [robot_pos_yaw_ext, robot_pos_yaw_all(peakFlex+ext_ind-1)];
 %     disp(flex_ext(ext_ind))
- JCS_flex=[flex_flex(flex_ind),ap_flex',ml_flex',si_flex',ir_flex',vv_flex'];
- JCS_ext=[flex_ext(ext_ind),ap_ext',ml_ext',si_ext',ir_ext',vv_ext'];
+ % JCS_flex=[flex_flex(flex_ind),ap_flex',ml_flex',si_flex',ir_flex',vv_flex'];
+ JCS_flex.Flexion = flex_flex(flex_ind);
+ JCS_flex.Posterior = ap_flex';
+ JCS_flex.Medial = ml_flex';
+ JCS_flex.Superior = si_flex';
+ JCS_flex.Internal = ir_flex';
+ JCS_flex.Valgus = vv_flex';
+
+
+ % JCS_ext=[flex_ext(ext_ind),ap_ext',ml_ext',si_ext',ir_ext',vv_ext'];
+ JCS_ext.Flexion = flex_ext(ext_ind);
+ JCS_ext.Posterior = ap_ext';
+ JCS_ext.Medial = ml_ext';
+ JCS_ext.Superior = si_ext';
+ JCS_ext.Internal = ir_ext';
+ JCS_ext.Valgus = vv_ext';
+
  robot_pos_flex=[robot_pos_x_flex,robot_pos_y_flex,robot_pos_z_flex,robot_pos_roll_flex,robot_pos_pitch_flex,robot_pos_yaw_flex];
  robot_pos_ext=[robot_pos_x_ext,robot_pos_y_ext,robot_pos_z_ext,robot_pos_roll_ext,robot_pos_pitch_ext,robot_pos_yaw_ext];
  
