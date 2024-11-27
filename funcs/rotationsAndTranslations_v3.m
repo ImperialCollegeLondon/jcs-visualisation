@@ -12,22 +12,12 @@ if right
     flex = -atan2(R(2,3),R(3,3))*180/pi;
     Valg = asind(R(1,3));
     IE = -atan2(R(1,2),R(1,1))*180/pi;
-
-    % Original code
-    % Rx = atan2(R(2,3),R(3,3))*180/pi;
-    % Ry = asind(R(1,3));
-    % Rz = atan2(R(1,2),R(1,1))*180/pi;
 else
-    flex = atan2(R(2,3),R(3,3))*180/pi;
+    flex = -atan2(R(2,3),R(3,3))*180/pi;
     Valg = -asind(R(1,3));
-    IE = -atan2(R(1,2),R(1,1))*180/pi;
+    IE = atan2(R(1,2),R(1,1))*180/pi;
 
 end
-
-%For the Hip
-% Rx = asind(-R(3,2));%see RotationMatrixSymbolic.m
-% Ry = atan2(R(3,1),R(3,3))*180/pi;
-% Rz = atan2(R(1,2),R(2,2))*180/pi;
 
 ML=Tl(1,4);
 AP=Tl(2,4);
@@ -36,15 +26,9 @@ SI=Tl(3,4);
 transform.Flexion = flex;
 transform.Valgus = Valg;
 transform.Internal = IE;
-% Original code converts from m to mm.
-% transform.Medial = ML * 1000; % convert to mm
-% transform.Posterior = AP * 1000; % convert to mm
-% transform.Superior = SI * 1000; % convert to mm
+
 transform.Medial = ML; 
 transform.Posterior = AP;
 transform.Superior = SI;
-% angles=[flex,Valg,IE];
-% XYZ=[ML,AP,SI];
-
 end
 

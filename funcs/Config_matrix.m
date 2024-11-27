@@ -30,7 +30,6 @@ function matrix = config_matrix(file_path, target_string)
 
     % Check if the line was found or not
     if string_found
-        fprintf('The line without "%s" at the start is: %s\n', target_string, found_line);
 
         % Split the found line into numeric values and convert into a 4x4 matrix
         values = regexp(found_line, '[" ]', 'split');

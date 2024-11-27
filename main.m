@@ -46,17 +46,17 @@ is_run = contains(run_conditions, desiredOrder);
 %% load in experiment run
 
 for j = 1:length(input_path)
-    if ~is_run(j) || contains(file_name{j}, "IE_optimise") % These are usually runs pre optimisation. Comment out this block if all data should be processed.
-        disp(strcat("Skipping: ", file_name{j}));
-        continue
-    end
-    disp(strcat("Running: ", file_name{j}));
+    % if ~is_run(j) || contains(file_name{j}, "IE_optimise") % These are usually runs pre optimisation. Comment out this block if all data should be processed.
+    %     disp(strcat("Skipping: ", file_name{j}));
+    %     continue
+    % end
+    disp(strcat("Run ", int2str(j), ": ", file_name{j}));
     input_file = tdmsread(input_path{j});
 
     %% Extract JCS kinematics and robot positions
-    [JCS_flex,JCS_ext,RP_flex,RP_ext]=tdms_extraction(input_file);
+    [JCS_raw, robot_position]=tdms_extraction(input_file);
 
-    robot_pos = [RP_flex; RP_ext];
+    robot_pos = [robot_position.flexion_all; robot_position.extension_all];
     W2_T_S2=coordinate2matrix(robot_pos); % End effector in Robot coordinate system
 
     %% calculate transform from TIBIA (RB2) to FEMUR (RB1).
@@ -70,7 +70,7 @@ for j = 1:length(input_path)
         
     end
     %% Calculate kinematics
-    JCS{j} = [struct2table(JCS_flex); struct2table(JCS_ext)];
+    JCS{j} = [struct2table(JCS_raw.translations.flexion); struct2table(JCS_raw.translations.extension)];
     kinematics_local=kinematics_local(1:height(JCS{j}),:);
     kinematics{j}= struct2table(kinematics_local);
     % Evidence of two errors:
@@ -79,7 +79,6 @@ for j = 1:length(input_path)
     % which resulted in meaningless error. JCS is still in supposedly m,
     % but the values line up with expectations in mm.
     error{j}=kinematics{j}-JCS{j}; 
-
 
 %% Write to CSV
     traj_folder = {trajectories.folder}';

@@ -1,4 +1,4 @@
-function [JCS_flex,JCS_ext,robot_pos_flex,robot_pos_ext] = tdms_extraction(data_in)
+function [JCS, robot_position] = tdms_extraction(data_in)
 % tdms_extraction looks for the relevant cells in the cell array, in this
 % case JCS and robot position. For the JCS kinematics it also finds and
 % only outputs data at each degrees of flexion. If more datapoints are
@@ -35,9 +35,33 @@ function [JCS_flex,JCS_ext,robot_pos_flex,robot_pos_ext] = tdms_extraction(data_
 % Loop through cells in the cell array for JCS  
     for c = 1:numel(data_in)
         data = data_in{c};
-%         disp(['Checking for JCS in cell ', num2str(c)]);
-        
-        % Check for JCS
+
+        % Check for Desired translations and forces
+        if contains(data_in{1, c}.Properties.VariableNames, "Desired")
+            headers = data.Properties.VariableNames;
+            for i = 1:length(headers)
+                split_name= strsplit(headers{i}, ' ');
+                field_name = split_name{1};
+                if any(contains(headers, "Drawer"))
+                    JCS.forces.desired.(field_name) = data.(headers{i});
+                else
+                    JCS.translations.desired.(field_name) = data.(headers{i});
+                end
+            end
+        end
+        % Check for JCS (actual) loads
+        if contains(data_in{1, c}.Properties.VariableNames, "JCS Load")
+            headers = data.Properties.VariableNames;
+            for i = 1:length(headers)
+                underscore = strsplit(headers{i}, '_'); % Split JCS Load_Lateral Drawer by the _.
+                force_direction = strsplit(underscore{2}, ' '); % Split Lateral Drawer by whitespace
+                field_name = force_direction{1};
+                JCS.forces.actual.(field_name) = data.(headers{i});
+            end
+        end
+
+        % Check for JCS translations (= position in optimised coordinate
+        % system)
         if sum(strcmp('JCS_Posterior', data_in{1, c}.Properties.VariableNames)) == 1
             ap = data.JCS_Posterior;
             flex = data.JCS_Flexion;
@@ -52,21 +76,23 @@ function [JCS_flex,JCS_ext,robot_pos_flex,robot_pos_ext] = tdms_extraction(data_
             flex_ext = flex(peakFlex:end);
 
             % Get indices of every degree
+            % This should be changed to be a mean of the values between 2
+            % indices. Also works as a low pass filter.
             flex_ind = [flex_ind, find_indices(flex_flex, 0:round(max(flex)))];
             ext_ind = [ext_ind, find_indices(flex_ext,round(max(flex)):-1:0)];
-%             disp(ext_ind(90))
-%             disp(length(flex_flex))
-%             disp(length(flex_ext))
-            ap_flex = [ap_flex, ap(flex_ind)'];
-            ap_ext = [ap_ext, ap(peakFlex+ext_ind-1)'];
-            ir_flex = [ir_flex, ir(flex_ind)'];
-            ir_ext = [ir_ext, ir(peakFlex+ext_ind-1)'];
-            vv_flex = [vv_flex, vv(flex_ind)'];
-            vv_ext = [vv_ext, vv(peakFlex+ext_ind-1)'];
-            ml_flex = [ml_flex, ml(flex_ind)'];
-            ml_ext = [ml_ext, ml(peakFlex+ext_ind-1)'];
-            si_flex = [si_flex, si(flex_ind)'];
-            si_ext = [si_ext, si(peakFlex+ext_ind-1)'];
+
+            JCS.translations.flexion.Flexion = flex_flex(flex_ind);
+            JCS.translations.extension.Flexion = flex_ext(ext_ind);
+            JCS.translations.flexion.Posterior = [ap_flex, ap(flex_ind)']';
+            JCS.translations.extension.Posterior = [ap_ext, ap(peakFlex+ext_ind-1)']';
+            JCS.translations.flexion.Internal = [ir_flex, ir(flex_ind)']';
+            JCS.translations.extension.Internal = [ir_ext, ir(peakFlex+ext_ind-1)']';
+            JCS.translations.flexion.Valgus = [vv_flex, vv(flex_ind)']';
+            JCS.translations.extension.Valgus = [vv_ext, vv(peakFlex+ext_ind-1)']';
+            JCS.translations.flexion.Medial = [ml_flex, ml(flex_ind)']';
+            JCS.translations.extension.Medial = [ml_ext, ml(peakFlex+ext_ind-1)']';
+            JCS.translations.flexion.Superior = [si_flex, si(flex_ind)']';
+            JCS.translations.extension.Superior = [si_ext, si(peakFlex+ext_ind-1)']';
         end
     end
     
@@ -111,39 +137,26 @@ function [JCS_flex,JCS_ext,robot_pos_flex,robot_pos_ext] = tdms_extraction(data_
         end
     end
 %  Process robot_pos_x, robot_pos_y, etc.
-            robot_pos_x_flex = [robot_pos_x_flex,  robot_pos_x_all(flex_ind)];
-            robot_pos_x_ext = [robot_pos_x_ext,  robot_pos_x_all(peakFlex+ext_ind-1)];
-            robot_pos_y_flex = [robot_pos_y_flex,  robot_pos_y_all(flex_ind)];
-            robot_pos_y_ext = [robot_pos_y_ext, robot_pos_y_all(peakFlex+ext_ind-1)];
-            robot_pos_z_flex = [robot_pos_z_flex,  robot_pos_z_all(flex_ind)];
-            robot_pos_z_ext = [robot_pos_z_ext,  robot_pos_z_all(peakFlex+ext_ind-1)];
-            robot_pos_pitch_flex = [robot_pos_pitch_flex,  robot_pos_pitch_all(flex_ind)];
-            robot_pos_pitch_ext = [robot_pos_pitch_ext, robot_pos_pitch_all(peakFlex+ext_ind-1)];
-            robot_pos_roll_flex = [robot_pos_roll_flex, robot_pos_roll_all(flex_ind)];
-            robot_pos_roll_ext = [robot_pos_roll_ext, robot_pos_roll_all(peakFlex+ext_ind-1)];
-            robot_pos_yaw_flex = [robot_pos_yaw_flex,robot_pos_yaw_all(flex_ind)];
-            robot_pos_yaw_ext = [robot_pos_yaw_ext, robot_pos_yaw_all(peakFlex+ext_ind-1)];
-%     disp(flex_ext(ext_ind))
- % JCS_flex=[flex_flex(flex_ind),ap_flex',ml_flex',si_flex',ir_flex',vv_flex'];
- JCS_flex.Flexion = flex_flex(flex_ind);
- JCS_flex.Posterior = ap_flex';
- JCS_flex.Medial = ml_flex';
- JCS_flex.Superior = si_flex';
- JCS_flex.Internal = ir_flex';
- JCS_flex.Valgus = vv_flex';
+             robot_position.flexion.X = [robot_pos_x_flex,  robot_pos_x_all(flex_ind)];
+            robot_position.extension.X = [robot_pos_x_ext,  robot_pos_x_all(peakFlex+ext_ind-1)];
+            robot_position.flexion.Y = [robot_pos_y_flex,  robot_pos_y_all(flex_ind)];
+            robot_position.extension.Y = [robot_pos_y_ext, robot_pos_y_all(peakFlex+ext_ind-1)];
+            robot_position.flexion.Z = [robot_pos_z_flex,  robot_pos_z_all(flex_ind)];
+            robot_position.extension.Z = [robot_pos_z_ext,  robot_pos_z_all(peakFlex+ext_ind-1)];
+            robot_position.flexion.Pitch = [robot_pos_pitch_flex,  robot_pos_pitch_all(flex_ind)];
+            robot_position.extension.Pitch = [robot_pos_pitch_ext, robot_pos_pitch_all(peakFlex+ext_ind-1)];
+            robot_position.flexion.Roll = [robot_pos_roll_flex, robot_pos_roll_all(flex_ind)];
+            robot_position.extension.Roll = [robot_pos_roll_ext, robot_pos_roll_all(peakFlex+ext_ind-1)];
+            robot_position.flexion.Yaw = [robot_pos_yaw_flex,robot_pos_yaw_all(flex_ind)];
+            robot_position.extension.Yaw = [robot_pos_yaw_ext, robot_pos_yaw_all(peakFlex+ext_ind-1)];
 
+            % Convert the struct to table. Probably easier to work with,
+            % but can just be commented out.
+            robot_position.flexion = struct2table(robot_position.flexion);
+            robot_position.extension = struct2table(robot_position.extension);
 
- % JCS_ext=[flex_ext(ext_ind),ap_ext',ml_ext',si_ext',ir_ext',vv_ext'];
- JCS_ext.Flexion = flex_ext(ext_ind);
- JCS_ext.Posterior = ap_ext';
- JCS_ext.Medial = ml_ext';
- JCS_ext.Superior = si_ext';
- JCS_ext.Internal = ir_ext';
- JCS_ext.Valgus = vv_ext';
-
- robot_pos_flex=[robot_pos_x_flex,robot_pos_y_flex,robot_pos_z_flex,robot_pos_roll_flex,robot_pos_pitch_flex,robot_pos_yaw_flex];
- robot_pos_ext=[robot_pos_x_ext,robot_pos_y_ext,robot_pos_z_ext,robot_pos_roll_ext,robot_pos_pitch_ext,robot_pos_yaw_ext];
- 
+ robot_position.flexion_all = [robot_position.flexion.X robot_position.flexion.Y robot_position.flexion.Z robot_position.flexion.Roll robot_position.flexion.Pitch robot_position.flexion.Yaw];
+ robot_position.extension_all = [robot_position.extension.X robot_position.extension.Y robot_position.extension.Z robot_position.extension.Roll robot_position.extension.Pitch robot_position.extension.Yaw];
 %  robot_pos=[robot_pos_x_all,robot_pos_y_all,robot_pos_z_all,robot_pos_roll_all,robot_pos_pitch_all,robot_pos_yaw_all];
  
 end
