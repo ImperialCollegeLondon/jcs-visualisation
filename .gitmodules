@@ -1,5 +1,3 @@
 [submodule "interspecimen_statistics"]
 	path = interspecimen_statistics
-	url = https://github.com/imperialCollegeLondon/interspecimen_statistics
-[submodule ".\\interspecimen_statistics\\"]
 	url = https://github.com/ImperialCollegeLondon/interspecimen_statistics_robot
