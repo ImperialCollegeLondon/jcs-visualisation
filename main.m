@@ -68,18 +68,17 @@ end
 %% Split the runs into specimens, knee states and loading conditions
 specimens = organise_runs(all_runs);
 
-kinematics_results = fullfile(root, "Results", "Kinematics");
-mkdir(kinematics_results);
-jcs_results = fullfile(root, "Results", "JCS");
-mkdir(jcs_results);
+%% Statistics
 states = fieldnames(specimens);
 states(strcmp(states, "name")) = [];
+
 for s = 1:numel(states)
     knee_state = states{s};
-    datum = interspecimen_stats([specimens.(knee_state)] , config);
-    stats.(knee_state) = datum;
-    print_mean_std_to_file(datum, knee_state, kinematics_results, jcs_results);
+    stats.(knee_state) = interspecimen_stats([specimens.(knee_state)] , config);
 end
+
+%% Plot
+print_mean_std_to_file(stats, states, root);
 
 %% Plot interspecimen
 truncate_min = -5;
