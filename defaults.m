@@ -2,7 +2,8 @@
 % These are sensible defaults.
 
 
-config.digitisation_state_name = {'unoptimised', 'native'};
+config.sensors = ["LVDT", "Single"]; %Make sure these are strings, not chars. Use ", not '.
+config.digitisation_state_name = {'unoptimised', 'native'}; %These are char.
 config.shift_flex = @(x) x - min(x); % Offset so min flex (extension) is 0
 % config.shift_flex = @(x) x + 120 - max(x); % Offset so max flexion is 120.
 
