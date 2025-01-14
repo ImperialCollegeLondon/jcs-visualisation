@@ -88,6 +88,9 @@ for n = 1:numel(specimen_list)
 end
 %% Print to file
 for i = 1:numel(all_runs)
+    if isempty(all_runs(i).specimen)
+        continue
+    end
     k_filename = fullfile(fp_kinematics, all_runs(i).specimen, [all_runs(i).state '_' all_runs(i).name '.csv']);
     jcs_filename = fullfile(fp_jcs, all_runs(i).specimen, [all_runs(i).state '_' all_runs(i).name '.csv']);
     writetable(all_runs(i).kinematics, k_filename);

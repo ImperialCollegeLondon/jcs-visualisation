@@ -26,6 +26,7 @@ function output = calculate_kinematics(data, config)
     output.name = JCS_raw.loading_condition;
     output.optimised_jcs = JCS_raw.translation.actual;
     output.kinematics = rotationsAndTranslations(RB1_T_RB2, config.is_right_knee);
+    output.sensors = JCS_raw.sensor;
     % output.kinematics.flexion = config.shift_flex(output.kinematics.flexion); % Offset so extension is 0 deg
     % output.error = output.kinematics - JCS_raw.translations.actual;
 end
