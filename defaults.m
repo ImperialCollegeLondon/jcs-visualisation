@@ -18,3 +18,4 @@ config.interspecimen_smooth_diff = @(x) smoothdata(x, "gaussian", 10); % Smooth 
 
 
 config.intact_name = "Native"; % Name for the native state. Used for interspecimen comparisons
+config.debug = false;

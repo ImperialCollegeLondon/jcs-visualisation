@@ -25,16 +25,18 @@ for i = 1:numel(fp_specimens)
         continue
     end
 
-    digitisation_file_mask = contains({fp_runs.name}, config.digitisation_state_name, "IgnoreCase",true); 
-    if sum(digitisation_file_mask) > 1 % There's more than 1 digitisation file
-        digitisation_file_mask(1:find(digitisation_file_mask, 1, "last")-1) = false; % Pick the last one
-        warning("Found more than one digitisation folder. Using '%s'", fp_runs(digitisation_file_mask).name);
+    digitisation_file_mask = contains({fp_runs.name}, config.digitisation_state_name, "IgnoreCase",true);
+    if sum(digitisation_file_mask) == 1
+        fp_digitisation = fullfile(fp_runs(digitisation_file_mask).folder, fp_runs(digitisation_file_mask).name);
+    else
+        warning("Could not determine digitisation folder. Choose it manually")
+        fp_digitisation = uigetdir(fp_specimens{i});
     end
 
     %% Load the digitised coordinate system files
-    fp_digitisation = fullfile(fp_runs(digitisation_file_mask).folder, fp_runs(digitisation_file_mask).name);
+    
 
-    new_config = load_configurations(fp_digitisation);
+    new_config = load_config(fp_digitisation);
     config = merge_config(config, new_config);
     
     %% Generate list of all trajectories
@@ -60,31 +62,59 @@ for i = 1:numel(fp_specimens)
         %     continue
         % end
         fprintf("Run: %d: %s\n", j, regexprep(file_name{j}, '_1of1_1_M.*', ''));
-
-        all_runs(ii) = calculate_kinematics(input_path{j}, config);
+        try
+        data = TDMS_getStruct(input_path{j});
+        catch ME
+            warning("Failed to run this file. Change defaults/config.debug=true if you want to see why")
+            if config.debug
+                rethrow ME
+            end
+            continue
+        end
+        all_runs(ii) = calculate_kinematics(data, config);
     end
 end
-
-%% Split the runs into specimens, knee states and loading conditions
-specimens = organise_runs(all_runs);
-
-%% Statistics
-states = fieldnames(specimens);
-states(strcmp(states, "name")) = [];
-
-for s = 1:numel(states)
-    knee_state = states{s};
-    stats.(knee_state) = interspecimen_stats([specimens.(knee_state)] , config);
+%% Prepare the folders
+fp_results = fullfile(root, "Results");
+fp_kinematics = fullfile(fp_results, "kinematics");
+fp_jcs = fullfile(fp_results, "jcs");
+mkdir(fp_results);
+mkdir(fp_kinematics);
+mkdir(fp_jcs);
+for n = 1:numel(specimen_list)
+    name = specimen_list(n).name;
+    mkdir(fullfile(fp_kinematics, name));
+    mkdir(fullfile(fp_jcs, name));
+end
+%% Print to file
+for i = 1:numel(all_runs)
+    k_filename = fullfile(fp_kinematics, all_runs(i).specimen, [all_runs(i).state '_' all_runs(i).name '.csv']);
+    jcs_filename = fullfile(fp_jcs, all_runs(i).specimen, [all_runs(i).state '_' all_runs(i).name '.csv']);
+    writetable(all_runs(i).kinematics, k_filename);
+    writetable(all_runs(i).optimised_jcs, jcs_filename);
 end
 
-%% Plot
-print_mean_std_to_file(stats, states, root);
 
-%% Plot interspecimen
-truncate_min = -5;
-truncate_max = 90;
+%% Split the runs into specimens, knee states and loading conditions
+% specimens = organise_runs(all_runs);
 
-plot_interspecimen(config, stats, config.intact_name, states, truncate_min, truncate_max);
+% %% Statistics
+% states = fieldnames(specimens);
+% states(strcmp(states, "name")) = [];
+% 
+% for s = 1:numel(states)
+%     knee_state = states{s};
+%     stats.(knee_state) = interspecimen_stats([specimens.(knee_state)] , config);
+% end
+% 
+% %% Plot
+% print_mean_std_to_file(stats, states, root);
+% 
+% %% Plot interspecimen
+% truncate_min = -5;
+% truncate_max = 90;
+% 
+% plot_interspecimen(config, stats, config.intact_name, states, truncate_min, truncate_max);
 % Only plots loading conditions that Native has experienced. If any are missing from it, they are just ignored.
 
 % function term = extract_condition(names)
