@@ -2,8 +2,10 @@
 % These are sensible defaults.
 
 
+config.is_first_run_digitisation = true;
+config.split_folders_with = "90N";
 config.sensors = ["LVDT", "Single"]; %Make sure these are strings, not chars. Use ", not '.
-config.digitisation_state_name = {'unoptimised', 'native'}; %These are char.
+config.digitisation_state_name = {'unoptimised'}; %These are char.
 config.shift_flex = @(x) x - min(x); % Offset so min flex (extension) is 0
 % config.shift_flex = @(x) x + 120 - max(x); % Offset so max flexion is 120.
 
@@ -20,3 +22,8 @@ config.interspecimen_smooth_diff = @(x) smoothdata(x, "gaussian", 10); % Smooth 
 
 config.intact_name = "Native"; % Name for the native state. Used for interspecimen comparisons
 config.debug = false;
+
+%% Other nice stuff
+
+warning('off', 'backtrace'); warning('off', 'MATLAB:MKDIR:DirectoryExists');
+set(0,'defaulttextinterpreter','latex');

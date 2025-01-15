@@ -1,9 +1,6 @@
 function specimens = organise_runs(all_runs)
-states = {all_runs.state};
-states = states(~cellfun(@isempty,states));
-states = unique(states);
-specimen_names = {all_runs.specimen};
-specimen_names = unique(specimen_names(~cellfun(@isempty,specimen_names)));
+states = unique([all_runs.state]);
+specimen_names = unique([all_runs.specimen]);
 for st = 1:numel(states)
     for sp = 1:numel(specimen_names)
         knee_state = states(st);

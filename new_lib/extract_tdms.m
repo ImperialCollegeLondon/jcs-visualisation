@@ -21,24 +21,24 @@ function output = extract_tdms(data, config)
     flexion_arc = union(idx_flexion, idx_extension)';
     
     output.translation.actual = flexion(flexion_arc, :);
-    
+    only_flexion = output.translation.actual(:, "Flexion");
     %% Others that always exist
-    output.forces.actual = extract_data(data.State_JCS_Load, "JCS_Load_", flexion_arc);
-    output.forces.desired = extract_data(data.Kinetics_JCS_Desired, "___Desired", flexion_arc);
-    output.translation.desired = extract_data(data.Kinematics_JCS_Desired, "___Desired", flexion_arc);
-    output.robot_position = extract_data(data.Sensor_Robot_Position, "Robot_Position_", flexion_arc);
+    output.forces.actual = [only_flexion, extract_data(data.State_JCS_Load, "JCS_Load_", flexion_arc)];
+    output.forces.desired = [only_flexion, extract_data(data.Kinetics_JCS_Desired, "___Desired", flexion_arc)];
+    output.translation.desired = [only_flexion, extract_data(data.Kinematics_JCS_Desired, "___Desired", flexion_arc)];
+    output.robot_position = [only_flexion, extract_data(data.Sensor_Robot_Position, "Robot_Position_", flexion_arc)];
     
     %% Try to find LVDTs and other fields. Change what you need in defaults.m: config.sensors
     field_names = fieldnames(data);
     sensor_mask = contains(field_names, config.sensors);
     sensors = field_names(sensor_mask);
+    sensor_data = only_flexion;
     for i = 1:numel(sensors)
         datum = data.(sensors{i});
-        header = fieldnames(datum);
-        header(ismember(header, {'name', 'Props'})) = [];
-        output.sensor.(header{1}) = extract_data(datum, "", flexion_arc);
+        individual_sensor = extract_data(datum, "", flexion_arc);
+        sensor_data = [sensor_data, individual_sensor];
     end
-
+    output.sensor = sensor_data;
 end
 
 function output = extract_data(name, str_rep, flexion_arc)
