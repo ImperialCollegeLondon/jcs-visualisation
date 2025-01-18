@@ -16,9 +16,15 @@ function output = calculate_kinematics(data, config)
     % i.e., Tibia in femoral frame of reference.
     RB1_T_W2 = S1_T_RB1 \ W1_T_W2;
     RB1_T_S2 = pagemtimes(RB1_T_W2, W2_T_S2);
-    RB1_T_RB2 = pagemtimes(RB1_T_S2,S2_T_RB2); % foTto
-    % RB1_T_RB2 = pagemldivide(RB1opt_T_RB1orig,RB1_T_RB2); % fTto
-    % RB1_T_RB2 = pagemtimes(RB1_T_RB2, RB2opt_T_RB2orig); %fTt
+    RB1_T_RB2 = pagemtimes(RB1_T_S2,S2_T_RB2); % fTt
+
+    % Invert the optimisations
+    S1_T_RB1 = S1_T_RB1 * RB1opt_T_RB1orig;
+    S2_T_RB2 = S2_T_RB2 * RB2opt_T_RB2orig;
+    
+    RB1_T_W2 = S1_T_RB1 \ W1_T_W2;
+    RB1_T_S2 = pagemtimes(RB1_T_W2, W2_T_S2);
+    RB1orig_T_RB2orig = pagemtimes(RB1_T_S2,S2_T_RB2); % fTt
     % RB1_T_RB2 = pagemtimes(RB1_T_RB2, position_offset);
     
     %% Prepare output
@@ -28,6 +34,7 @@ function output = calculate_kinematics(data, config)
 
     output.optimised_jcs = JCS_raw.translation.actual;
     output.kinematics = rotationsAndTranslations(RB1_T_RB2, config.is_right_knee);
+    output.kinematics_optimised = rotationsAndTranslations(RB1orig_T_RB2orig, config.is_right_knee);
 
     output.sensors = JCS_raw.sensor;
     
