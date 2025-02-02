@@ -6,4 +6,5 @@ function root_ls = get_root_files(root, exclude_folders)
 root_ls = dir(root);
 root_ls = root_ls(~ismember({root_ls.name}, {'.', '..'}));
 root_ls = root_ls(~contains({root_ls.name}, exclude_folders, 'IgnoreCase', true));
+root_ls = Option(root_ls);
 end

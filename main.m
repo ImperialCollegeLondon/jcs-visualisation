@@ -8,7 +8,7 @@ defaults;
 % State cfg file is used to create the transforms.
 disp("Pick the folder with all the specimens")
 root = uigetdir(".", "Pick the folder with all specimens");
-specimen_list = get_root_files(root, {'result'});
+specimen_list = get_root_files(root, {'result'}).unwrap();
 fp_specimens = fullfile({specimen_list.folder}, {specimen_list.name});
 %% Run data
 ii = 0;
@@ -16,17 +16,16 @@ for i = 1:numel(fp_specimens)
     specimen_folder_name = get_specimen_name(specimen_list(i).name);
     fprintf("%d. Specimen folder: %s\n", i, specimen_folder_name);
     fp_runs = get_root_files(fp_specimens{i}, {});
-    if isempty(fp_runs)
-        warning("No files");
+    if fp_runs.is_none()
+        warning("Folder contains no runs");
         continue
     end
-    fp_digitisation = get_digitisation(fp_runs, config);
+    fp_digitisation = get_digitisation(fp_runs.unwrap(), config);
 
     %% Load the digitised coordinate system files
     
 
-    new_config = load_config(fp_digitisation);
-    config = merge_config(config, new_config);
+    config = load_config(fp_digitisation, config);
     
     %% Generate list of all trajectories
     [root_specimen, ~, ~] = fileparts(fp_digitisation);
@@ -88,24 +87,17 @@ for s = 1:numel(states)
     statistics.(knee_state) = interspecimen_stats([specimens.(knee_state)], config);
 end
 
-%% Plot
+%% Output stats
 disp("Printing statistics to file")
 print_mean_std_to_file(statistics, states, root);
 
-%% Plot interspecimen
+%% Plot
 truncate_min = -5;
 truncate_max = 90;
+%% Stability envelope
+stability_envelope(config, statistics, truncate_min, truncate_max)
+%% Plot interspecimen
 
-% plot_interspecimen(config, statistics, statistics, states, truncate_min, truncate_max);
+
+plot_interspecimen(config, statistics, statistics, states, truncate_min, truncate_max);
 % Only plots loading conditions that Native has experienced. If any are missing from it, they are just ignored.
-
-
-function config = merge_config(config, new_config)
-    fields = fieldnames(new_config);
-    for i = 1:numel(fields)
-        field = fields{i};
-        if ~isfield(config, field)
-            config.(field) = new_config.(field);
-        end
-    end
-end

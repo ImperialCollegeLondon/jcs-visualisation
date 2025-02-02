@@ -1,5 +1,4 @@
-function [config, setup] = load_config(path)
-    config.step_size = 1;
+function [config, setup] = load_config(path, config)
     % Unzip the configuration
     fp_config = fullfile(path, "Configuration");
     unzip(fullfile(fp_config, "Project.sVprj"), fp_config);
@@ -18,13 +17,13 @@ function [config, setup] = load_config(path)
     config.RB1opt_T_RB1orig = knee_state.JCS.T_RB1_OPT_RB1_Orig;
     config.T_S1_RB1_Orig = knee_state.JCS.Initial_T_Sen1_RB1;
     config.T_S2_RB2_Orig = knee_state.JCS.Initial_T_Sen2_RB2;
-    
     position_offset = knee_state.JCS.Position_Offset; %Neutral position offset, defined as the zero point to calculate kinematics
     position_offset = [position_offset(1:3)*1000; rad2deg(position_offset(4:6))];
     config.position_offset = findTrackerFixedFrames(position_offset(4:6), position_offset(1:3));
     
     setup = serialise(fp_setup);
-    
+    config.T_W1_Robot = setup.DefineRobotCoordinateSystem.T_WORLD1_ROB;
+    config.robot_position = setup.DetermineNeutralPosition.Robot_Position;
     if strcmpi(setup.RecordSpecimenInfo.Specimen_Side, "right")
         config.is_right_knee = true;
     else
