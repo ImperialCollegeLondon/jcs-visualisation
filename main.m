@@ -20,21 +20,38 @@ for i = 1:numel(fp_specimens)
         warning("Folder contains no runs");
         continue
     end
-    fp_digitisation = get_digitisation(fp_runs.unwrap(), config);
+    specimen_runs = fp_runs.unwrap();
+    root_specimen = {specimen_runs.folder};
+    root_specimen = root_specimen{1};
+    runs = fullfile(root_specimen, {specimen_runs.name});
 
-    %% Load the digitised coordinate system files
-    
+    [config, state, setup] = load_config(runs{i}, config);
 
-    config = load_config(fp_digitisation, config);
-    
+    if config.visualise_digitisation && any(config.optimisation_rb2_current ~= state.JCS.T_RB2_OPT_RB2_Orig, "all")
+        config.optimisation_rb2_current = state.JCS.T_RB2_OPT_RB2_Orig;
+        config.optimisation_rb1_current = state.JCS.T_RB1_OPT_RB1_Orig;
+
+        figure; hold on; grid;
+        t = landmarks(state.JCS.Collected_Points_Rigid_Body_2);
+        f = landmarks(state.JCS.Collected_Points_Rigid_Body_1);
+        visualise_landmark(t, f, config);
+
+        if all(state.JCS.T_RB2_OPT_RB2_Orig ~= eye(4), "all")
+            t_opt = to_opt(t, state.JCS.T_RB2_OPT_RB2_Orig);
+            f_opt = to_opt(f, state.JCS.T_RB1_OPT_RB1_Orig);
+            visualise_landmark(t_opt, f_opt, config);
+        end
+        hold off;
+    end
+
     %% Generate list of all trajectories
-    [root_specimen, ~, ~] = fileparts(fp_digitisation);
-    % trajectories = dir(fullfile(root, "**/*.tdms"));
     trajectories = dir(fullfile(root_specimen, "**/*processed.tdms"));
+
     
-    input_path = fullfile({trajectories.folder}', {trajectories.name}');
+    %% Load the digitised coordinate system files    
+    input_path = fullfile({trajectories.folder}, {trajectories.name});
     [~, file_name, ~] = fileparts({trajectories.name}'); % Name without extension
-    
+
     %% load in experiment run
     
     for j = 1:length(input_path)
@@ -44,7 +61,7 @@ for i = 1:numel(fp_specimens)
             data = TDMS_getStruct(input_path{j});
             all_runs(ii) = calculate_kinematics(data, config);
         catch ME
-            warning("Failed to run this file. Change defaults/config.debug=true if you want to figure out why")
+            warning(ME.message)
             if config.debug
                 rethrow ME
             end
@@ -99,5 +116,18 @@ stability_envelope(config, statistics, truncate_min, truncate_max)
 %% Plot interspecimen
 
 
-plot_interspecimen(config, statistics, statistics, states, truncate_min, truncate_max);
+% plot_interspecimen(config, statistics, statistics, states, truncate_min, truncate_max);
 % Only plots loading conditions that Native has experienced. If any are missing from it, they are just ignored.
+
+    function r = landmarks(points)
+        p = reshape(points', 3, []);
+        p(4,:) = 1; %% To homogeneous
+        r.lateral = p(:,1);
+        r.medial = p(:,2);
+        r.distal = mean(p(:, 4:6), 2);
+    end
+            function r = to_opt(p, t)
+            r.lateral = t * p.lateral;
+            r.medial = t * p.medial;
+            r.distal = t * p.distal;
+        end

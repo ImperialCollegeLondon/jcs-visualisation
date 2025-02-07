@@ -3,12 +3,12 @@ function output = calculate_kinematics(data, config)
     JCS_raw = extract_tdms(data, config);
 
     % Get important transforms from config
-    W1_T_W2 = config.W1_T_W2;
-    S1_T_RB1 = config.S1_T_RB1;
-    S2_T_RB2 = config.S2_T_RB2;
-    RB2opt_T_RB2orig = config.RB2opt_T_RB2orig; %toTt
-    RB1opt_T_RB1orig = config.RB1opt_T_RB1orig; %foTf
-    position_offset = config.position_offset;
+    W1_T_W2 = config.transforms.W1_T_W2;
+    S1_T_RB1 = config.transforms.S1_T_RB1;
+    S2_T_RB2 = config.transforms.S2_T_RB2;
+    RB2opt_T_RB2orig = config.transforms.RB2opt_T_RB2orig; %toTt
+    RB1opt_T_RB1orig = config.transforms.RB1opt_T_RB1orig; %foTf
+    position_offset = config.transforms.position_offset;
    
     W2_T_S2 = coordinate2matrix(JCS_raw.robot_position); % End effector in Robot coordinate system throughout arc of flexion
     
@@ -40,6 +40,6 @@ function output = calculate_kinematics(data, config)
     
     output.forces_actual = JCS_raw.forces.actual;
     output.forces_desired = JCS_raw.forces.desired;
-    % output.kinematics.flexion = config.shift_flex(output.kinematics.flexion); % Offset so extension is 0 deg
+    % output.kinematics.flexion = config.transforms.shift_flex(output.kinematics.flexion); % Offset so extension is 0 deg
     % output.error = output.kinematics - JCS_raw.translations.actual;
 end
