@@ -1,11 +1,11 @@
-function visualise_landmark(t, f, config, colour_t, colour_f)
-    plot_t = scatter3(t.medial(1), t.medial(2), t.medial(3));
+function plots = visualise_landmark(t, f, config, colour_t, colour_f)
+    plots(1) = scatter3(t.medial(1), t.medial(2), t.medial(3), [], colour_t);
     hold on;
     text(t.medial(1), t.medial(2), t.medial(3), "  Medial");
 
-    scatter3(t.lateral(1), t.lateral(2), t.lateral(3));
+    scatter3(t.lateral(1), t.lateral(2), t.lateral(3), [], colour_t);
     text(t.lateral(1), t.lateral(2), t.lateral(3), "  Lateral");
-    scatter3(t.distal(1), t.distal(2), t.distal(3));
+    scatter3(t.distal(1), t.distal(2), t.distal(3), [], colour_t);
     text(t.distal(1), t.distal(2), t.distal(3), "  Distal");
     
 
@@ -28,13 +28,13 @@ function visualise_landmark(t, f, config, colour_t, colour_f)
 
     %% Femur
 
-    plot_f = scatter3(f.medial(1), f.medial(2), f.medial(3));
+    plots(2) = scatter3(f.medial(1), f.medial(2), f.medial(3), [], colour_f);
     hold on;
     text(f.medial(1), f.medial(2), f.medial(3), "  Medial");
 
-    scatter3(f.lateral(1), f.lateral(2), f.lateral(3));
+    scatter3(f.lateral(1), f.lateral(2), f.lateral(3), [], colour_f);
     text(f.lateral(1), f.lateral(2), f.lateral(3), "  Lateral");
-    scatter3(f.distal(1), f.distal(2), f.distal(3));
+    scatter3(f.distal(1), f.distal(2), f.distal(3), [], colour_f);
     text(f.distal(1), f.distal(2), f.distal(3), "  Proximal");
 
     %% Medial lateral axis
@@ -52,5 +52,4 @@ function visualise_landmark(t, f, config, colour_t, colour_f)
     %% Proximal-distal axis
     prox_dist = f.distal - o;
     quiver3(o(1), o(2), o(3), prox_dist(1), prox_dist(2), prox_dist(3), 0, colour_f);
-    legend([plot_t, plot_f], {'Tibia', 'Femur'});
 end
