@@ -1,6 +1,4 @@
-config.visualise_digitisation = true;
-config.optimisation_rb1_current = [0 0 0 0; 0 0 0 0; 0 0 0 0; 0 0 0 0];
-config.optimisation_rb2_current = [0 0 0 0; 0 0 0 0; 0 0 0 0; 0 0 0 0];
+config.visualise_digitisation = true; % Plots the landmark digitisation
 %% Important post-processing definitions
 % These are sensible defaults.
 

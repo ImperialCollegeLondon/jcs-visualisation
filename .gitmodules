@@ -1,6 +1,0 @@
-[submodule "lib/interspecimen_statistics_robot"]
-	path = lib/interspecimen_statistics_robot
-	url = git@github.com:imperialcollegelondon/interspecimen_statistics_robot.git
-[submodule "new_lib/simvitro-serialise-settings"]
-	path = new_lib/simvitro-serialise-settings
-	url = git@github.com:ImperialCollegeLondon/simvitro-serialise-settings.git
