@@ -19,8 +19,8 @@ function output = calculate_kinematics(data, config)
     RB1_T_RB2 = pagemtimes(RB1_T_S2,S2_T_RB2); % fTt
 
     % Invert the optimisations
-    S1_T_RB1 = S1_T_RB1 * RB1opt_T_RB1orig;
-    S2_T_RB2 = S2_T_RB2 * RB2opt_T_RB2orig;
+    S1_T_RB1 = S1_T_RB1 / RB1opt_T_RB1orig;
+    S2_T_RB2 = S2_T_RB2 / RB2opt_T_RB2orig;
     
     RB1_T_W2 = S1_T_RB1 \ W1_T_W2;
     RB1_T_S2 = pagemtimes(RB1_T_W2, W2_T_S2);
