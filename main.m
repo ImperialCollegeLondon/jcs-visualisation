@@ -1,5 +1,6 @@
 %% this code calculates the knee kinematics in both the original, digitised coordinate frame and the optimised coordinate frame
 clc;clear; close all;
+profile on;
 diary("log.txt"); % Creates a log. Important for checking which runs failed!!
 
 %% Load in the Specimen folder
@@ -29,36 +30,16 @@ for sp = 1:numel(path_specimens) % Navigate specimens
         path_trajectory_set = path_trajectory_sets(ts);
         [~, trajectory_set, ~] = fileparts(path_trajectory_set);
         trajectories = dir(fullfile(path_trajectory_set, "**/*processed.tdms"));
+        if isempty(trajectories)
+            continue
+        end
         input_path = fullfile({trajectories.folder}, {trajectories.name});
         [~, file_name, ~] = fileparts({trajectories.name}'); % Name without extension
 
         [config, state, setup] = load_config(path_trajectory_set, config);
-
         % Visualise landmarks
-        if config.visualise_digitisation
-            figure; 
-            hold on; grid;
-            sgtitle([specimen_name replace(trajectory_set, '_', ' ')]);
-            t_certus = landmarks(state.JCS.Collected_Points_Rigid_Body_2);
-            t = transform_landmark(t_certus, inv(state.JCS.T_World1_World2));
-            f_certus = landmarks(state.JCS.Collected_Points_Rigid_Body_1);
-            f = transform_landmark(f_certus, inv(state.JCS.T_World1_World2));
-            plots = visualise_landmark(t, f, config, 'b', 'r');
-            if any(state.JCS.T_RB2_OPT_RB2_Orig ~= eye(4), "all")
-                t_opt = transform_landmark(t, state.JCS.T_RB2_OPT_RB2_Orig);
-                f_opt = transform_landmark(f, state.JCS.T_RB1_OPT_RB1_Orig);
-                plots_t = visualise_landmark(t_opt, f_opt, config, 'k', 'k');
-                plots = [plots plots_t];
-
-                legend(plots, {'Digitised Tibia', 'Digitised Femur', 'Optimised Tibia', 'Optimised Femur'});
-            else
-                legend(plots, {'Tibia', 'Femur'});
-            end
-            hold off;
-            
-            disp(trajectory_set)
-            disp(rotationsAndTranslations(state.JCS.T_RB2_OPT_RB2_Orig, config.is_right_knee))
-        end
+        titles = [specimen_name replace(trajectory_set, '_', ' ')];
+        visualise_digitisation(state, config, titles);
 
         %% load in experiment run
         for t = 1:numel(trajectories)
@@ -68,6 +49,13 @@ for sp = 1:numel(path_specimens) % Navigate specimens
             try
                 data = TDMS_getStruct(input_path{t});
                 all_runs(ii) = calculate_kinematics(data, config);
+
+                traj_text = split(trajectory_set, '_');
+                state_from_name = state_regex(string(traj_text{2}));
+                if all_runs(ii).state ~= state_from_name
+                    all_runs(ii).state = state_from_name;
+                end
+
             catch ME
                 if config.debug
                     rethrow(ME)
@@ -89,7 +77,7 @@ end
 %% Print to file
 % Prepare the folders
 fp_results = fullfile(root, "Results");
-folder_names = setdiff(string(fieldnames(all_runs)), ["specimen", "state", "loading_condition"]);
+folder_names = setdiff(string(fieldnames(all_runs)), ["specimen", "state", "loading_condition", "config"]);
 for n = 1:numel(folder_names)
     fp_output = fullfile(fp_results, folder_names(n));
     fp_output_specimens = fullfile(fp_output, string({specimen_list.name}));
@@ -105,24 +93,29 @@ end
 %% Split the runs into specimens, knee states and loading conditions
 specimens = organise_runs(all_runs);
 
-%% Statistics
-disp("Performing statistics")
-states = setdiff(fieldnames(specimens), "name");
-
-for s = 1:numel(states)
-    knee_state = states{s};
-    statistics.(knee_state) = interspecimen_stats([specimens.(knee_state)], config);
-end
-
-%% Output stats
-disp("Printing statistics to file")
-print_mean_std_to_file(statistics, states, root);
-
-%% Plot
+%% Calculate stability envelopes
 truncate_min = -5;
 truncate_max = 90;
+
+for sp = 1:numel(specimens)
+    stability_envelope(specimens(sp), config, truncate_min, truncate_max)
+end
+
+% %% Statistics
+% disp("Performing statistics")
+% states = setdiff(fieldnames(specimens), "name");
+%
+% for s = 1:numel(states)
+%     knee_state = states{s};
+%     statistics.(knee_state) = interspecimen_stats([specimens.(knee_state)], config);
+% end
+%
+% %% Output stats
+% disp("Printing statistics to file")
+% print_mean_std_to_file(statistics, states, root);
+
+%% Plot
 %% Stability envelope
-stability_envelope(config, statistics, truncate_min, truncate_max)
 %% Plot interspecimen
 
 

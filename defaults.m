@@ -1,4 +1,4 @@
-config.visualise_digitisation = true; % Plots the landmark digitisation
+config.visualise_digitisation = false; % Plots the landmark digitisation
 %% Important post-processing definitions
 % These are sensible defaults.
 
