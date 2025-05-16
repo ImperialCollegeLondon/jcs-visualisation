@@ -1,3 +1,4 @@
 function O = state_regex(I)
-    O = replace(I, '+', '_w_');
+    I = replace(I, '+', '_w_');
+    O = replace(I, '-', '_wo_');
 end

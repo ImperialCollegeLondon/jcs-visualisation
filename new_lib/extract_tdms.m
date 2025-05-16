@@ -4,8 +4,13 @@ function output = extract_tdms(data, config)
     output.loading_condition = data.Attributes__Test_Description.Trajectory.data{:};
     knee_state = data.Attributes__Test_Description.Experiment_Run.data{:};
     knee_state = split(knee_state, '_');
-    knee_state = knee_state(1);
-    output.state = state_regex(knee_state{:});
+    knee_state = knee_state{1};
+
+    if ~strcmp(knee_state, config.state_from_file_name)
+        warning("State from file name and data do not match. Using %s.", config.state_from_file_name);
+        knee_state = config.state_from_file_name;
+    end
+    output.state = state_regex(knee_state);
     
     %% Flexion
     flexion = extract_data(data.State_JCS, "JCS_");

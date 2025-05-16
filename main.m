@@ -34,12 +34,17 @@ for i = 1:numel(fp_specimens)
     
     input_path = fullfile({trajectories.folder}', {trajectories.name}');
     [~, file_name, ~] = fileparts({trajectories.name}'); % Name without extension
-    
+
     %% load in experiment run
     
     for j = 1:length(input_path)
         ii = ii + 1;
         fprintf("  Run %d: %s\n", j, regexprep(file_name{j}, '_1of1_1_M.*', ''));
+
+        %Current state from name
+        file_name_split = split(file_name{j}, '_');
+        state_from_file_name = file_name_split{2};
+        config.state_from_file_name = state_from_file_name;
         try
             data = TDMS_getStruct(input_path{j});
             all_runs(ii) = calculate_kinematics(data, config);
@@ -78,9 +83,86 @@ end
 %% Split the runs into specimens, knee states and loading conditions
 specimens = organise_runs(all_runs);
 
+%% Visualise all specimens
+
+% gs_specimen = {all_runs.specimen}';
+% gs_state = {all_runs.state}';
+% gs_loading_condition = {all_runs.loading_condition}';
+% gs_jcs = {all_runs.optimised_jcs}';
+% 
+% is_run = cellfun(@(x) height(x) == 181, gs_jcs);
+% gs_specimen = gs_specimen(is_run);
+% gs_state = gs_state(is_run);
+% gs_loading_condition = gs_loading_condition(is_run);
+% gs_jcs = gs_jcs(is_run);
+% 
+% for angle = 1:181
+%     tab = cellfun(@(x) x(angle, :), gs_jcs, "UniformOutput",false);
+%     data_per_angle = vertcat(tab{:});
+%     data_per_angle.name = categorical(string(gs_specimen));
+%     data_per_angle.state = categorical(string(gs_state));
+%     data_per_angle.loading_condition = categorical(string(gs_loading_condition));
+% 
+% 
+%     groups{angle} = groupsummary(data_per_angle, {'state', 'loading_condition'}, "mean");
+% end
+%%
+
+states = setdiff(fieldnames(specimens), "name");
+% specimen_names = [specimens.name];
+%% Neutral path
+neutral_path = all_runs([all_runs.loading_condition] == "Neutral_flex");
+neutral_path = neutral_path([neutral_path.state] ~= "Unoptimised"); % Exclude unoptimised
+specimen_names = unique([neutral_path.specimen]);
+specimen_states = unique([neutral_path.state]);
+colours = lines(numel(specimen_states));
+
+for sn = 1:numel(specimen_names)
+    figure(sn)
+    legend_text = "";
+    
+    current_specimen = neutral_path([neutral_path.specimen] == specimen_names(sn));
+    for ss = 1:numel(specimen_states)
+        current_state = current_specimen([current_specimen.state] == specimen_states(ss));
+        % opt_jcs = {current_state.optimised_jcs};
+        % flex = 'Flexion';
+
+        opt_jcs = {current_state.kinematics};
+        flex = 'flexion';
+        
+        colour = colours(ss, :);
+        legend_text(end+1) = specimen_states(ss); 
+        for oj = 1:numel(opt_jcs)
+
+            datum = opt_jcs{oj};
+
+            fieldnames = setdiff(datum.Properties.VariableNames, flex);
+            for f = 1:numel(fieldnames)
+                hold on;
+                nexttile(f)
+                fname = fieldnames{f};
+                [x_arrowed, y_arrowed] = arrowed_line(datum.(flex), datum.(fname), 10, 100, 100);
+                h = plot(x_arrowed, y_arrowed, 'Color', colour);
+                xlabel("Flexion")
+                ylabel(replace(fname, '_', ' '))
+
+                if oj == 1 && f == 1
+                    legend_handles(sn, ss) = h;
+                end
+            end
+        end
+    end
+    legend_text = legend_text(~(legend_text == ""));
+    sgtitle(specimen_names(sn));
+    legend_text = replace(legend_text, '_w_', '+');
+    legend_text = replace(legend_text, '_wo_', '-');
+    legend(legend_handles(sn, :), legend_text)
+end
+
+
 %% Statistics
 disp("Performing statistics")
-states = setdiff(fieldnames(specimens), "name");
+
 
 for s = 1:numel(states)
     knee_state = states{s};
