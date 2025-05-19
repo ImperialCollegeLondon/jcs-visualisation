@@ -19,6 +19,7 @@ function [config, state, setup] = load_config(path, config)
     config.transforms.T_S2_RB2_Orig = state.JCS.Initial_T_Sen2_RB2;
     position_offset = state.JCS.Position_Offset; %Neutral position offset, defined as the zero point to calculate kinematics
     position_offset = [position_offset(1:3)*1000; rad2deg(position_offset(4:6))];
+    % position_offset = [position_offset(1:3); rad2deg(position_offset(4:6))];
     config.transforms.position_offset = findTrackerFixedFrames(position_offset(4:6), position_offset(1:3));
     
     setup = serialise(fp_setup);

@@ -14,9 +14,9 @@ if right
     Ry = asind(R(1,3,:));
     Rz = -atan2(R(1,2,:),R(1,1,:))*180/pi;
 else
-    Rx = atan2(R(2,3,:),R(3,3,:))*180/pi;
+    Rx = -atan2(R(2,3,:),R(3,3,:))*180/pi;
     Ry = -asind(R(1,3,:));
-    Rz = -atan2(R(1,2,:),R(1,1,:))*180/pi;
+    Rz = atan2(R(1,2,:),R(1,1,:))*180/pi;
 end
 transform = table();
 transform.flexion = squeeze(Rx);

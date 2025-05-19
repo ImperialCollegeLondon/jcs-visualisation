@@ -53,6 +53,7 @@ for sp = 1:numel(path_specimens) % Navigate specimens
                 traj_text = split(trajectory_set, '_');
                 state_from_name = state_regex(string(traj_text{2}));
                 if all_runs(ii).state ~= state_from_name
+                    warning("Using knee state from file name: %s", state_from_name);
                     all_runs(ii).state = state_from_name;
                 end
 
@@ -86,14 +87,119 @@ for n = 1:numel(folder_names)
     % Print to file
     for sp = 1:numel(all_runs)
         filename = fullfile(fp_output, all_runs(sp).specimen, strcat(all_runs(sp).state, '_', all_runs(sp).loading_condition, '.csv'));
-        writetable(all_runs(sp).(folder_names(n)), filename);
+        datum = all_runs(sp).(folder_names(n));
+        if ~istable(datum)
+            datum = table(datum);
+        end
+        writetable(datum, filename);
     end
 end
 
 %% Split the runs into specimens, knee states and loading conditions
 specimens = organise_runs(all_runs);
 
-%% Calculate stability envelopes
+
+%% Visualise all specimens
+
+% gs_specimen = {all_runs.specimen}';
+% gs_state = {all_runs.state}';
+% gs_loading_condition = {all_runs.loading_condition}';
+% gs_jcs = {all_runs.optimised_jcs}';
+% 
+% is_run = cellfun(@(x) height(x) == 181, gs_jcs);
+% gs_specimen = gs_specimen(is_run);
+% gs_state = gs_state(is_run);
+% gs_loading_condition = gs_loading_condition(is_run);
+% gs_jcs = gs_jcs(is_run);
+% 
+% for angle = 1:181
+%     tab = cellfun(@(x) x(angle, :), gs_jcs, "UniformOutput",false);
+%     data_per_angle = vertcat(tab{:});
+%     data_per_angle.name = categorical(string(gs_specimen));
+%     data_per_angle.state = categorical(string(gs_state));
+%     data_per_angle.loading_condition = categorical(string(gs_loading_condition));
+% 
+% 
+%     groups{angle} = groupsummary(data_per_angle, {'state', 'loading_condition'}, "mean");
+% end
+%%
+
+states = setdiff(fieldnames(specimens), "name");
+% specimen_names = [specimens.name];
+%% Neutral path
+neutral_path = all_runs([all_runs.loading_condition] == "Neutral_flex");
+neutral_path = neutral_path([neutral_path.state] ~= "Unoptimised"); % Exclude unoptimised
+specimen_names = unique([neutral_path.specimen]);
+specimen_states = unique([neutral_path.state]);
+colours = lines(numel(specimen_states));
+
+for sn = 1:numel(specimen_names)
+    figure(sn)
+    legend_text = "";
+    
+    current_specimen = neutral_path([neutral_path.specimen] == specimen_names(sn));
+
+    for ss = 1:numel(specimen_states)
+        current_state = current_specimen([current_specimen.state] == specimen_states(ss));
+        opt_jcs = {current_state.optimised_jcs};
+        flex = 'Flexion';
+
+        % opt_jcs = {current_state.kinematics};
+        % flex = 'flexion';
+        
+        colour = colours(ss, :);
+        legend_text(end+1) = specimen_states(ss); 
+        for oj = 1:numel(opt_jcs)
+
+            datum = opt_jcs{oj};
+
+            fieldnames = setdiff(datum.Properties.VariableNames, flex);
+            for f = 1:numel(fieldnames)
+                hold on;
+                nexttile(f)
+                fname = fieldnames{f};
+                [x_arrowed, y_arrowed] = arrowed_line(datum.(flex), datum.(fname), 10, 100, 100);
+                h = plot(x_arrowed, y_arrowed, 'Color', colour);
+                xlabel("Flexion")
+                ylabel(replace(fname, '_', ' '))
+
+                if oj == 1 && f == 1
+                    legend_handles(sn, ss) = h;
+                end
+            end
+        end
+    end
+    sgtitle(specimen_names(sn));
+    
+    is_line = arrayfun(@(x) isa(x, 'matlab.graphics.chart.primitive.Line'), legend_handles(sn, :));
+    current_legends = legend_handles(sn, :);
+    line_mask = is_line(current_legends);
+
+    legend_text = legend_text(~(legend_text == ""));
+    legend_text = replace(legend_text, '_w_', '+');
+    legend_text = replace(legend_text, '_wo_', '-');
+
+    
+    legend_text = legend_text(line_mask);
+    current_legends = current_legends(line_mask);
+    legend(current_legends, legend_text)
+end
+
+
+%% Statistics
+disp("Performing statistics")
+
+
+for s = 1:numel(states)
+    knee_state = states{s};
+    statistics.(knee_state) = interspecimen_stats([specimens.(knee_state)], config);
+end
+
+%% Output stats
+disp("Printing statistics to file")
+print_mean_std_to_file(statistics, states, root);
+
+%% Plot
 truncate_min = -5;
 truncate_max = 90;
 

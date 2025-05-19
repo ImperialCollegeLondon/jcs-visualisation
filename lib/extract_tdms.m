@@ -4,8 +4,8 @@ function output = extract_tdms(data, config)
     output.loading_condition = data.Attributes__Test_Description.Trajectory.data{:};
     knee_state = data.Attributes__Test_Description.Experiment_Run.data{:};
     knee_state = split(knee_state, '_');
-    knee_state = knee_state(1);
-    output.state = state_regex(knee_state{:});
+    knee_state = knee_state{1};
+    output.state = state_regex(knee_state);
     
     %% Flexion
     flexion = extract_data(data.State_JCS, "JCS_");

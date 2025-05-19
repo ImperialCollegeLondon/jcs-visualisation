@@ -26,7 +26,6 @@ function data_struct = serialise(path)
         if contains(keys{end}, "size")
             continue
         end
-
         %% Group similar keys.
         % Channel Names [0-n] grouped as a string array.
         % last_digit_is_num = is_last_word_num(keys);
