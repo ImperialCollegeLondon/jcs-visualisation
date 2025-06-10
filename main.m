@@ -169,20 +169,113 @@ for sn = 1:numel(specimen_names)
             end
         end
     end
-    sgtitle(specimen_names(sn));
+    sgtitle([specimen_names(sn) 'Optimised']);
     
     is_line = arrayfun(@(x) isa(x, 'matlab.graphics.chart.primitive.Line'), legend_handles(sn, :));
     current_legends = legend_handles(sn, :);
-    line_mask = is_line(current_legends);
+    legend_lines = current_legends(is_line);
 
     legend_text = legend_text(~(legend_text == ""));
     legend_text = replace(legend_text, '_w_', '+');
     legend_text = replace(legend_text, '_wo_', '-');
 
     
-    legend_text = legend_text(line_mask);
-    current_legends = current_legends(line_mask);
-    legend(current_legends, legend_text)
+    legend_text = legend_text(is_line);
+    legend(legend_lines, legend_text)
+end
+
+%% Statistics
+is_full_flexion = is_flexion_arc(all_runs, 180);
+data_full_flexion = all_runs(is_full_flexion);
+data_for_stats = split_to_matrix(data_full_flexion);
+[c,m,h,gnames] = split_into_stats_struct(data_for_stats);
+
+function [c,m,h,gnames] = split_into_stats_struct(data)
+    fields = fieldnames(data);
+    for f = 1:numel(fields)
+        field_data = data.(fields{f});
+        is_data(f) = istable(field_data);
+        is_property(f) = ~istable(field_data) && ~isnumeric(field_data);
+    end
+
+    field_properties = fields(is_property);
+    field_data = fields(is_data);
+    for fd = 1:numel(field_data)
+        
+        for n = 1:size(data, 2)
+            data_all_rows = data(:, n);
+            current_angle = table;
+            for k = 1:numel(data_all_rows)
+                new_row = table;
+                datum = data_all_rows(k, :);
+                field_datum = field_data{fd};
+                for f = 1:numel(field_properties)
+                    new_row.(field_properties{f}) = categorical(datum.(field_properties{f}));
+                end
+                new_row = [new_row, datum.(field_datum)];
+                current_angle(k,:) = new_row;
+            end
+
+            for fp = 1:numel(field_properties)
+                groups{fp} = [data_all_rows.(field_properties{fp})]';
+            end
+
+            groups = cellfun(@(x) replace(x, '_w_', '+'), groups, 'UniformOutput', false);
+            groups = cellfun(@(x) replace(x, '_wo_', '-'), groups, 'UniformOutput', false);
+            properties = current_angle.Properties.VariableNames;
+            for p = 1:numel(properties)
+                c_field = properties{p};
+                dat = current_angle.(properties{p});
+                if isnumeric(dat)
+                    [pval, tbl, sts, terms] = anovan(dat, groups, 'varnames', field_properties, 'display', 'off');
+                    [c(n).(field_data{fd}).(c_field), m(n).(field_data{fd}).(c_field), h(n).(field_data{fd}).(c_field), gnames] = multcompare(sts, 'Display','off');
+                    title(replace(c_field, '_', ' '))
+                end
+            end
+           
+        end
+    end
+end
+function row_data = split_to_matrix(data)
+    fields = fieldnames(data);
+    for f = 1:numel(fields)
+        datum = {data.(fields{f})};
+        if istable(datum{1})
+            h = height(datum{1});
+            break
+        end
+    end
+    if h == 0
+        error("No data provided")
+    end
+
+    for i = 1:h
+        for n = 1:numel(data)
+            for f = 1:numel(fields)
+                datum = data(n).(fields{f});
+                if ~istable(datum)
+                    row_data(n, i).(fields{f}) = datum;
+                else
+                    row_data(n, i).(fields{f}) = datum(h, :);
+                end
+            end
+        end
+    end
+end
+
+function keep = is_flexion_arc(data, threshold)
+    fields = fieldnames(data);
+    keep = false(size(data));
+    % Remove sections that aren't a full flexion arc
+    for i = 1:numel(data)
+        for j = 1:numel(fields)
+            T = data(i).(fields{j});
+            if istable(T) && height(T) > threshold
+                keep(i) = true;
+                break
+            end
+        end
+    end
 end
 
 
@@ -195,9 +288,9 @@ for s = 1:numel(states)
     statistics.(knee_state) = interspecimen_stats([specimens.(knee_state)], config);
 end
 
-%% Output stats
-disp("Printing statistics to file")
-print_mean_std_to_file(statistics, states, root);
+% %% Output stats
+% disp("Printing statistics to file")
+% print_mean_std_to_file(statistics, states, root);
 
 %% Plot
 truncate_min = -5;
