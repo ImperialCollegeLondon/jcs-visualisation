@@ -127,6 +127,15 @@ specimens = organise_runs(all_runs);
 states = setdiff(fieldnames(specimens), "name");
 % specimen_names = [specimens.name];
 %% Neutral path
+
+jcss = ["jcs_optimised", "jcs_digitised"];
+
+for n = 1:numel(jcss)
+    figure(n)
+    plot_neutral_path(all_runs, jcss(n))
+end
+
+function plot_neutral_path(all_runs, jcss)
 neutral_path = all_runs([all_runs.loading_condition] == "Neutral_flex");
 neutral_path = neutral_path([neutral_path.state] ~= "Unoptimised"); % Exclude unoptimised
 specimen_names = unique([neutral_path.specimen]);
@@ -134,15 +143,15 @@ specimen_states = unique([neutral_path.state]);
 colours = lines(numel(specimen_states));
 
 for sn = 1:numel(specimen_names)
-    figure(sn)
+    % figure(sn)
     legend_text = "";
     
     current_specimen = neutral_path([neutral_path.specimen] == specimen_names(sn));
 
     for ss = 1:numel(specimen_states)
         current_state = current_specimen([current_specimen.state] == specimen_states(ss));
-        opt_jcs = {current_state.optimised_jcs};
-        flex = 'Flexion';
+        opt_jcs = {current_state.(jcss)};
+        flex = 'flexion';
 
         % opt_jcs = {current_state.kinematics};
         % flex = 'flexion';
@@ -169,7 +178,7 @@ for sn = 1:numel(specimen_names)
             end
         end
     end
-    sgtitle([specimen_names(sn) 'Optimised']);
+    sgtitle([specimen_names(sn) replace(jcss, '_', ' ')]);
     
     is_line = arrayfun(@(x) isa(x, 'matlab.graphics.chart.primitive.Line'), legend_handles(sn, :));
     current_legends = legend_handles(sn, :);
@@ -182,6 +191,7 @@ for sn = 1:numel(specimen_names)
     
     legend_text = legend_text(is_line);
     legend(legend_lines, legend_text)
+end
 end
 
 %% Statistics
@@ -263,30 +273,16 @@ function row_data = split_to_matrix(data)
     end
 end
 
-function keep = is_flexion_arc(data, threshold)
-    fields = fieldnames(data);
-    keep = false(size(data));
-    % Remove sections that aren't a full flexion arc
-    for i = 1:numel(data)
-        for j = 1:numel(fields)
-            T = data(i).(fields{j});
-            if istable(T) && height(T) > threshold
-                keep(i) = true;
-                break
-            end
-        end
-    end
-end
 
 
 %% Statistics
-disp("Performing statistics")
-
-
-for s = 1:numel(states)
-    knee_state = states{s};
-    statistics.(knee_state) = interspecimen_stats([specimens.(knee_state)], config);
-end
+% disp("Performing statistics")
+% 
+% 
+% for s = 1:numel(states)
+%     knee_state = states{s};
+%     statistics.(knee_state) = interspecimen_stats([specimens.(knee_state)], config);
+% end
 
 % %% Output stats
 % disp("Printing statistics to file")

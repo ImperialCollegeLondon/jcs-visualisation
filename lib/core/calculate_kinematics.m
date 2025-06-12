@@ -15,9 +15,9 @@ function output = calculate_kinematics(data, config)
     %% calculate transform from TIBIA (RB2) to FEMUR (RB1).
     % i.e., Tibia in femoral frame of reference.
     RB1_T_W2 = S1_T_RB1 \ W1_T_W2;
-    RB1_T_S2 = pagemtimes(RB1_T_W2, W2_T_S2);
+    RB1_T_S2 = pagemtimes(RB1_T_W2, W2_T_S2); % End effector in Femur CS
     RB1_T_RB2 = pagemtimes(RB1_T_S2,S2_T_RB2); % fTt
-    RB1_T_RB2 = pagemtimes(RB1_T_RB2, position_offset);
+    % RB1_T_RB2 = pagemtimes(RB1_T_RB2, position_offset);
 
     % Invert the optimisations
     RB1orig_T_RB2 = pagemldivide(RB1opt_T_RB1orig, RB1_T_RB2);
@@ -28,8 +28,11 @@ function output = calculate_kinematics(data, config)
     output.state = string(JCS_raw.state);
     output.loading_condition = string(JCS_raw.loading_condition);
 
-    output.optimised_jcs = JCS_raw.translation.actual;
-    
+    output.jcs_optimised = JCS_raw.translation.actual;
+    try
+    output.jcs_digitised = JCS_raw.translation.digitised;
+    catch
+    end
     output.kinematics = rotationsAndTranslations(RB1_T_RB2, config.is_right_knee);
     output.kinematics_orig = rotationsAndTranslations(RB1orig_T_RB2orig, config.is_right_knee);
    

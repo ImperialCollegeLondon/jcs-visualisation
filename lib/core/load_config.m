@@ -10,7 +10,7 @@ function [config, state, setup] = load_config(path, config)
     state = serialise(fp_knee_state);
 
     % Get the bits we care about out of the serialised config
-    config.transforms.W1_T_W2 = state.JCS.T_World1_World2;
+    config.transforms.W1_T_W2 = state.JCS.T_World1_World2_for_Fiducials;
     config.transforms.S1_T_RB1 = state.JCS.T_Sensor1_RB1; %Transformation from Certus to Rigid Body 1 (Femur)
     config.transforms.S2_T_RB2 = state.JCS.T_Sensor2_RB2; %Transformation from Sensor 2 (Load Cell/Robot end effector) to Rigid Body 2 (Tibia)
     config.transforms.RB2opt_T_RB2orig = state.JCS.T_RB2_OPT_RB2_Orig;
