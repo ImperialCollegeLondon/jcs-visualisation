@@ -53,11 +53,19 @@ end
     output = table();
     for f = 1:numel(headers)
         datum = name.(headers{f}).data(flexion_arc);
-        output.(new_headers{f}) = datum(:);
+        if contains(headers{f}, {'roll', 'pitch', 'yaw'})
+            dat = unwrap_deg(datum(:));
+        else
+            dat = datum(:);
+        end
+        output.(new_headers{f}) = dat;
     end
 end
 
 function idx = quantise(signal, values)
 diffs = abs(signal - values);
 [~, idx] = min(diffs, [], 1);
+end
+function ang = unwrap_deg(rad)
+    ang = rad2deg(unwrap(deg2rad(rad)));
 end
