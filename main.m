@@ -50,6 +50,11 @@ for sp = 1:numel(path_specimens) % Navigate specimens
                 data = TDMS_getStruct(input_path{t});
                 all_runs(ii) = calculate_kinematics(data, config);
 
+                if all_runs(ii).specimen ~= specimen_name && ts == 1 && t == 1
+                    warning("Specimen %s changed to %s", all_runs(ii).specimen, specimen_name);
+                    all_runs(ii).specimen = specimen_name;
+                end
+
                 traj_text = split(trajectory_set, '_');
                 state_from_name = state_regex(string(traj_text{2}));
                 if all_runs(ii).state ~= state_from_name
@@ -75,25 +80,25 @@ for sp = numel(all_runs):-1:1
     end
 end
 
-%% Print to file
-% Prepare the folders
-fp_results = fullfile(root, "Results");
-folder_names = setdiff(string(fieldnames(all_runs)), ["specimen", "state", "loading_condition", "config"]);
-for n = 1:numel(folder_names)
-    fp_output = fullfile(fp_results, folder_names(n));
-    fp_output_specimens = fullfile(fp_output, string({specimen_list.name}));
-    cellfun(@mkdir, fp_output_specimens);
-
-    % Print to file
-    for sp = 1:numel(all_runs)
-        filename = fullfile(fp_output, all_runs(sp).specimen, strcat(all_runs(sp).state, '_', all_runs(sp).loading_condition, '.csv'));
-        datum = all_runs(sp).(folder_names(n));
-        if ~istable(datum)
-            datum = table(datum);
-        end
-        writetable(datum, filename);
-    end
-end
+% %% Print to file
+% % Prepare the folders
+% fp_results = fullfile(root, "Results");
+% folder_names = setdiff(string(fieldnames(all_runs)), ["specimen", "state", "loading_condition", "config"]);
+% for n = 1:numel(folder_names)
+%     fp_output = fullfile(fp_results, folder_names(n));
+%     fp_output_specimens = fullfile(fp_output, string({specimen_list.name}));
+%     cellfun(@mkdir, fp_output_specimens);
+% 
+%     % Print to file
+%     for sp = 1:numel(all_runs)
+%         filename = fullfile(fp_output, all_runs(sp).specimen, strcat(all_runs(sp).state, '_', all_runs(sp).loading_condition, '.csv'));
+%         datum = all_runs(sp).(folder_names(n));
+%         if ~istable(datum)
+%             datum = table(datum);
+%         end
+%         % writetable(datum, filename);
+%     end
+% end
 
 %% Split the runs into specimens, knee states and loading conditions
 specimens = organise_runs(all_runs);
@@ -128,124 +133,73 @@ states = setdiff(fieldnames(specimens), "name");
 % specimen_names = [specimens.name];
 %% Neutral path
 
-jcss = ["jcs_optimised", "jcs_digitised"];
+% jcss = ["jcs_optimised", "jcs_digitised"];
+jcss = "robot_pos";
 
 for n = 1:numel(jcss)
-    figure(n)
-    plot_neutral_path(all_runs, jcss(n))
+    figure
+    plot_neutral_path(all_runs([all_runs.is_optimised]), jcss(n))
+    % plot_average_neutral_path(all_runs([all_runs.is_optimised]), jcss(n))
 end
 
-function plot_neutral_path(all_runs, jcss)
-neutral_path = all_runs([all_runs.loading_condition] == "Neutral_flex");
-neutral_path = neutral_path([neutral_path.state] ~= "Unoptimised"); % Exclude unoptimised
-specimen_names = unique([neutral_path.specimen]);
-specimen_states = unique([neutral_path.state]);
-colours = lines(numel(specimen_states));
 
-for sn = 1:numel(specimen_names)
-    % figure(sn)
-    legend_text = "";
-    
-    current_specimen = neutral_path([neutral_path.specimen] == specimen_names(sn));
-
-    for ss = 1:numel(specimen_states)
-        current_state = current_specimen([current_specimen.state] == specimen_states(ss));
-        opt_jcs = {current_state.(jcss)};
-        flex = 'flexion';
-
-        % opt_jcs = {current_state.kinematics};
-        % flex = 'flexion';
-        
-        colour = colours(ss, :);
-        legend_text(end+1) = specimen_states(ss); 
-        for oj = 1:numel(opt_jcs)
-
-            datum = opt_jcs{oj};
-
-            fieldnames = setdiff(datum.Properties.VariableNames, flex);
-            for f = 1:numel(fieldnames)
-                hold on;
-                nexttile(f)
-                fname = fieldnames{f};
-                [x_arrowed, y_arrowed] = arrowed_line(datum.(flex), datum.(fname), 10, 100, 100);
-                h = plot(x_arrowed, y_arrowed, 'Color', colour);
-                xlabel("Flexion")
-                ylabel(replace(fname, '_', ' '))
-
-                if oj == 1 && f == 1
-                    legend_handles(sn, ss) = h;
-                end
-            end
-        end
-    end
-    sgtitle([specimen_names(sn) replace(jcss, '_', ' ')]);
-    
-    is_line = arrayfun(@(x) isa(x, 'matlab.graphics.chart.primitive.Line'), legend_handles(sn, :));
-    current_legends = legend_handles(sn, :);
-    legend_lines = current_legends(is_line);
-
-    legend_text = legend_text(~(legend_text == ""));
-    legend_text = replace(legend_text, '_w_', '+');
-    legend_text = replace(legend_text, '_wo_', '-');
-
-    
-    legend_text = legend_text(is_line);
-    legend(legend_lines, legend_text)
-end
-end
 
 %% Statistics
-is_full_flexion = is_flexion_arc(all_runs, 180);
-data_full_flexion = all_runs(is_full_flexion);
-data_for_stats = split_to_matrix(data_full_flexion);
-[c,m,h,gnames] = split_into_stats_struct(data_for_stats);
+% is_full_flexion = is_flexion_arc(all_runs, 180);
+% data_full_flexion = all_runs(is_full_flexion);
+% data_for_stats = split_to_matrix(data_full_flexion);
+% [c,m,h,gnames] = split_into_stats_struct(data_for_stats);
 
-function [c,m,h,gnames] = split_into_stats_struct(data)
-    fields = fieldnames(data);
-    for f = 1:numel(fields)
-        field_data = data.(fields{f});
-        is_data(f) = istable(field_data);
-        is_property(f) = ~istable(field_data) && ~isnumeric(field_data);
-    end
 
-    field_properties = fields(is_property);
-    field_data = fields(is_data);
-    for fd = 1:numel(field_data)
-        
-        for n = 1:size(data, 2)
-            data_all_rows = data(:, n);
-            current_angle = table;
-            for k = 1:numel(data_all_rows)
-                new_row = table;
-                datum = data_all_rows(k, :);
-                field_datum = field_data{fd};
-                for f = 1:numel(field_properties)
-                    new_row.(field_properties{f}) = categorical(datum.(field_properties{f}));
-                end
-                new_row = [new_row, datum.(field_datum)];
-                current_angle(k,:) = new_row;
-            end
 
-            for fp = 1:numel(field_properties)
-                groups{fp} = [data_all_rows.(field_properties{fp})]';
-            end
 
-            groups = cellfun(@(x) replace(x, '_w_', '+'), groups, 'UniformOutput', false);
-            groups = cellfun(@(x) replace(x, '_wo_', '-'), groups, 'UniformOutput', false);
-            properties = current_angle.Properties.VariableNames;
-            for p = 1:numel(properties)
-                c_field = properties{p};
-                dat = current_angle.(properties{p});
-                if isnumeric(dat)
-                    [pval, tbl, sts, terms] = anovan(dat, groups, 'varnames', field_properties, 'display', 'off');
-                    [c(n).(field_data{fd}).(c_field), m(n).(field_data{fd}).(c_field), h(n).(field_data{fd}).(c_field), gnames] = multcompare(sts, 'Display','off');
-                    title(replace(c_field, '_', ' '))
-                end
-            end
-           
-        end
-    end
+%% Statistics
+% disp("Performing statistics")
+% 
+% 
+% for s = 1:numel(states)
+%     knee_state = states{s};
+%     statistics.(knee_state) = interspecimen_stats([specimens.(knee_state)], config);
+% end
+
+% %% Output stats
+% disp("Printing statistics to file")
+% print_mean_std_to_file(statistics, states, root);
+
+%% Plot
+truncate_min = -5;
+truncate_max = 90;
+jcs = 'jcs_optimised';
+native_name = "Native";
+passive_flex_name = "Passive Flexion";
+for sp = 1:numel(specimens)
+    specimen = specimens(sp);
+    native_passive = get_native_passive_flex(specimen, native_name, passive_flex_name);
+    stability_envelope(specimen, native_passive, config, truncate_min, truncate_max, jcs)
 end
+
+% %% Statistics
+% disp("Performing statistics")
+% states = setdiff(fieldnames(specimens), "name");
+%
+% for s = 1:numel(states)
+%     knee_state = states{s};
+%     statistics.(knee_state) = interspecimen_stats([specimens.(knee_state)], config);
+% end
+%
+% %% Output stats
+% disp("Printing statistics to file")
+% print_mean_std_to_file(statistics, states, root);
+
+%% Plot
+%% Stability envelope
+%% Plot interspecimen
+
+
+% plot_interspecimen(config, statistics, statistics, states, truncate_min, truncate_max);
+% Only plots loading conditions that Native has experienced. If any are missing from it, they are just ignored.
+
+
 function row_data = split_to_matrix(data)
     fields = fieldnames(data);
     for f = 1:numel(fields)
@@ -272,48 +226,3 @@ function row_data = split_to_matrix(data)
         end
     end
 end
-
-
-
-%% Statistics
-% disp("Performing statistics")
-% 
-% 
-% for s = 1:numel(states)
-%     knee_state = states{s};
-%     statistics.(knee_state) = interspecimen_stats([specimens.(knee_state)], config);
-% end
-
-% %% Output stats
-% disp("Printing statistics to file")
-% print_mean_std_to_file(statistics, states, root);
-
-%% Plot
-truncate_min = -5;
-truncate_max = 90;
-
-for sp = 1:numel(specimens)
-    stability_envelope(specimens(sp), config, truncate_min, truncate_max)
-end
-
-% %% Statistics
-% disp("Performing statistics")
-% states = setdiff(fieldnames(specimens), "name");
-%
-% for s = 1:numel(states)
-%     knee_state = states{s};
-%     statistics.(knee_state) = interspecimen_stats([specimens.(knee_state)], config);
-% end
-%
-% %% Output stats
-% disp("Printing statistics to file")
-% print_mean_std_to_file(statistics, states, root);
-
-%% Plot
-%% Stability envelope
-%% Plot interspecimen
-
-
-% plot_interspecimen(config, statistics, statistics, states, truncate_min, truncate_max);
-% Only plots loading conditions that Native has experienced. If any are missing from it, they are just ignored.
-

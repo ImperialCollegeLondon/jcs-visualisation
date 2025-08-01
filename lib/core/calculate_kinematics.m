@@ -26,6 +26,7 @@ function output = calculate_kinematics(data, config)
     %% Prepare output
     output.specimen = string(JCS_raw.specimen);
     output.state = string(JCS_raw.state);
+    output.is_optimised = config.transforms.is_optimised;
     output.loading_condition = string(JCS_raw.loading_condition);
 
     output.jcs_optimised = JCS_raw.translation.actual;
@@ -33,6 +34,11 @@ function output = calculate_kinematics(data, config)
     output.jcs_digitised = JCS_raw.translation.digitised;
     catch
     end
+
+    % Correctly unwrap robot pos
+    robot_pos = rotationsAndTranslations(W2_T_S2, config.is_right_knee);
+    robot_pos_arr = unwrap(table2array(robot_pos));
+    output.robot_pos = array2table(robot_pos_arr, "VariableNames", robot_pos.Properties.VariableNames);
     output.kinematics = rotationsAndTranslations(RB1_T_RB2, config.is_right_knee);
     output.kinematics_orig = rotationsAndTranslations(RB1orig_T_RB2orig, config.is_right_knee);
    
@@ -42,8 +48,8 @@ function output = calculate_kinematics(data, config)
     output.forces_actual = JCS_raw.forces.actual;
     output.forces_desired = JCS_raw.forces.desired;
 
-    output.RB2opt_T_RB2orig = config.transforms.RB2opt_T_RB2orig; %toTt
-    output.RB1opt_T_RB1orig = config.transforms.RB1opt_T_RB1orig; %foTf
+    % output.RB2opt_T_RB2orig = config.transforms.RB2opt_T_RB2orig; %toTt
+    % output.RB1opt_T_RB1orig = config.transforms.RB1opt_T_RB1orig; %foTf
     % output.kinematics.flexion = config.transforms.shift_flex(output.kinematics.flexion); % Offset so extension is 0 deg
     % output.error = output.kinematics - JCS_raw.translations.actual;
 end

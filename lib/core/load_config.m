@@ -15,6 +15,10 @@ function [config, state, setup] = load_config(path, config)
     config.transforms.S2_T_RB2 = state.JCS.T_Sensor2_RB2; %Transformation from Sensor 2 (Load Cell/Robot end effector) to Rigid Body 2 (Tibia)
     config.transforms.RB2opt_T_RB2orig = state.JCS.T_RB2_OPT_RB2_Orig;
     config.transforms.RB1opt_T_RB1orig = state.JCS.T_RB1_OPT_RB1_Orig;
+
+    identity = eye(4);
+    config.transforms.is_optimised = all(state.JCS.T_RB2_OPT_RB2_Orig(1:3, 1:4) ~= identity(1:3, 1:4), "all");
+
     config.transforms.T_S1_RB1_Orig = state.JCS.Initial_T_Sen1_RB1;
     config.transforms.T_S2_RB2_Orig = state.JCS.Initial_T_Sen2_RB2;
     position_offset = state.JCS.Position_Offset; %Neutral position offset, defined as the zero point to calculate kinematics
