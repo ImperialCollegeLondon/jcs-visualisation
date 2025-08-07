@@ -134,7 +134,7 @@ states = setdiff(fieldnames(specimens), "name");
 %% Neutral path
 
 % jcss = ["jcs_optimised", "jcs_digitised"];
-jcss = "robot_pos";
+jcss = "kinematics";
 
 for n = 1:numel(jcss)
     figure
@@ -171,7 +171,7 @@ truncate_min = -5;
 truncate_max = 90;
 jcs = 'jcs_optimised';
 native_name = "Native";
-passive_flex_name = "Passive Flexion";
+passive_flex_name = "Neutral_flex";
 for sp = 1:numel(specimens)
     specimen = specimens(sp);
     native_passive = get_native_passive_flex(specimen, native_name, passive_flex_name);

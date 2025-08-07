@@ -32,7 +32,7 @@ function stability_envelope(data, native_neutral, config, truncate_min, truncate
         grid on;
     end
     sgtitle(["Anterior/Posterior stability envelope"]);
-    legend(plots(:,1), state_regex_inv(states));
+    % legend(plots(:,1), state_regex_inv(states));
 
     plots = [];
     figure; hold on;

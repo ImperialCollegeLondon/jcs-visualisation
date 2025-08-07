@@ -10,7 +10,11 @@ function output = calculate_kinematics(data, config)
     RB1opt_T_RB1orig = config.transforms.RB1opt_T_RB1orig; %foTf
     position_offset = config.transforms.position_offset;
    
-    W2_T_S2 = coordinate2matrix(JCS_raw.robot_position); % End effector in Robot coordinate system throughout arc of flexion
+    robot_position = JCS_raw.robot_position;
+    robot_position.yaw = -atan2d_north_to_east(JCS_raw.robot_position.yaw);
+    robot_position.roll = -atan2d_north_to_east(JCS_raw.robot_position.roll);
+
+    W2_T_S2 = coordinate2matrix(robot_position); % End effector in Robot coordinate system throughout arc of flexion
     
     %% calculate transform from TIBIA (RB2) to FEMUR (RB1).
     % i.e., Tibia in femoral frame of reference.
