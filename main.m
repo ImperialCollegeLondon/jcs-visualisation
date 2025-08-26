@@ -134,7 +134,7 @@ states = setdiff(fieldnames(specimens), "name");
 %% Neutral path
 
 % jcss = ["jcs_optimised", "jcs_digitised"];
-jcss = "kinematics";
+jcss = ["kinematics" "load_cell"];
 
 for n = 1:numel(jcss)
     figure

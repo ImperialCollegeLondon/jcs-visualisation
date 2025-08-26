@@ -11,8 +11,8 @@ function output = calculate_kinematics(data, config)
     position_offset = config.transforms.position_offset;
    
     robot_position = JCS_raw.robot_position;
-    robot_position.yaw = -atan2d_north_to_east(JCS_raw.robot_position.yaw);
-    robot_position.roll = -atan2d_north_to_east(JCS_raw.robot_position.roll);
+    % robot_position.yaw = atan2d_north_to_east(JCS_raw.robot_position.yaw);
+    % robot_position.roll = atan2d_north_to_east(JCS_raw.robot_position.roll);
 
     W2_T_S2 = coordinate2matrix(robot_position); % End effector in Robot coordinate system throughout arc of flexion
     
@@ -32,6 +32,8 @@ function output = calculate_kinematics(data, config)
     output.state = string(JCS_raw.state);
     output.is_optimised = config.transforms.is_optimised;
     output.loading_condition = string(JCS_raw.loading_condition);
+
+    output.load_cell = JCS_raw.load_cell;
 
     output.jcs_optimised = JCS_raw.translation.actual;
     try

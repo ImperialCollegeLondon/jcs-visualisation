@@ -28,6 +28,8 @@ function output = extract_tdms(data, config)
     output.forces.desired = [only_flexion, extract_data(data.Kinetics_JCS_Desired, "___Desired", flexion_arc)];
     output.translation.desired = [only_flexion, extract_data(data.Kinematics_JCS_Desired, "___Desired", flexion_arc)];
     output.robot_position = [only_flexion, extract_data(data.Sensor_Robot_Position, "Robot_Position_", flexion_arc)];
+    output.load_cell = [only_flexion, extract_data(data.Sensor_Control_Load_Cell, "Control_Load_Cell_", flexion_arc)];
+
     try
     output.translation.digitised = extract_data(data.State_JCS_digitised, 'JCS_digitised_', flexion_arc);
     catch ME

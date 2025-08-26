@@ -36,13 +36,3 @@ rotation = pagemtimes(pagemtimes(Qz, Qy), Qx);
 
 transform = pagemtimes(translation, rotation);
 end
-
-% Roll=30.5630;
-% Pitch= 36.1142;
-% Yaw=-21.1694;
-% 
-% Rxpitchyaw=[Roll Pitch Yaw]
-
-% Roll=Roll*pi/180;
-% Pitch=Pitch*pi/180;
-% Yaw=Yaw*pi/180;

@@ -1,8 +1,7 @@
 function stability_envelope(data, native_neutral, config, truncate_min, truncate_max, jcs)
     colourmap = lines(8);    
-    paired_conditions = @(x, str1, str2) contains([x.loading_condition], str1) | contains([x.loading_condition], str2);
-    ant_pos = @(x) paired_conditions(x, 'ant', 'pos');
-    ext_int = @(x) paired_conditions(x, 'ext', 'int');
+    ant_pos = @(x) contains([x.loading_condition], ["ant", "pos"]);
+    ext_int = @(x) contains([x.loading_condition], ["ext", "int"]);
 
     states = fieldnames(data);
     % is_native = states == "Native";
