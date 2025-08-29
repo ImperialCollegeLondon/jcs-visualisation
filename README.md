@@ -36,4 +36,4 @@ spm1d is a package for one-dimensional Statistical Parametric Mapping (SPM). spm
     GNU General Public License for more details.
     
     You should have received a copy of the GNU General Public License
-![version](https://img.shields.io/badge/version-M.0.4.51-blue)
+![version](https://img.shields.io/badge/version-M.0.4.52-blue)

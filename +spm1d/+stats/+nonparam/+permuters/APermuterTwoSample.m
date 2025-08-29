@@ -37,10 +37,14 @@ classdef APermuterTwoSample < spm1d.stats.nonparam.permuters.APermuter
             addOptional(parser, 'two_tailed', false, @islogical);
             parser.parse(varargin{:});
             two_tailed  = parser.Results.two_tailed;
+            
+            
+            % revision by jeremyeekhoff, 2025-08
+            % https://github.com/0todd0000/spm1d/issues/311#issue-3322446572
             if iterations==-1
                 ONES     = nchoosek( 1:self.J, self.JA );
                 n        = self.nPermTotal;
-                if two_tailed
+                if two_tailed && self.JA==self.JB %only valid to use half the distribution if equal sample sizes
                     Z    = zeros(n/2, self.Q);
                     for i = 1:(n/2)
                         Z(i,:) = self.get_test_stat_ones( ONES(i,:)' );
@@ -58,7 +62,41 @@ classdef APermuterTwoSample < spm1d.stats.nonparam.permuters.APermuter
                     ONES = randperm(self.J, self.JA);
                     Z(i,:) = self.get_test_stat_ones( ONES' );
                 end
+                
+                
+%                 ONES     = nchoosek( 1:self.J, self.JA ); %determine all possible permutations
+%                 n        = iterations;
+%                 ni       = randsample(size(ONES,1),n); %randomly select which permutations to use without repeats
+%                 Z        = zeros(n, self.Q);
+%                 for i = 1:n
+% %                     ONES = randperm(self.J, self.JA);
+% %                     Z(i,:) = self.get_test_stat_ones( ONES' );
+%                     Z(i,:) = self.get_test_stat_ones( ONES(ni(i),:)' );
+%                 end
             end
+            
+            % if iterations==-1
+            %     ONES     = nchoosek( 1:self.J, self.JA );
+            %     n        = self.nPermTotal;
+            %     if two_tailed
+            %         Z    = zeros(n/2, self.Q);
+            %         for i = 1:(n/2)
+            %             Z(i,:) = self.get_test_stat_ones( ONES(i,:)' );
+            %         end
+            %     else
+            %         Z    = zeros(n, self.Q);
+            %         for i = 1:n
+            %             Z(i,:) = self.get_test_stat_ones( ONES(i,:)' );
+            %         end
+            %     end
+            % else
+                n        = iterations;
+                Z        = zeros(n, self.Q);
+                for i = 1:n
+                    ONES = randperm(self.J, self.JA);
+                    Z(i,:) = self.get_test_stat_ones( ONES' );
+                end
+            % end
             if two_tailed
                 self.Z         = max(abs(Z), [], 2);
             else
