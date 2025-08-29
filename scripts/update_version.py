@@ -46,7 +46,7 @@ with open(fpath, 'r') as f:
     for i,line in enumerate(lines):
         if line.startswith('![Version]'):
             break
-    lines[i] = f"![version](https://img.shields.io/badge/version-{version_str}-blue)\n"
+    lines[i] = f"![Version](https://img.shields.io/badge/version-{version_str}-blue)\n"
 with open(fpath, 'w') as f:
     f.writelines( lines )
 
