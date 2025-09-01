@@ -5,6 +5,7 @@ classdef Envelope
     properties (Access = private)
         States
         Directions
+        SpecimenName
     end
 
     methods % Constructor
@@ -18,25 +19,29 @@ classdef Envelope
                 specimen_states
             end
 
-            loading_direction = split_loading_condition(trajectory, envelope, specimen_states);
+            obj.SpecimenName = string([trajectory.SpecimenName]); % Should only support one at a time?
+            names = unique(obj.SpecimenName);
+            states = '';
+            directions = '';
+            for n = 1:numel(names)
+                curr_specimen = obj.SpecimenName == names(n);
+                loading_direction.(names(n)) = split_loading_condition(trajectory(curr_specimen), envelope, specimen_states);
+                states = [states; fieldnames(loading_direction.(names(n)))];
+                directions = [directions; fieldnames(loading_direction.(names(n)).(states{1}))];
+            end
 
-            obj.States = string(fieldnames(loading_direction));
-            obj.Directions = string(fieldnames(loading_direction.(obj.States{1})));
-            obj.Data = subtract_native(loading_direction, native_neutral.Data);
-
-
-            % ap_datum = {datum(ant_pos(datum)).(jcs)};
-            % if isempty(ap_datum)
-            %     % Temporary fix. Should correct the Unoptimised state.
-            %     continue
-            % end
-            % ap = subtract_native(d, native_neutral.Data);
-            % plots(st,1) = gen_plots(ap, colourmap(st, :));
-            % grid on;
+            obj.States = unique(states);
+            obj.Directions = unique(directions);
+            obj.Data = subtract_native(loading_direction, native_neutral);
         end
     end
 
     methods
+
+
+        function average(obj)
+            inner_loop(obj.Data, @(x) x)
+        end
         function p = plot(obj, colour)
             arguments
                 obj
@@ -49,38 +54,14 @@ classdef Envelope
             end
 
             states = obj.states;
+            
             for s = 1:numel(states)
                 state = states(s);
 
                 directions = obj.directions;
-                % tiledlayout(round(numel(orientations)/2), 2);
-                for d = 1:numel(directions)
-                    ap = directions(d);
-                    datum = obj.Data.(state).(ap);
+                plots(s) = gen_plots(obj.Data.(state), directions);
 
-                    jcss = fieldnames(datum);
-
-                    for j = 1:numel(jcss)
-                        jcs = jcss{j};
-                        orientations = datum.(jcs).Properties.VariableNames;
-                        orientations(contains(orientations, 'flexion')) = [];
-                        for o = 1:numel(orientations)
-                            nexttile(o); hold on;
-                            x = datum{d}.flexion;
-                            y = datum{d}.(orientations{o});
-                            [x_arrowed, y_arrowed] = arrowed_line(x, y, 10, 100, 100);
-                            fill(x,y, colour, 'FaceAlpha', 0.1);
-                            p = plot(x_arrowed, y_arrowed, 'color', colour);
-                            grid on;
-                            xlabel("Flexion angle");
-                            ylabel(replace(orientations{o}, '_', ' '));
-                        end
-                    end
-
-
-                end
             end
-
         end
     end
 
@@ -149,7 +130,7 @@ function output = split_loading_condition(trajectory, envelope, specimen_states)
                 % datum = datum(is_valid);
 
                 % output.(specimen_states{st}).(name) = datum(direction(is_valid)).Data;
-                output.(specimen_states{st}).(name) = datum(is_direction).Data;
+                output.(specimen_states{st}).(name) = datum.Data;
             end
         end
     end
@@ -177,31 +158,92 @@ function keep = valid_flexion(data, threshold)
 end
 
 function o = subtract_native(data, native)
-    o = data;
-    states = fieldnames(data);
+o = data;
 
-    for st = 1:numel(states)
-        state = states{st};
-        loading_conditions = fieldnames(data.(state));
+    specimen_names = [native.SpecimenName];
+    for ss = 1:numel(specimen_names)
+        specimen_name = specimen_names(ss);
+        curr_specimen = data.(specimen_name);
+        curr_native = native([native.SpecimenName] == specimen_name);
 
-        for d = 1:numel(loading_conditions)
-            loading_condition = loading_conditions{d};
-            datum = data.(state).(loading_condition);
-            jcss = fieldnames(datum);
+        states = fieldnames(curr_specimen);
 
-            for j = 1:numel(jcss)
-                jcs = jcss{j};
-                o.(state).(loading_condition).(jcs) = datum.(jcs) - native.(jcs);
-                try
-                    o.(state).(loading_condition).(jcs).flexion = native.(jcs).flexion;
-                catch ME
-                    if contains(ME.message, "flexion")
-                        warning("No field called 'flexion'. Expect angles to be all 0!")
-                    else
-                        rethrow ME
+        for st = 1:numel(states)
+            state = states{st};
+            loading_conditions = fieldnames(curr_specimen.(state));
+
+            for d = 1:numel(loading_conditions)
+                loading_condition = loading_conditions{d};
+                datum = curr_specimen.(state).(loading_condition);
+                if isempty(datum)
+                    continue
+                end
+                jcss = fieldnames(datum);
+
+                for j = 1:numel(jcss)
+                    jcs = jcss{j};
+                    o.(specimen_name).(state).(loading_condition).(jcs) = datum.(jcs) - curr_native.Data.(jcs);
+                    try
+                        o.(specimen_name).(state).(loading_condition).(jcs).flexion = curr_native.Data.(jcs).flexion;
+                    catch ME
+                        if contains(ME.message, "flexion")
+                            warning("No field called 'flexion'. Expect angles to be all 0!")
+                        else
+                            rethrow ME
+                        end
                     end
                 end
             end
+        end
+    end
+end
+
+function p = gen_plots(data, directions)
+    for d = 1:numel(directions)
+        ap = directions(d);
+        datum = data.(ap);
+    
+        if isempty(datum)
+            p = plot(0);
+            continue
+        end
+        jcss = fieldnames(datum);
+    
+        for j = 1:numel(jcss)
+            jcs = jcss{j};
+            orientations = datum.(jcs).Properties.VariableNames;
+            orientations(contains(orientations, 'flexion')) = [];
+            for o = 1:numel(orientations)
+                nexttile(o); hold on;
+                x = datum.(jcs).flexion;
+                y = datum.(jcs).(orientations{o});
+                [x_arrowed, y_arrowed] = arrowed_line(x, y, 10, 100, 100);
+                % fill(x,y, colour, 'FaceAlpha', 0.1);
+                % p = plot(x_arrowed, y_arrowed, 'color', colour);
+                p = plot(x_arrowed, y_arrowed);
+                grid on;
+                axis square;
+                xlabel("Flexion angle");
+                ylabel(replace(orientations{o}, '_', ' '));
+            end
+        end
+    
+    
+    end
+end
+
+function o = inner_loop(data, fn)
+    states = fieldnames(data); % Should equal obj.States. Unsure when calling on multiple
+    for s = 1:numel(states)
+        state = states{s};
+        loading_conditions = fieldnames(data.(state));
+        for lc = 1:numel(loading_conditions)
+            loading_condition = loading_conditions{lc};
+            datum = data.(state).(loading_condition);
+            if isempty(datum)
+                continue
+            end
+            o.(state).(loading_condition) = fn(datum);
         end
     end
 end
