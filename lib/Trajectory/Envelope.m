@@ -38,7 +38,6 @@ classdef Envelope
 
     methods
 
-
         function average(obj)
             inner_loop(obj.Data, @(x) x)
         end
@@ -53,14 +52,17 @@ classdef Envelope
                 return
             end
 
-            states = obj.states;
-            
-            for s = 1:numel(states)
-                state = states(s);
+            states = string(obj.states);
+            specimens = string(obj.specimens);
+            for sp = 1:numel(specimens)
+                specimen = specimens(sp);
+                for s = 1:numel(states)
+                    state = states(s);
 
-                directions = obj.directions;
-                plots(s) = gen_plots(obj.Data.(state), directions);
+                    directions = string(obj.directions);
+                    plots(s) = gen_plots(obj.Data.(specimen).(state), directions);
 
+                end
             end
         end
     end
@@ -90,10 +92,13 @@ classdef Envelope
         end
 
         function o = directions(obj)
-        o = obj.Directions;
+            o = obj.Directions;
         end
         function o = states(obj)
-        o = obj.States;
+            o = obj.States;
+        end
+        function o = specimens(obj)
+            o = unique(obj.SpecimenName);
         end
     end
 end
@@ -182,6 +187,11 @@ o = data;
 
                 for j = 1:numel(jcss)
                     jcs = jcss{j};
+                    is_incomplete_run = ~all(size(datum.(jcs)) == size(curr_native.Data.(jcs)));
+
+                    if is_incomplete_run
+                        continue
+                    end
                     o.(specimen_name).(state).(loading_condition).(jcs) = datum.(jcs) - curr_native.Data.(jcs);
                     try
                         o.(specimen_name).(state).(loading_condition).(jcs).flexion = curr_native.Data.(jcs).flexion;
@@ -199,18 +209,21 @@ o = data;
 end
 
 function p = gen_plots(data, directions)
-    for d = 1:numel(directions)
-        ap = directions(d);
-        datum = data.(ap);
-    
-        if isempty(datum)
-            p = plot(0);
-            continue
-        end
-        jcss = fieldnames(datum);
-    
-        for j = 1:numel(jcss)
-            jcs = jcss{j};
+    jcss = fieldnames(data.(directions(1)));
+    for j = 1:numel(jcss)
+        figure(j);
+        jcs = jcss{j};
+        for d = 1:numel(directions)
+            ap = directions(d);
+            datum = data.(ap);
+
+            if isempty(datum)
+                p = plot(0);
+                continue
+            end
+
+
+
             orientations = datum.(jcs).Properties.VariableNames;
             orientations(contains(orientations, 'flexion')) = [];
             for o = 1:numel(orientations)
@@ -226,9 +239,12 @@ function p = gen_plots(data, directions)
                 xlabel("Flexion angle");
                 ylabel(replace(orientations{o}, '_', ' '));
             end
+
+            sgtitle(jcs);
+
         end
-    
-    
+
+
     end
 end
 

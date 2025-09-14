@@ -28,31 +28,32 @@ function output = calculate_kinematics(data, config)
     RB1orig_T_RB2orig = pagemtimes(RB1orig_T_RB2, RB2opt_T_RB2orig);
     
     %% Prepare output
-    output.specimen = string(JCS_raw.specimen);
-    output.state = string(JCS_raw.state);
-    output.is_optimised = config.transforms.is_optimised;
-    output.loading_condition = string(JCS_raw.loading_condition);
+    name = string(JCS_raw.specimen);
+    state = string(JCS_raw.state);
+    loading_condition = string(JCS_raw.loading_condition);
+    is_optimised = config.transforms.is_optimised;
+    output = Trajectory(name, state, loading_condition, is_optimised);
+    
 
-    output.load_cell = JCS_raw.load_cell;
-
-    output.jcs_optimised = JCS_raw.translation.actual;
+    output.add_data("load_cell", JCS_raw.load_cell);
+    output.add_data("jcs_optimised", JCS_raw.translation.actual);
     try
-    output.jcs_digitised = JCS_raw.translation.digitised;
+        output.add_data("jcs_digitised", JCS_raw.translation.digitised);
     catch
     end
 
     % Correctly unwrap robot pos
     robot_pos = rotationsAndTranslations(W2_T_S2, config.is_right_knee);
     robot_pos_arr = unwrap(table2array(robot_pos));
-    output.robot_pos = array2table(robot_pos_arr, "VariableNames", robot_pos.Properties.VariableNames);
-    output.kinematics = rotationsAndTranslations(RB1_T_RB2, config.is_right_knee);
-    output.kinematics_orig = rotationsAndTranslations(RB1orig_T_RB2orig, config.is_right_knee);
+    output.add_data("robot_pos", array2table(robot_pos_arr, "VariableNames", robot_pos.Properties.VariableNames));
+    output.add_data("kinematics", rotationsAndTranslations(RB1_T_RB2, config.is_right_knee));
+    output.add_data("kinematics_orig", rotationsAndTranslations(RB1orig_T_RB2orig, config.is_right_knee));
    
     
-    output.sensors = JCS_raw.sensor;
+    output.add_data("sensors", JCS_raw.sensor);
     
-    output.forces_actual = JCS_raw.forces.actual;
-    output.forces_desired = JCS_raw.forces.desired;
+    output.add_data("forces_actual", JCS_raw.forces.actual);
+    output.add_data("forces_desired", JCS_raw.forces.desired);
 
     % output.RB2opt_T_RB2orig = config.transforms.RB2opt_T_RB2orig; %toTt
     % output.RB1opt_T_RB1orig = config.transforms.RB1opt_T_RB1orig; %foTf

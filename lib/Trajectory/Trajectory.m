@@ -3,17 +3,19 @@ classdef Trajectory < handle
         SpecimenName
         SpecimenState
         LoadingCondition
+        IsOptimised
         Data struct = struct()
     end
     properties (Access = private)
-        IsOptimised
+    %     IsOptimised
     end
 
     methods % Constructor
-        function obj = Trajectory(name, state, loading_condition)
+        function obj = Trajectory(name, state, loading_condition, is_optimised)
             obj.SpecimenState = string(state);
             obj.SpecimenName = string(name);
             obj.LoadingCondition = string(loading_condition);
+            obj.IsOptimised = is_optimised;
         end
     end
 
@@ -63,10 +65,47 @@ classdef Trajectory < handle
 
             envelope = Envelope(obj, envelopes, native_passive_flex, states);
         end
+
+        function out = states(obj)
+            out = unique([obj.SpecimenState]);
+        end
     end
 
     % Convenience functions
     methods
+        function out = specimen(obj, arg)
+            if nargin > 1
+                obj.SpecimenName = arg;
+                out = obj;
+            else
+                out = obj.SpecimenName;
+            end
+        end
+        function out = state(obj, arg)
+            if nargin > 1
+                obj.SpecimenState = arg;
+                out = obj;
+            else
+                out = obj.SpecimenState;
+            end
+        end
+        function out = loading_condition(obj, arg)
+            if nargin > 1
+                obj.LoadingCondition = arg;
+                out = obj;
+            else
+                out = obj.LoadingCondition;
+            end
+        end
+        function out = is_optimised(obj, arg)
+            if nargin > 1
+                obj.IsOptimised = arg;
+                out = obj;
+            else
+                out = obj.IsOptimised;
+            end
+        end
+
         function envelope = ap(obj, name_native, name_neutral_flexion)
             if nargin > 1
                 envelope = obj.stability_envelope(["ant", "pos"], name_native, name_neutral_flexion);

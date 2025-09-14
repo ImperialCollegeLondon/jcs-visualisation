@@ -52,14 +52,14 @@ for sp = 1:numel(path_specimens) % Navigate specimens
 
                 if all_runs(ii).specimen ~= specimen_name && ts == 1 && t == 1
                     warning("Specimen %s changed to %s", all_runs(ii).specimen, specimen_name);
-                    all_runs(ii).specimen = specimen_name;
+                    all_runs(ii).specimen(specimen_name);
                 end
 
                 traj_text = split(trajectory_set, '_');
                 state_from_name = state_regex(string(traj_text{2}));
                 if all_runs(ii).state ~= state_from_name
                     warning("Using knee state from file name: %s", state_from_name);
-                    all_runs(ii).state = state_from_name;
+                    all_runs(ii).state(state_from_name);
                 end
 
             catch ME
@@ -73,12 +73,12 @@ for sp = 1:numel(path_specimens) % Navigate specimens
     end
 end
 
-%% Remove any files that failed to run
-for sp = numel(all_runs):-1:1
-    if isempty(all_runs(sp).specimen)
-        all_runs(sp) = [];
-    end
-end
+% %% Remove any files that failed to run
+% for sp = numel(all_runs):-1:1
+%     if isempty(all_runs(sp).specimen)
+%         all_runs(sp) = [];
+%     end
+% end
 
 % %% Print to file
 % % Prepare the folders
@@ -101,7 +101,8 @@ end
 % end
 
 %% Split the runs into specimens, knee states and loading conditions
-specimens = organise_runs(all_runs);
+% specimens = organise_runs(all_runs);
+specimens = all_runs;
 
 
 %% Visualise all specimens
@@ -129,7 +130,7 @@ specimens = organise_runs(all_runs);
 % end
 %%
 
-states = setdiff(fieldnames(specimens), "name");
+states = specimens.states();
 % specimen_names = [specimens.name];
 %% Neutral path
 
@@ -141,8 +142,6 @@ for n = 1:numel(jcss)
     plot_neutral_path(all_runs([all_runs.is_optimised]), jcss(n))
     % plot_average_neutral_path(all_runs([all_runs.is_optimised]), jcss(n))
 end
-
-
 
 %% Statistics
 % is_full_flexion = is_flexion_arc(all_runs, 180);
