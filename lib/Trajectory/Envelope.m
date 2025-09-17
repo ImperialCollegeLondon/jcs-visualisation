@@ -1,12 +1,13 @@
 classdef Envelope
     properties
         Data
-    end
-    properties (Access = private)
         States
         Directions
         SpecimenName
+        Signals
     end
+    % properties (Access = private)
+    % end
 
     methods % Constructor
         function obj = Envelope(trajectory, envelope, native_neutral, specimen_states)
@@ -25,27 +26,57 @@ classdef Envelope
             directions = '';
             for n = 1:numel(names)
                 curr_specimen = obj.SpecimenName == names(n);
-                loading_direction.(names(n)) = split_loading_condition(trajectory(curr_specimen), envelope, specimen_states);
-                states = [states; fieldnames(loading_direction.(names(n)))];
-                directions = [directions; fieldnames(loading_direction.(names(n)).(states{1}))];
+                specimens.(names(n)) = split_loading_condition(trajectory(curr_specimen), envelope, specimen_states);
+                states = [states; fieldnames(specimens.(names(n)))];
+                directions = [directions; fieldnames(specimens.(names(n)).(states{1}))];
+                
             end
+            is_neutral = contains([trajectory.LoadingCondition], "neutral", "IgnoreCase", true);
+            neutral = trajectory(is_neutral);
 
-            obj.States = unique(states);
+            obj.Signals = fieldnames(specimens.(names(1)).(states{1}).(directions{1}));
+            obj.States = setdiff(unique(states), ["UKA_w_pACL", "Unoptimised"]); % Remove
             obj.Directions = unique(directions);
-            obj.Data = subtract_native(loading_direction, native_neutral);
+            % obj.Data = subtract_native(specimens, native_neutral);
+            obj.Data = subtract_neutral(specimens, neutral);
         end
     end
 
     methods
+        function [flex, ext] = split_flex_ext(obj)
+            directions = obj.directions;
+            states = obj.states;
+            specimens = obj.specimens;
+            obj.SpecimenName = specimens;
+            flex = obj;
+            ext = obj;
 
-        function average(obj)
-            inner_loop(obj.Data, @(x) x)
-        end
-        function p = plot(obj, colour)
-            arguments
-                obj
-                colour = lines(10)
+            for d = 1:numel(directions)
+                direction = directions(d);
+                for st = 1:numel(states)
+                    state = states(st);
+
+                    for sp = 1:numel(specimens)
+                        specimen = specimens(sp);
+                        signals = fieldnames(obj.Data.(specimen).(state).(direction));
+                        for sg = 1:numel(signals)
+                            signal = signals{sg};
+                            datum = obj.Data.(specimen).(state).(direction).(signal);
+                            n = round(height(datum)/2);
+                            flex.Data.(specimen).(state).(direction).(signal) = datum(1:n, :);
+                            ext.Data.(specimen).(state).(direction).(signal) = datum(n:end, :);
+                        end
+                    end
+                end
             end
+            
+        end
+
+        function o = average(obj)
+            o = EnvelopeAverage(obj);
+        end
+
+        function p = plot(obj)
 
             if isempty(obj.Data)
                 p = plot(0);
@@ -54,27 +85,52 @@ classdef Envelope
 
             states = string(obj.states);
             specimens = string(obj.specimens);
+            n_colours = length(fieldnames(obj.Data.(specimens(1))));
+            colours = lines(n_colours);
+            directions = string(obj.directions);
+
             for sp = 1:numel(specimens)
                 specimen = specimens(sp);
                 for s = 1:numel(states)
                     state = states(s);
+                    colour = colours(s, :);
 
-                    directions = string(obj.directions);
-                    plots(s) = gen_plots(obj.Data.(specimen).(state), directions);
+                    if any(cellfun(@(x) isempty(obj.Data.(specimen).(state).(x)), directions))
+                        continue
+                    end
+                    signals = fieldnames(obj.Data.(specimen).(state).(directions(1)));
+                    for sg = 1:numel(signals)
+                        figure(sg);
+                        signal = signals{sg};
 
+                        plots(s, sg) = gen_plots(obj.Data.(specimen).(state), directions, signal, colour);
+                        
+                        
+
+                    end
+                end
+
+                for sg = 1:numel(signals)
+                    signal = signals{sg};
+                    figure(sg);
+                    sgtitle(replace(signal, '_', ' '));
+                    legend(plots(:,sg), state_regex_inv(states));
                 end
             end
+            
         end
     end
 
     methods
         function o = filter_state(obj, state)
-        mask = strcmpi(obj.States, state);
+        error("Not yet implemented");
+            mask = strcmpi(obj.States, state);
         o = obj(mask, :);
         end
 
         function o = filter_envelope(obj, envelope)
-        mask = contains(obj.Directions, envelope, "IgnoreCase", true);
+        error("Not yet implemented");
+            mask = contains(obj.Directions, envelope, "IgnoreCase", true);
         if ~any(mask)
             o = [];
             return
@@ -91,14 +147,21 @@ classdef Envelope
         end
         end
 
+        function o = filter(obj, signal)
+            obj.Signals = obj.Signals(contains(obj.Signals, signal));
+            o = obj;
+        end
         function o = directions(obj)
-            o = obj.Directions;
+            o = string(obj.Directions);
         end
         function o = states(obj)
-            o = obj.States;
+            o = string(obj.States);
         end
         function o = specimens(obj)
-            o = unique(obj.SpecimenName);
+            o = string(unique(obj.SpecimenName));
+        end
+        function o = signals(obj)
+            o = string(unique(obj.Signals));
         end
     end
 end
@@ -161,6 +224,52 @@ function keep = valid_flexion(data, threshold)
         end
     end
 end
+function o = subtract_neutral(data, neutral)
+o = data;
+
+    specimen_names = [neutral.SpecimenName];
+    for ss = 1:numel(specimen_names)
+        specimen_name = specimen_names(ss);
+        curr_specimen = data.(specimen_name);
+        
+        states = fieldnames(curr_specimen);
+
+        for st = 1:numel(states)
+            state = states{st};
+            is_curr_neutral = ([neutral.SpecimenState] == state) & ([neutral.SpecimenName] == specimen_name);
+            curr_neutral = neutral(is_curr_neutral);
+            loading_conditions = fieldnames(curr_specimen.(state));
+
+            for d = 1:numel(loading_conditions)
+                loading_condition = loading_conditions{d};
+                datum = curr_specimen.(state).(loading_condition);
+                if isempty(datum)
+                    continue
+                end
+                signals = fieldnames(datum);
+
+                for sg = 1:numel(signals)
+                    signal = signals{sg};
+                    is_incomplete_run = ~all(size(datum.(signal)) == size(curr_neutral.Data.(signal)));
+
+                    if is_incomplete_run
+                        continue
+                    end
+                    o.(specimen_name).(state).(loading_condition).(signal) = datum.(signal) - curr_neutral.Data.(signal);
+                    try
+                        o.(specimen_name).(state).(loading_condition).(signal).flexion = curr_neutral.Data.(signal).flexion;
+                    catch ME
+                        if contains(ME.message, "flexion")
+                            warning("No field called 'flexion'. Expect angles to be all 0!")
+                        else
+                            rethrow ME
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
 
 function o = subtract_native(data, native)
 o = data;
@@ -183,18 +292,18 @@ o = data;
                 if isempty(datum)
                     continue
                 end
-                jcss = fieldnames(datum);
+                signals = fieldnames(datum);
 
-                for j = 1:numel(jcss)
-                    jcs = jcss{j};
-                    is_incomplete_run = ~all(size(datum.(jcs)) == size(curr_native.Data.(jcs)));
+                for sg = 1:numel(signals)
+                    signal = signals{sg};
+                    is_incomplete_run = ~all(size(datum.(signal)) == size(curr_native.Data.(signal)));
 
                     if is_incomplete_run
                         continue
                     end
-                    o.(specimen_name).(state).(loading_condition).(jcs) = datum.(jcs) - curr_native.Data.(jcs);
+                    o.(specimen_name).(state).(loading_condition).(signal) = datum.(signal) - curr_native.Data.(signal);
                     try
-                        o.(specimen_name).(state).(loading_condition).(jcs).flexion = curr_native.Data.(jcs).flexion;
+                        o.(specimen_name).(state).(loading_condition).(signal).flexion = curr_native.Data.(signal).flexion;
                     catch ME
                         if contains(ME.message, "flexion")
                             warning("No field called 'flexion'. Expect angles to be all 0!")
@@ -208,58 +317,39 @@ o = data;
     end
 end
 
-function p = gen_plots(data, directions)
-    jcss = fieldnames(data.(directions(1)));
-    for j = 1:numel(jcss)
-        figure(j);
-        jcs = jcss{j};
-        for d = 1:numel(directions)
-            ap = directions(d);
-            datum = data.(ap);
+function p = gen_plots(data, directions, jcs, colour)
 
-            if isempty(datum)
-                p = plot(0);
-                continue
-            end
+    for d = 1:numel(directions)
+        ap = directions(d);
+        datum = data.(ap);
+        if d > 1
+            colour = 0.9 * colour;
+        end
+
+        if isempty(datum)
+            p = plot(0);
+            continue
+        end
 
 
 
-            orientations = datum.(jcs).Properties.VariableNames;
-            orientations(contains(orientations, 'flexion')) = [];
-            for o = 1:numel(orientations)
-                nexttile(o); hold on;
-                x = datum.(jcs).flexion;
-                y = datum.(jcs).(orientations{o});
-                [x_arrowed, y_arrowed] = arrowed_line(x, y, 10, 100, 100);
-                % fill(x,y, colour, 'FaceAlpha', 0.1);
-                % p = plot(x_arrowed, y_arrowed, 'color', colour);
-                p = plot(x_arrowed, y_arrowed);
-                grid on;
-                axis square;
-                xlabel("Flexion angle");
-                ylabel(replace(orientations{o}, '_', ' '));
-            end
-
-            sgtitle(jcs);
-
+        orientations = datum.(jcs).Properties.VariableNames;
+        orientations(contains(orientations, 'flexion')) = [];
+        for o = 1:numel(orientations)
+            nexttile(o); hold on;
+            x = datum.(jcs).flexion;
+            y = datum.(jcs).(orientations{o});
+            [x_arrowed, y_arrowed] = arrowed_line(x, y, 10, 100, 100);
+            % fill(x,y, colour, 'FaceAlpha', 0.1);
+            p = plot(x_arrowed, y_arrowed, 'color', colour);
+            % p = plot(x_arrowed, y_arrowed);
+            grid on;
+            axis square;
+            xlabel("Flexion angle");
+            ylabel(replace(orientations{o}, '_', ' '));
         end
 
 
     end
-end
 
-function o = inner_loop(data, fn)
-    states = fieldnames(data); % Should equal obj.States. Unsure when calling on multiple
-    for s = 1:numel(states)
-        state = states{s};
-        loading_conditions = fieldnames(data.(state));
-        for lc = 1:numel(loading_conditions)
-            loading_condition = loading_conditions{lc};
-            datum = data.(state).(loading_condition);
-            if isempty(datum)
-                continue
-            end
-            o.(state).(loading_condition) = fn(datum);
-        end
-    end
 end

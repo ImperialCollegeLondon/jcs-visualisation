@@ -48,18 +48,18 @@ for sp = 1:numel(path_specimens) % Navigate specimens
 
             try
                 data = TDMS_getStruct(input_path{t});
-                all_runs(ii) = calculate_kinematics(data, config);
+                specimens(ii) = calculate_kinematics(data, config);
 
-                if all_runs(ii).specimen ~= specimen_name && ts == 1 && t == 1
-                    warning("Specimen %s changed to %s", all_runs(ii).specimen, specimen_name);
-                    all_runs(ii).specimen(specimen_name);
+                if specimens(ii).specimen ~= specimen_name && ts == 1 && t == 1
+                    warning("Specimen %s changed to %s", specimens(ii).specimen, specimen_name);
+                    specimens(ii).SpecimenName = string(specimen_name);
                 end
 
                 traj_text = split(trajectory_set, '_');
                 state_from_name = state_regex(string(traj_text{2}));
-                if all_runs(ii).state ~= state_from_name
+                if specimens(ii).state ~= state_from_name
                     warning("Using knee state from file name: %s", state_from_name);
-                    all_runs(ii).state(state_from_name);
+                    specimens(ii).state(state_from_name);
                 end
 
             catch ME
@@ -72,14 +72,6 @@ for sp = 1:numel(path_specimens) % Navigate specimens
         end
     end
 end
-
-% %% Remove any files that failed to run
-% for sp = numel(all_runs):-1:1
-%     if isempty(all_runs(sp).specimen)
-%         all_runs(sp) = [];
-%     end
-% end
-
 % %% Print to file
 % % Prepare the folders
 % fp_results = fullfile(root, "Results");
@@ -99,39 +91,37 @@ end
 %         % writetable(datum, filename);
 %     end
 % end
-
-%% Split the runs into specimens, knee states and loading conditions
-% specimens = organise_runs(all_runs);
-specimens = all_runs;
-
-
-%% Visualise all specimens
-
-% gs_specimen = {all_runs.specimen}';
-% gs_state = {all_runs.state}';
-% gs_loading_condition = {all_runs.loading_condition}';
-% gs_jcs = {all_runs.optimised_jcs}';
-% 
-% is_run = cellfun(@(x) height(x) == 181, gs_jcs);
-% gs_specimen = gs_specimen(is_run);
-% gs_state = gs_state(is_run);
-% gs_loading_condition = gs_loading_condition(is_run);
-% gs_jcs = gs_jcs(is_run);
-% 
-% for angle = 1:181
-%     tab = cellfun(@(x) x(angle, :), gs_jcs, "UniformOutput",false);
-%     data_per_angle = vertcat(tab{:});
-%     data_per_angle.name = categorical(string(gs_specimen));
-%     data_per_angle.state = categorical(string(gs_state));
-%     data_per_angle.loading_condition = categorical(string(gs_loading_condition));
-% 
-% 
-%     groups{angle} = groupsummary(data_per_angle, {'state', 'loading_condition'}, "mean");
-% end
 %%
-
 states = specimens.states();
-% specimen_names = [specimens.name];
+
+
+%% Neutral Path
+[path_flex, path_ext] = specimens...
+    .path()...
+    .filter(["load", "pos", "jcs"])...
+    .split_flex_ext();
+path_flex.plot();
+
+% specimens...
+%     .path()...
+%     .filter("jcs")...
+%     .average()...
+%     .split_flex_ext()...
+%     .plot();
+
+%% Stability Envelopes
+[ap_flex, ap_ext] = specimens ...
+    .ap() ...
+    .filter("jcs") ...
+    .average() ...
+    .split_flex_ext();
+ap_flex.plot();
+[ie_flex, ie_ext] = specimens ...
+    .ie()...
+    .filter("jcs")...
+    .average()...
+    .split_flex_ext();
+
 %% Neutral path
 
 % jcss = ["jcs_optimised", "jcs_digitised"];
@@ -139,7 +129,7 @@ jcss = ["kinematics" "load_cell"];
 
 for n = 1:numel(jcss)
     figure
-    plot_neutral_path(all_runs([all_runs.is_optimised]), jcss(n))
+    plot_neutral_path(specimens([specimens.is_optimised]), jcss(n))
     % plot_average_neutral_path(all_runs([all_runs.is_optimised]), jcss(n))
 end
 
@@ -165,17 +155,6 @@ end
 % disp("Printing statistics to file")
 % print_mean_std_to_file(statistics, states, root);
 
-%% Plot
-truncate_min = -5;
-truncate_max = 90;
-jcs = 'jcs_optimised';
-native_name = "Native";
-passive_flex_name = "Neutral_flex";
-for sp = 1:numel(specimens)
-    specimen = specimens(sp);
-    native_passive = get_native_passive_flex(specimen, native_name, passive_flex_name);
-    stability_envelope(specimen, native_passive, config, truncate_min, truncate_max, jcs)
-end
 
 % %% Statistics
 % disp("Performing statistics")

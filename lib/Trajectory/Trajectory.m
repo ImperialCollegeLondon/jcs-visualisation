@@ -13,7 +13,7 @@ classdef Trajectory < handle
     methods % Constructor
         function obj = Trajectory(name, state, loading_condition, is_optimised)
             obj.SpecimenState = string(state);
-            obj.SpecimenName = string(name);
+            obj.SpecimenName = replace(string(name), 'a', '');
             obj.LoadingCondition = string(loading_condition);
             obj.IsOptimised = is_optimised;
         end
@@ -28,18 +28,12 @@ classdef Trajectory < handle
             obj.Data.(label) = data;
         end
 
-        function path = path(obj, label)
-            contains_label = contains([obj.LoadingCondition], label, 'IgnoreCase', true);
-            if ~any(contains_label)
-                path = Option.None;
-                return;
-            end
+        function path = path(obj)
+            names = unique([obj.SpecimenName]);
+            states = unique([obj.SpecimenState]);
+            directions = unique([obj.LoadingCondition]);
 
-            paths = obj(contains_label);
-            names = unique([paths.SpecimenName]);
-            states = unique([paths.SpecimenState]);
-
-            path = Option(Path(paths, names, states));
+            path = Path(obj, names, states, directions);
         end
 
 
@@ -86,7 +80,7 @@ classdef Trajectory < handle
                 obj.SpecimenState = arg;
                 out = obj;
             else
-                out = obj.SpecimenState;
+                out = [obj.SpecimenState];
             end
         end
         function out = loading_condition(obj, arg)
@@ -94,7 +88,7 @@ classdef Trajectory < handle
                 obj.LoadingCondition = arg;
                 out = obj;
             else
-                out = obj.LoadingCondition;
+                out = [obj.LoadingCondition];
             end
         end
         function out = is_optimised(obj, arg)
@@ -102,7 +96,7 @@ classdef Trajectory < handle
                 obj.IsOptimised = arg;
                 out = obj;
             else
-                out = obj.IsOptimised;
+                out = [obj.IsOptimised];
             end
         end
 
@@ -128,6 +122,28 @@ classdef Trajectory < handle
             else
                 envelope = obj.stability_envelope(["int", "ext"]);
             end
+        end
+
+        % Needs to be made considerably more ergonomic
+        function o = flip_ie(obj, specimen, state, loading_condition, signal_in)
+            is_specimen = contains([obj.SpecimenName], specimen, "IgnoreCase", true);
+            is_state = contains([obj.SpecimenState], state, "IgnoreCase", true);
+            is_lc = contains([obj.LoadingCondition], loading_condition, "IgnoreCase", true);
+            mask = is_specimen & is_state & is_lc;
+
+            data = [obj.Data];
+            signals = fieldnames(data);
+            is_field = contains(signals, signal_in, "IgnoreCase", true);
+            signals_valid = signals(is_field);
+            for f = 1:numel(signals_valid)
+                signal = signals_valid{f};
+                datum = data(mask).(signal);
+                datum.internal_rotation = -datum.internal_rotation;
+                obj(mask).Data.(signal) = datum;
+            end
+            
+            o = obj;
+            
         end
     end
 end

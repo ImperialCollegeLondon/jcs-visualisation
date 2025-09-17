@@ -50,10 +50,10 @@ function output = calculate_kinematics(data, config)
     output.add_data("kinematics_orig", rotationsAndTranslations(RB1orig_T_RB2orig, config.is_right_knee));
    
     
-    output.add_data("sensors", JCS_raw.sensor);
-    
-    output.add_data("forces_actual", JCS_raw.forces.actual);
-    output.add_data("forces_desired", JCS_raw.forces.desired);
+    % output.add_data("sensors", JCS_raw.sensor);
+    % 
+    % output.add_data("forces_actual", JCS_raw.forces.actual);
+    % output.add_data("forces_desired", JCS_raw.forces.desired);
 
     % output.RB2opt_T_RB2orig = config.transforms.RB2opt_T_RB2orig; %toTt
     % output.RB1opt_T_RB1orig = config.transforms.RB1opt_T_RB1orig; %foTf
