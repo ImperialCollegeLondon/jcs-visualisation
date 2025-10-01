@@ -23,13 +23,26 @@ classdef Path
         function o = average(obj)
             o = PathAverage(obj);
         end
-        function o = filter(obj, signal)
+        function o = filter_signal(obj, signal)
             obj.Signals = obj.Signals(contains(obj.Signals, signal));
             o = obj;
         end
     end
 
     methods
+
+        function o = exclude_specimen(obj, specimen)
+            o = obj;
+            mask = contains(o.Specimens, specimen, "IgnoreCase", true);
+            o.Specimens = o.Specimens(~mask);
+        end
+
+        function o = exclude_specimen_exact(obj, specimen)
+            o = obj;
+            specimens_remaining = setdiff(o.Specimens, specimen);
+            o.Specimens = specimens_remaining;
+        end
+
         function [flex, ext] = split_flex_ext(obj)
             directions = obj.Directions;
             states = obj.States;

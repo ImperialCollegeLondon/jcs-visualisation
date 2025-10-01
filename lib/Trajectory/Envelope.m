@@ -20,12 +20,13 @@ classdef Envelope
                 specimen_states
             end
 
-            obj.SpecimenName = string([trajectory.SpecimenName]); % Should only support one at a time?
+            specimen_list = string([trajectory.SpecimenName]);
+            obj.SpecimenName = unique(specimen_list); % Should only support one at a time?
             names = unique(obj.SpecimenName);
             states = '';
             directions = '';
             for n = 1:numel(names)
-                curr_specimen = obj.SpecimenName == names(n);
+                curr_specimen = specimen_list == names(n);
                 specimens.(names(n)) = split_loading_condition(trajectory(curr_specimen), envelope, specimen_states);
                 states = [states; fieldnames(specimens.(names(n)))];
                 directions = [directions; fieldnames(specimens.(names(n)).(states{1}))];
@@ -122,6 +123,33 @@ classdef Envelope
     end
 
     methods
+        function obj = print_to_file(obj, path)
+            % % Prepare the folders
+            fp_results = fullfile(path, "results", "per_specimen", "stability_envelope");
+            states = obj.states;
+            signals = obj.signals;
+            directions = obj.directions;
+            specimens = obj.specimens;
+            for sp = 1:numel(specimens)
+                specimen = specimens(sp);
+                for st = 1:numel(states)
+                    state = states(st);
+                    for sg = 1:numel(signals)
+                        signal = signals(sg);
+
+                        filepath = fullfile(fp_results, signal, state, specimen);
+                        mkdir(filepath);
+                        for d = 1:numel(directions)
+                            direction = directions(d);
+
+                            datum = obj.Data.(specimen).(state).(direction).(signal);
+
+                            writetable(datum, strcat(fullfile(filepath, direction), '.csv'));
+                        end
+                    end
+                end
+            end
+        end
         function o = filter_state(obj, state)
         error("Not yet implemented");
             mask = strcmpi(obj.States, state);
@@ -147,7 +175,17 @@ classdef Envelope
         end
         end
 
-        function o = filter(obj, signal)
+        function o = exclude_specimen_exact(obj, specimen)
+            o = obj;
+            specimens_remaining = setdiff(o.specimens, specimen);
+            o.SpecimenName = specimens_remaining;
+        end
+        function o = exclude_specimen(obj, specimen)
+            o = obj;
+            mask = contains(o.specimens, specimen);
+            o.SpecimenName = o.SpecimenName(~mask);
+        end
+        function o = filter_signal(obj, signal)
             obj.Signals = obj.Signals(contains(obj.Signals, signal));
             o = obj;
         end
@@ -250,8 +288,11 @@ o = data;
 
                 for sg = 1:numel(signals)
                     signal = signals{sg};
+                    try
                     is_incomplete_run = ~all(size(datum.(signal)) == size(curr_neutral.Data.(signal)));
-
+                    catch ME
+                        keyboard
+                    end
                     if is_incomplete_run
                         continue
                     end

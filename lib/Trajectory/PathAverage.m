@@ -35,6 +35,33 @@ classdef PathAverage
     end
 
     methods
+        function obj = print_to_file(obj, path)
+            % % Prepare the folders
+            fp_results = fullfile(path, "results", "average", "neutral_path");
+            states = obj.States;
+            signals = obj.Signals;
+            for st = 1:numel(states)
+                state = states(st);
+                for sg = 1:numel(signals)
+                    signal = signals(sg);
+
+                    filepath = fullfile(fp_results, signal);
+                    mkdir(filepath);
+
+                    datum = obj.Data.(state).(signal);
+                    headers = datum.mean.Properties.VariableNames;
+
+                    t_mean = datum.mean;
+                    t_std = datum.std;
+
+                    t_mean.Properties.VariableNames = headers + "_mean";
+                    t_std.Properties.VariableNames = headers + "_std";
+
+
+                    writetable([t_mean t_std], strcat(fullfile(filepath, state), '.csv'));
+                end
+            end
+        end
 
         function [flex, ext] = split_flex_ext(obj)
             directions = obj.Directions;
@@ -59,7 +86,7 @@ classdef PathAverage
             end
         end
 
-        function plots = plot(obj)
+        function plots = plot(obj, orientations)
             signals = obj.Signals;
             states = obj.States;
             colours = lines(numel(states));
@@ -72,16 +99,18 @@ classdef PathAverage
                     state = states(s);
                     colour = colours(s, :);
 
+                    if ~nargin > 1
                     orientations = obj.Data.(state).(signal).mean.Properties.VariableNames;
                     orientations = setdiff(orientations, 'flexion');
+                    end
                     for o = 1:numel(orientations)
                         nexttile(o); hold on;
                         x = obj.Data.(state).(signal).mean.flexion;
                         y = obj.Data.(state).(signal).mean.(orientations{o});
-                        plots = plot(x, y, 'Color', colour);
+                        p = plot(x, y, 'Color', colour);
 
 
-                        idx = 1:10:numel(x);
+                        idx = 1:10+2*s:numel(x);
                         y_std = obj.Data.(state).(signal).std.(orientations{o});
                         errorbar(x(idx), y(idx), y_std(idx), 'LineStyle', 'none', 'Color', colour*0.7);
 
@@ -91,6 +120,7 @@ classdef PathAverage
                         xlabel("Flexion angle");
                         ylabel(replace(orientations{o}, '_', ' '));
                     end
+                    plots(s) = p;
                 end
                 sgtitle(replace(signal, '_', ' '));
                 legend(plots, state_regex_inv(states));

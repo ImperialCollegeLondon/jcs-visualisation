@@ -41,10 +41,41 @@ classdef EnvelopeAverage
             obj.Directions = directions;
             obj.Signals = string(signals);
         end
-
     end
 
     methods
+        function obj = print_to_file(obj, path)
+            % % Prepare the folders
+            fp_results = fullfile(path, "results", "average", "stability_envelope");
+            states = obj.States;
+            signals = obj.Signals;
+            directions = obj.Directions;
+            for st = 1:numel(states)
+                state = states(st);
+                for sg = 1:numel(signals)
+                    signal = signals(sg);
+
+                    filepath = fullfile(fp_results, signal, state);
+                    mkdir(filepath);
+                    for d = 1:numel(directions)
+                        direction = directions(d);
+
+                        datum = obj.Data.(state).(signal).(direction);
+                        headers = datum.mean.Properties.VariableNames;
+
+                        t_mean = datum.mean;
+                        t_std = datum.std;
+                        
+                        t_mean.Properties.VariableNames = headers + "_mean";
+                        t_std.Properties.VariableNames = headers + "_std";
+                        
+                        
+                        writetable([t_mean t_std], strcat(fullfile(filepath, direction), '.csv'));
+                    end
+                end
+            end
+        end
+
         function [flex, ext] = split_flex_ext(obj)
             directions = obj.Directions;
             states = obj.States;
@@ -74,7 +105,12 @@ classdef EnvelopeAverage
             end
         end
 
-        function o = plot(obj)
+        function o = plot(obj, orientations)
+            if nargin > 1
+                orient = orientations;
+            else
+                orient = [];
+            end
             if isempty(obj.Data)
                 o = plot(0);
                 return
@@ -86,44 +122,41 @@ classdef EnvelopeAverage
             signals = obj.Signals;
 
             for sg = 1:numel(signals)
-                figure(sg);
+                f(sg) = figure;
                 signal = signals{sg};
                 for s = 1:numel(states)
                     state = states(s);
                     colour = colours(s, :);
 
-                    plots(s, sg) = gen_plots(obj.Data.(state).(signal), directions, colour);
+                    plots(s, sg) = gen_plots(obj.Data.(state).(signal), directions, colour, s, orient);
 
                 end
-                
+                sgtitle(replace(signals(sg), '_', ' '));
+                legend(plots(:,sg), state_regex_inv(states));
             end
-
-                for sg = 1:numel(signals)
-                    figure(sg);
-                    sgtitle(replace(signals(sg), '_', ' '));
-                    legend(plots(:,sg), state_regex_inv(states));
-
-                            % After your plotting loop
-                                nexttile; hold on;
-                                % Dummy plots for direction legend
-                                h(1) = plot(nan, nan, '--k', 'DisplayName', 'Anterior');
-                                h(2) = plot(nan, nan, '-k', 'DisplayName', 'Posterior');
-
-                                % Place second legend
-                                lgd = legend(h, {'Anterior', 'Posterior'}, 'Location', 'eastoutside');
-                    lgd.NumColumns = 2;
-                end
         end
     end
 
 end
 
-function p = gen_plots(data, directions, colour)
+
+
+
+function p = gen_plots(data, directions, colour, s, orientations)
+    arguments
+        data
+        directions
+        colour
+        s
+        orientations = [];
+    end
     means = [];
     for d = 1:numel(directions)
         ap = directions(d);
         datum = data.(ap);
-        orientations = datum.mean.Properties.VariableNames;
+        if isempty(orientations)
+            orientations = datum.mean.Properties.VariableNames;
+        end
         is_flexion = contains(orientations, 'flexion');
         orientations(is_flexion) = [];
         for o = 1:numel(orientations)
@@ -134,7 +167,7 @@ function p = gen_plots(data, directions, colour)
 
     is_first_higher = means(:, 1) > means(:, 2);
 
-    linestyles = ["--", "-"];
+    % linestyles = ["--", ":"];
     for d = 1:numel(directions)
         ap = directions(d);
         datum = data.(ap);
@@ -149,9 +182,10 @@ function p = gen_plots(data, directions, colour)
 
 
 
-        orientations = datum.mean.Properties.VariableNames;
+        if isempty(orientations)
+            orientations = datum.mean.Properties.VariableNames;
+        end
         is_flexion = contains(orientations, 'flexion');
-        flexion = orientations{is_flexion};
         orientations(is_flexion) = [];
 
         step = 10;
@@ -161,13 +195,14 @@ function p = gen_plots(data, directions, colour)
         for o = 1:numel(orientations)
 
             nexttile(o); hold on;
-            x = datum.mean.(flexion);
+            x = datum.mean.flexion;
             y = datum.mean.(orientations{o});
-            p = plot(x, y, linestyles(d), 'color', colour);
+            % p = plot(x, y, linestyles(d), 'color', colour);
+            p = plot(x, y, 'color', colour);
 
 
             y_std = datum.std.(orientations{o});
-            idx = 1:step:numel(x);
+            idx = 1:step+1*s:numel(x);
             is_bar_up = xor(is_first_higher(o), d > 1);
             if is_bar_up
                 errorbar(x(idx), y(idx), 0, y_std(idx), 'LineStyle', 'none', 'Color', colour*0.7);
@@ -175,10 +210,6 @@ function p = gen_plots(data, directions, colour)
                 errorbar(x(idx), y(idx), y_std(idx), 0, 'LineStyle', 'none', 'Color', colour*0.7);
             end
             % fill(x,y, colour, 'FaceAlpha', 0.1);
-            
-            
-            
-            
 
             grid on;
             axis square;
@@ -188,5 +219,4 @@ function p = gen_plots(data, directions, colour)
 
 
     end
-
 end

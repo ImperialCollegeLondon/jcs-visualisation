@@ -27,4 +27,4 @@ config.debug = false;
 %% Other nice stuff
 
 warning('off', 'backtrace'); warning('off', 'MATLAB:MKDIR:DirectoryExists');
-set(0,'defaulttextinterpreter','latex');
+% set(0,'defaulttextinterpreter','latex');
