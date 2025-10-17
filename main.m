@@ -8,8 +8,15 @@ addpath(genpath('./lib'))
 defaults;
 
 % State cfg file is used to create the transforms.
-disp("Pick the folder with all the specimens")
-root = uigetdir(".", "Pick the folder with all specimens");
+folder_exist = 7;
+if exist('data', 'dir') == folder_exist
+    disp("Found data folder in current directory");
+    root = fullfile('.', 'data');
+else
+    disp("Pick experiment folder.")
+    root = uigetdir(".", "Pick the folder with all specimens");
+end
+if root == 0, disp("Exiting script."), return, end
 experiment = Experiment(root, config);
 trajectories = experiment.Trajectories;
 
