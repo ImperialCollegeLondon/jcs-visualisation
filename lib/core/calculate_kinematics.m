@@ -49,6 +49,7 @@ function output = calculate_kinematics(data, config)
     output.add_data("kinematics", rotationsAndTranslations(RB1_T_RB2, config.is_right_knee));
     output.add_data("kinematics_orig", rotationsAndTranslations(RB1orig_T_RB2orig, config.is_right_knee));
    
+    output.add_transforms("tTf", pageinv(RB1_T_RB2));
     
     % output.add_data("sensors", JCS_raw.sensor);
     % 

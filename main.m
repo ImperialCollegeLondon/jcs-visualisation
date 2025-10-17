@@ -2,15 +2,19 @@
 clc;clear; close all;
 profile on;
 diary("log.txt"); % Creates a log. Important for checking which runs failed!!
-
+addpath('spm');
+addpath(genpath('./lib'))
 %% Load in the Specimen folder
 defaults;
 
 % State cfg file is used to create the transforms.
 disp("Pick the folder with all the specimens")
 root = uigetdir(".", "Pick the folder with all specimens");
-trajectory_set = TrajectorySet(root, config);
-trajectories = trajectory_set.Trajectories;
+experiment = Experiment(root, config);
+trajectories = experiment.Trajectories;
+
+%%
+trajectories.plot_tibia();
 
 %%
 [ap_flex, ap_ext] = trajectories ...

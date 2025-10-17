@@ -1,4 +1,4 @@
-classdef TrajectorySet
+classdef Experiment
     properties
         Config
         Root
@@ -9,7 +9,7 @@ classdef TrajectorySet
         i
     end
     methods
-        function obj = TrajectorySet(root, config)
+        function obj = Experiment(root, config)
             obj.Config = config;
             obj.Root = root;
             obj = obj.load_specimens();
