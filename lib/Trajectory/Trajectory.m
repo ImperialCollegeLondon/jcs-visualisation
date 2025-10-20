@@ -116,12 +116,15 @@ classdef Trajectory < handle
         end
 
         function out = states(obj)
-            out = unique([obj.SpecimenState]);
+            out = [obj.SpecimenState];
         end
     end
 
     % Convenience functions
     methods
+        function out = signals(obj)
+            out = string(fields(obj(1).Data));
+        end
         function out = specimen(obj, arg)
             if nargin > 1
                 obj.SpecimenName = arg;

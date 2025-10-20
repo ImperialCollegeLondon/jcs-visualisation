@@ -44,6 +44,33 @@ classdef Envelope
     end
 
     methods
+        function [nii, metadata] = to_nifti(obj)
+            directions = obj.directions;
+            states = obj.states;
+            specimens = obj.specimens;
+            signals = obj.signals;
+            
+            metadata.order = '[angle, dof, direction, states]';
+            metadata.directions = directions;
+            metadata.states = states;
+            for sg = 1:numel(signals)
+                signal = signals(sg);
+                for sp = 1:numel(specimens)
+                    specimen = specimens(sp);
+                    [i, j] = size(obj.Data.(specimen).(states(1)).(directions(1)).(signal));
+                    nii.(signal).(specimen) = nan(i, j, numel(directions), numel(states));
+                    for d = 1:numel(directions)
+                        direction = directions(d);
+                        for st = 1:numel(states)
+                            state = states(st);
+                            datum = obj.Data.(specimen).(state).(direction).(signal);
+                            nii.(signal).(specimen)(:, :, d, st) = table2array(datum);
+                        end
+                    end
+                end
+                metadata.signals.(signal) = string(datum.Properties.VariableNames);
+            end
+        end
         function [flex, ext] = split_flex_ext(obj)
             directions = obj.directions;
             states = obj.states;
