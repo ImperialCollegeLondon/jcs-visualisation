@@ -2,7 +2,7 @@
 clc;clear; close all;
 profile on;
 diary("log.txt"); % Creates a log. Important for checking which runs failed!!
-addpath('spm');
+addpath(genpath('spm'));
 addpath(genpath('./lib'))
 %% Load in the Specimen folder
 defaults;
@@ -21,7 +21,9 @@ experiment = Experiment(root, config);
 trajectories = experiment.Trajectories;
 
 %%
-trajectories.plot_tibia();
+[spm, spm_bs] = trajectories.ap().split_flex_ext().filter_signal("jcs").spm_2d();
+%%
+% trajectories.plot_tibia();
 
 %%
 [ap_flex, ap_ext] = trajectories ...
