@@ -22,6 +22,15 @@ trajectories = experiment.Trajectories;
 
 %%
 [spm, spm_bs] = trajectories.ap().split_flex_ext().filter_signal("jcs").spm_2d();
+
+spm.jcs_digitised.ant.posterior.plot();
+spm.jcs_digitised.ant.posterior.plot_p_values();
+spm.jcs_digitised.ant.posterior.plot_threshold_label();
+
+spm.jcs_digitised.pos.posterior.plot();
+hold on;
+plot(spm_bs.jcs_digitised.ant.posterior.z, 'r');
+plot(spm_bs.jcs_digitised.pos.posterior.z, 'r');
 %%
 % trajectories.plot_tibia();
 
