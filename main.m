@@ -19,7 +19,9 @@ end
 if root == 0, disp("Exiting script."), return, end
 experiment = Experiment(root, config);
 trajectories = experiment.Trajectories;
-
+%% SPSS
+spss = trajectories.ap().split_flex_ext().filter_signal("jcs").spss(); % Optional arg value between angles. Default 10.
+spss.print_to_file(root);
 %%
 [spm, spm_bs] = trajectories.ap().split_flex_ext().filter_signal("jcs").spm_2d();
 

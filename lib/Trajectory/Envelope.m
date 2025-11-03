@@ -74,6 +74,13 @@ classdef Envelope
                 end
             end
         end
+        function o = spss(obj, interval)
+            arguments
+                obj
+                interval = 10;
+            end
+            o = SPSS(obj, interval);
+        end
 
         function [spmi, spm_bs] = spm_2d(obj)
             %obj.Data.JJH03.Native.ant.jcs_digitised
