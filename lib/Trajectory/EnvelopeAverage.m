@@ -138,7 +138,8 @@ classdef EnvelopeAverage
                 orient = orientations;
             else
                 orient = [];
-            end
+            endspm.jcs_digitised.pos.posterior.plot();
+
             if isempty(obj.Data)
                 o = plot(0);
                 return
@@ -228,8 +229,9 @@ function p = gen_plots(data, directions, colour, s, orientations)
             % p = plot(x, y, linestyles(d), 'color', colour);
             p = plot(x, y, 'color', colour);
 
+            [orientation, multi] = invert_orientation(orientations{o});
 
-            y_std = datum.std.(orientations{o});
+            y_std = multi * datum.std.(orientations{o});
             idx = 1:step+1*s:numel(x);
             is_bar_up = xor(is_first_higher(o), d > 1);
             if is_bar_up
@@ -242,9 +244,18 @@ function p = gen_plots(data, directions, colour, s, orientations)
             grid on;
             axis square;
             xlabel("Flexion angle");
-            ylabel(replace(orientations{o}, '_', ' '));
+            ylabel(replace(orientation, '_', ' '));
         end
 
 
+    end
+end
+
+function [o, multi] = invert_orientation(orientation)
+    o = orientation;
+    multi = 1;
+    if strcmp(orientation, 'posterior')
+        o = 'anterior';
+        multi = -1;
     end
 end

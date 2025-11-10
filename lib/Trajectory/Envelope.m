@@ -44,111 +44,16 @@ classdef Envelope
     end
 
     methods
-        function spmi = spm(obj)
-            %obj.Data.JJH03.Native.ant.jcs_digitised
+        function spm = spm(obj)
             states = obj.states;
             directions = obj.directions;
             specimens = obj.specimens;
             signals = obj.signals;
-
-            for sg = 1:numel(signals)
-                signal = signals(sg);
-                for st = 1:numel(states)
-                    state = states(st);
-                    for d = 1:numel(directions)
-                        direction = directions(d);
-                        x = obj.Data.(specimens(1)).(state).(direction).(signal);
-                        val = nan(height(x), numel(specimens), width(x));
-                        for sp = 1:numel(specimens)
-                            specimen = specimens(sp);
-                            datum = obj.Data.(specimen).(state).(direction).(signal);
-                            val(:, sp, :) = table2array(datum);
-                        end
-                        headers = datum.Properties.VariableNames;
-                        for h = 1:numel(headers)
-                            header = headers{h};
-                            spm = spm1d.stats.anova1(val(:, :, h)', 1:numel(specimens));
-                            spmi.(signal).(direction).(state).(header) = spm.inference(0.05);
-                        end
-                    end
-                end
-            end
-        end
-        function o = spss(obj, interval)
-            arguments
-                obj
-                interval = 10;
-            end
-            o = SPSS(obj, interval);
+            data = obj.Data;
+            spm = SPM(states, directions, specimens, signals, data);
         end
 
-        function [spmi, spm_bs] = spm_2d(obj)
-            %obj.Data.JJH03.Native.ant.jcs_digitised
-            states = obj.states;
-            directions = obj.directions;
-            specimens = obj.specimens;
-            signals = obj.signals;
 
-
-            for sg = 1:numel(signals)
-                signal = signals(sg);
-                for d = 1:numel(directions)
-                    direction = directions(d);
-                    i = 1;
-                    x = obj.Data.(specimens(1)).(states(1)).(direction).(signal);
-                    val = nan(height(x), numel(specimens) * numel(states), width(x));
-
-                    state_list = nan(numel(specimens) * numel(states), 1);
-                    specimen_list = nan(numel(specimens) * numel(states), 1);
-                    for st = 1:numel(states)
-                        state = states(st);
-                        for sp = 1:numel(specimens)
-                            specimen = specimens(sp);
-                            datum = obj.Data.(specimen).(state).(direction).(signal);
-                            val(:, i, :) = table2array(datum);
-                            state_list(i) = st-1;
-                            specimen_list(i) = sp-1;
-                            i = i + 1;
-                        end
-                    end
-
-                    headers = datum.Properties.VariableNames;
-                    for h = 1:numel(headers)
-                        header = headers{h};
-                        spm_bs.(signal).(direction).(header) = spm1d.stats.anova1(val(:, :, h)', state_list);
-                        spm = spm1d.stats.anova1rm(val(:, :, h)', state_list, specimen_list);
-                        spmi.(signal).(direction).(header) = spm.inference(0.05);
-                    end
-                end
-            end
-        end
-        % function [nii, metadata] = to_nifti(obj)
-        %     directions = obj.directions;
-        %     states = obj.states;
-        %     specimens = obj.specimens;
-        %     signals = obj.signals;
-        %
-        %     metadata.order = '[angle, dof, direction, states]';
-        %     metadata.directions = directions;
-        %     metadata.states = states;
-        %     for sg = 1:numel(signals)
-        %         signal = signals(sg);
-        %         for sp = 1:numel(specimens)
-        %             specimen = specimens(sp);
-        %             [i, j] = size(obj.Data.(specimen).(states(1)).(directions(1)).(signal));
-        %             nii.(signal).(specimen) = nan(i, j, numel(directions), numel(states));
-        %             for d = 1:numel(directions)
-        %                 direction = directions(d);
-        %                 for st = 1:numel(states)
-        %                     state = states(st);
-        %                     datum = obj.Data.(specimen).(state).(direction).(signal);
-        %                     nii.(signal).(specimen)(:, :, d, st) = table2array(datum);
-        %                 end
-        %             end
-        %         end
-        %         metadata.signals.(signal) = string(datum.Properties.VariableNames);
-        %     end
-        % end
         function [flex, ext] = split_flex_ext(obj)
             directions = obj.directions;
             states = obj.states;
