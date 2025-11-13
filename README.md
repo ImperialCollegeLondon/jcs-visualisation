@@ -1,8 +1,7 @@
 # Joint Coordinate System visualisation
 ## Usage
-- Add the folders `lib` and `new_lib` to Path.
 - Run `main.m`.
-- Pick the folder which contains all specimens.
+- Pick the folder which contains all specimens. By default if the folder is called `data`, it will pick it by itself.
 ```
 data          <====== Pick data, not individual specimens
 ├── AA12
