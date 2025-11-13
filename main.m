@@ -26,8 +26,10 @@ spss.print_to_file(root);
 %%
 spm = trajectories.ap().split_flex_ext().filter_signal("jcs").spm();
 %%
-spm.dunnet('UKA_w_ACL');
-
+dunn = spm.dunnet('UKA_w_ACL');
+dunn.Data.jcs_digitised.Native.ant.flexion.plot()
+hold on;
+dunn.Data.jcs_digitised.Native.pos.flexion.plot()
 %%
 spm.jcs_digitised.ant.posterior.plot();
 spm.jcs_digitised.ant.posterior.plot_p_values();

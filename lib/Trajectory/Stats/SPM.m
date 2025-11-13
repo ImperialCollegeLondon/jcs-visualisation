@@ -6,6 +6,9 @@ classdef SPM
     properties(Access = private)
         States
         Specimens
+        Directions
+        Signals
+        Data
     end
 
     methods
@@ -47,20 +50,49 @@ classdef SPM
 
             obj.States = states;
             obj.Specimens = specimens;
+            obj.Directions = directions;
+            obj.Signals = signals;
+            obj.Data = data;
         end
 
 
         function o = dunnet(obj, control)
+            if nargin < 2
+                error("Missing control group. options: %s", strjoin(obj.States, ', '))
+            end
             if ~ismember(control, obj.States)
                 error("Not a valid control. options: %s", strjoin(obj.States, ', '))
             end
+
             alpha = 0.05;
             n_tests = numel(obj.States) - 1;
 
             p_critical = spm1d.util.p_corrected_bonf(alpha, n_tests);
 
-            
+
+            o = Dunnet(obj, control, p_critical);
         end
+
+        function o = states(obj)
+            o = obj.States;
+        end
+
+        function o = specimens(obj)
+            o = obj.Specimens;
+        end
+
+        function o = directions(obj)
+            o = obj.Directions;
+        end
+
+        function o = signals(obj)
+            o = obj.Signals;
+        end
+
+        function o = data(obj)
+            o = obj.Data;
+        end
+
 
     end
 end

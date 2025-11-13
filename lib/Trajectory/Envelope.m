@@ -44,6 +44,13 @@ classdef Envelope
     end
 
     methods
+        function o = spss(obj, interval)
+            arguments
+                obj
+                interval = 10;
+            end
+            o = SPSS(obj, interval);
+        end
         function spm = spm(obj)
             states = obj.states;
             directions = obj.directions;
