@@ -1,17 +1,19 @@
 # Joint Coordinate System visualisation
 ## Usage
-Run `main.m` with matlab on Windows.
-Pick the unoptimised trajectory directory (e.g, `/path/to/AA12/90N_flexion`, the one that contains `Data/` and `Configuration/`).
-All other trajectories in the parent folder (`/path/to/AA12`) will run and use the unoptimised run as its Grood and Suntay JCS.
+- Run `main.m`.
+- Pick the folder which contains all specimens. By default if the folder is called `data`, it will pick it by itself.
+```
+data          <====== Pick data, not individual specimens
+├── AA12
+│   ├── Data
+│   └── Configuration
+└── AA23
+    └── ...
+```
+It assumes the first run does not have an optimisation matrix, and uses its matrices to generate the motion for all specimens.
 
 ## Information
-### I need to compare desired to actual forces
-The struct `JCS_raw`, output of `tdms_extract()`, has the fields `translations` and `forces`.
-Each of them has a `desired` and `actual` field.
-
-### Why only Windows?
-The routine was implemented using `tdmsread()`, which requires the Data Acquisition Toolbox, that is currently not available on Linux.
-
+Some important settings are located in `defaults.m`. Make sure to check them.
 ### What does the code do?
 1. Unzips the project configuration (`Project.sVprj`) to find transformation matrices and knee side
 2. Calculates joint coordinate system (JCS) in the optimised coordinate system
