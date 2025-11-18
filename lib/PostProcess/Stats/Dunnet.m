@@ -41,7 +41,7 @@ classdef Dunnet
                             control_spcm = data.(control)(:,:,h)';
 
                             spm_t = spm1d.stats.ttest2(current, control_spcm);
-                            obj.Data.(signal).(state).(direction).(header) = spm_t.inference(p_critical, true, 'interp', true);
+                            obj.Data.(signal).(state).(direction).(header) = spm_t.inference(p_critical, 'two_tailed', true);
                         end
                     end
                 end

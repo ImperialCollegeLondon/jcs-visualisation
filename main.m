@@ -6,7 +6,7 @@ addpath(genpath('spm'));
 addpath(genpath('./lib'))
 %% Load in the Specimen folder
 defaults;
-
+tic
 % State cfg file is used to create the transforms.
 folder_exist = 7;
 if exist('data', 'dir') == folder_exist
@@ -19,7 +19,7 @@ end
 if root == 0, disp("Exiting script."), return, end
 experiment = Experiment(root, config);
 trajectories = experiment.Trajectories;
-
+toc
 %% SPSS
 spss = trajectories.ap().split_flex_ext().filter_signal("jcs").spss(); % Optional arg value between angles. Default 10.
 spss.print_to_file(root);
@@ -27,9 +27,9 @@ spss.print_to_file(root);
 spm = trajectories.ap().split_flex_ext().filter_signal("jcs").spm();
 %%
 dunn = spm.dunnet('UKA_w_ACL');
-dunn.Data.jcs_digitised.Native.ant.flexion.plot()
+dunn.Data.jcs_digitised.UKA_wo_ACL.ant.flexion.plot();
 hold on;
-dunn.Data.jcs_digitised.Native.pos.flexion.plot()
+dunn.Data.jcs_digitised.Native.pos.flexion.plot();
 %%
 spm.jcs_digitised.ant.posterior.plot();
 spm.jcs_digitised.ant.posterior.plot_p_values();
