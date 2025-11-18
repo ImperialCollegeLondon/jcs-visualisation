@@ -21,21 +21,30 @@ experiment = Experiment(root, config);
 trajectories = experiment.Trajectories;
 toc
 %% SPSS
-spss = trajectories.ap().split_flex_ext().filter_signal("jcs").spss(); % Optional arg value between angles. Default 10.
-spss.print_to_file(root);
+% spss = trajectories.ap().split_flex_ext().filter_signal("jcs").spss(); % Optional arg value between angles. Default 10.
+% spss.print_to_file(root);
 %%
 spm = trajectories.ap().split_flex_ext().filter_signal("jcs").spm();
 %%
 dunn = spm.dunnet('UKA_w_ACL');
-dunn.Data.jcs_digitised.UKA_wo_ACL.ant.flexion.plot();
-hold on;
-dunn.Data.jcs_digitised.Native.pos.flexion.plot();
-%%
-spm.jcs_digitised.ant.posterior.plot();
-spm.jcs_digitised.ant.posterior.plot_p_values();
-spm.jcs_digitised.ant.posterior.plot_threshold_label();
 
-spm.jcs_digitised.pos.posterior.plot();
+states = setdiff(dunn.States, dunn.Control);
+
+for s = 1:numel(states)
+    state = states(s);
+
+    figure;
+    sgtitle(replace(state, '_', ' '));
+
+    dunn.Data.jcs_digitised.(state).pos.posterior.plot();
+    dunn.Data.jcs_digitised.(state).ant.posterior.plot();
+end
+%%
+spm.inference.jcs_digitised.ant.posterior.plot();
+spm.inference.jcs_digitised.ant.posterior.plot_p_values();
+spm.inference.jcs_digitised.ant.posterior.plot_threshold_label();
+
+spm.inference.jcs_digitised.pos.posterior.plot();
 hold on;
 plot(spm_bs.jcs_digitised.ant.posterior.z, 'r');
 plot(spm_bs.jcs_digitised.pos.posterior.z, 'r');
