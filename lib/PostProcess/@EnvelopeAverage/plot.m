@@ -3,31 +3,30 @@ function o = plot(obj, orientations)
         orient = orientations;
     else
         orient = [];
-        endspm.jcs_digitised.pos.posterior.plot();
+    end
 
-        if isempty(obj.Data)
-            o = plot(0);
-            return
+    if isempty(obj.Data)
+        o = plot(0);
+        return
+    end
+
+    states = obj.States;
+    directions = obj.Directions;
+    colours = lines(numel(states));
+    signals = obj.Signals;
+
+    for sg = 1:numel(signals)
+        f(sg) = figure;
+        signal = signals{sg};
+        for s = 1:numel(states)
+            state = states(s);
+            colour = colours(s, :);
+
+            plots(s, sg) = gen_plots(obj.Data.(state).(signal), directions, colour, s, orient);
+
         end
-
-        states = obj.States;
-        directions = obj.Directions;
-        colours = lines(numel(states));
-        signals = obj.Signals;
-
-        for sg = 1:numel(signals)
-            f(sg) = figure;
-            signal = signals{sg};
-            for s = 1:numel(states)
-                state = states(s);
-                colour = colours(s, :);
-
-                plots(s, sg) = gen_plots(obj.Data.(state).(signal), directions, colour, s, orient);
-
-            end
-            sgtitle(replace(signals(sg), '_', ' '));
-            legend(plots(:,sg), state_regex_inv(states));
-        end
+        sgtitle(replace(signals(sg), '_', ' '));
+        legend(plots(:,sg), state_regex_inv(states));
     end
 end
 
