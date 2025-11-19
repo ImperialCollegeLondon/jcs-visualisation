@@ -1,7 +1,8 @@
 classdef SPM
     properties
-        SPMI
-        SPM_BS
+        inference
+        within_subject
+        between_subject
     end
     properties(Access = private)
         States
@@ -39,11 +40,11 @@ classdef SPM
                     headers = datum.Properties.VariableNames;
                     for h = 1:numel(headers)
                         header = headers{h};
-                        obj.SPM_BS.(signal).(direction).(header) = spm1d.stats.anova1(val(:, :, h)', state_list);
+                        obj.between_subject.(signal).(direction).(header) = spm1d.stats.anova1(val(:, :, h)', state_list);
                         spm = spm1d.stats.anova1rm(val(:, :, h)', state_list, specimen_list);
                         % spm = spm1d.stats.anova1(val(:, :, h)', state_list);
-
-                        obj.SPMI.(signal).(direction).(header) = spm.inference(0.05);
+                        obj.within_subject = spm;
+                        obj.inference.(signal).(direction).(header) = spm.inference(0.05);
                     end
                 end
             end
