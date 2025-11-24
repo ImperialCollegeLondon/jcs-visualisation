@@ -57,7 +57,7 @@ classdef SPM
         end
 
 
-        function o = dunnet(obj, control)
+        function o = dunnett(obj, control)
             if nargin < 2
                 error("Missing control group. options: %s", strjoin(obj.States, ', '))
             end
@@ -71,7 +71,7 @@ classdef SPM
             p_critical = spm1d.util.p_corrected_bonf(alpha, n_tests);
 
 
-            o = Dunnet(obj, control, p_critical);
+            o = Dunnett(obj, control, p_critical);
         end
 
         function o = states(obj)

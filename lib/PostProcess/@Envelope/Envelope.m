@@ -1,4 +1,4 @@
-classdef Envelope < Plot & SplitFlexExt
+classdef Envelope
     properties
         Data
         States
