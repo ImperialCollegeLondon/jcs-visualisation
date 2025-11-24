@@ -15,26 +15,30 @@ function add_significance(obj, posthoc)
 
         for st = 1:numel(states)
             state = states(st);
-            if state == posthoc.Control
-                continue
-            end
             line_handles = obj.LineHandles(st).(signal);
             DOFs = fields(line_handles);
-            for o = 1:numel(orientations)
-                orientation = orientations(o);
-                for d = 1:numel(DOFs)
+            for d = 1:numel(DOFs)
+                for o = 1:numel(orientations)
+                    orientation = orientations(o);
                     nexttile(d);
                     dof = DOFs{d};
-                    line = line_handles.(dof);
-                    is_significant = posthoc.Significance.(signal).(state).(orientation).(dof);
+                    line = line_handles.(dof).(orientation);
+
+                    x = line.XData;
+
+                    if state == posthoc.Control
+                        is_significant = true(numel(x), 1);
+                    else
+                        is_significant = posthoc.Significance.(signal).(state).(orientation).(dof);
+                    end
                     if ~any(is_significant)
                         continue;
                     end
 
-                    x = line.XData;
                     y = line.YData;
+                    line_width = line.LineWidth * 4;
                     colour = line.Color;
-                    plot(x(is_significant), y(is_significant), 'LineWidth', 2, 'Color', colour, 'HandleVisibility', 'off');
+                    plot(x(is_significant), y(is_significant), 'LineWidth', line_width, 'Color', colour, 'HandleVisibility', 'off');
 
                 end
             end

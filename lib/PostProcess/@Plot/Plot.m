@@ -46,36 +46,37 @@ function [line_handles, figure_handles] = create_plot(obj, orientations)
         sgtitle(replace(signals(sg), '_', ' '));
         plot_handles = [plots.(signal)];
         orient = fields(plot_handles);
-        legend([plot_handles.(orient{1})], state_regex_inv(states));
+        h = [plot_handles.(orient{1})];
+        legend([h.(directions(1))], state_regex_inv(states));
     end
     line_handles = plots;
     
 end
 
-function p = gen_plots(data, directions, colour, s, orientations)
+function p = gen_plots(data, directions, colour, s, DOFs)
     arguments
         data
-        directions
+        directions % directions of the envelope. "ant" and "pos", etc
         colour
         s
-        orientations = [];
+        DOFs = []; % posterior, medial, internal, etc
     end
     means = [];
     for d = 1:numel(directions)
-        ap = directions(d);
+        direction = directions(d);
         try
-        datum = data.(ap);
+        datum = data.(direction);
         catch ME
             keyboard
         end
-        if isempty(orientations)
-            orientations = datum.mean.Properties.VariableNames;
+        if isempty(DOFs)
+            DOFs = datum.mean.Properties.VariableNames;
         end
-        is_flexion = contains(orientations, 'flexion');
-        orientations(is_flexion) = [];
-        for o = 1:numel(orientations)
-            orientation = orientations{o};
-            means(o, d) = mean(datum.mean.(orientation));
+        is_flexion = contains(DOFs, 'flexion');
+        DOFs(is_flexion) = [];
+        for o = 1:numel(DOFs)
+            dof = DOFs{o};
+            means(o, d) = mean(datum.mean.(dof));
         end
     end
 
@@ -83,41 +84,41 @@ function p = gen_plots(data, directions, colour, s, orientations)
 
     % linestyles = ["--", ":"];
     for d = 1:numel(directions)
-        ap = directions(d);
-        datum = data.(ap);
+        direction = directions(d);
+        datum = data.(direction);
         if d > 1 %Differentiate anterior from posterior
             colour = 0.9 * colour;
         end
 
         if isempty(datum.mean)
-            for o = 1:numel(orientations)
-                p.(orientations{o}) = plot(0);
+            for o = 1:numel(DOFs)
+                p.(DOFs{o}) = plot(0);
             end
             return
         end
 
 
 
-        if isempty(orientations)
-            orientations = datum.mean.Properties.VariableNames;
+        if isempty(DOFs)
+            DOFs = datum.mean.Properties.VariableNames;
         end
-        is_flexion = contains(orientations, 'flexion');
-        orientations(is_flexion) = [];
+        is_flexion = contains(DOFs, 'flexion');
+        DOFs(is_flexion) = [];
 
         step = 10;
 
 
 
-        for o = 1:numel(orientations)
-            orientation = orientations{o};
+        for o = 1:numel(DOFs)
+            dof = DOFs{o};
 
             nexttile(o); hold on;
             x = datum.mean.flexion;
-            y = datum.mean.(orientation);
+            y = datum.mean.(dof);
             % p = plot(x, y, linestyles(d), 'color', colour);
-            p.(orientation) = plot(x, y, 'color', colour);
+            p.(dof).(direction) = plot(x, y, 'color', colour);
 
-            y_std = datum.std.(orientation);
+            y_std = datum.std.(dof);
             idx = 1:step+1*s:numel(x);
             is_bar_up = xor(is_first_higher(o), d > 1);
             if is_bar_up
@@ -130,7 +131,7 @@ function p = gen_plots(data, directions, colour, s, orientations)
             grid on;
             axis square;
             xlabel("Flexion angle");
-            ylabel(replace(orientation, '_', ' '));
+            ylabel(replace(dof, '_', ' '));
         end
 
 
