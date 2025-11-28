@@ -26,6 +26,7 @@ end
 
 function [trajectories, sets] = load_specimens(config, root)
             obj.Root = root;
+            obj.Config = config;
 
             specimen_list = get_root_files(root, {'result'}).unwrap();
             path_specimens = fullfile({specimen_list.folder}, {specimen_list.name});
