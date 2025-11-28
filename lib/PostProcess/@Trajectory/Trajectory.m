@@ -11,6 +11,7 @@ classdef Trajectory < handle
     methods 
         function obj = Trajectory(name, state, loading_condition, is_optimised)
             obj.SpecimenState = string(state);
+            warning("Removing the letter a from all tests. if you see this, you probably want to remove this.")
             obj.SpecimenName = replace(string(name), 'a', '');
             obj.LoadingCondition = string(loading_condition);
             obj.IsOptimised = is_optimised;
@@ -85,6 +86,7 @@ classdef Trajectory < handle
 
         % Needs to be made considerably more ergonomic
         function o = flip_ie(obj, specimen, state, loading_condition, signal_in)
+
             is_specimen = contains([obj.SpecimenName], specimen, "IgnoreCase", true);
             is_state = contains([obj.SpecimenState], state, "IgnoreCase", true);
             is_lc = contains([obj.LoadingCondition], loading_condition, "IgnoreCase", true);

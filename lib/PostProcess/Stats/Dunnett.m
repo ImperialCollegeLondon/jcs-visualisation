@@ -1,12 +1,15 @@
-classdef Dunnet
+classdef Dunnett < PostHoc
     properties
         States
         Control
         PCritical
         Data
     end
+    properties % From PostHoc
+        Significance
+    end
     methods
-        function obj = Dunnet(spm, control, p_critical)
+        function obj = Dunnett(spm, control, p_critical)
             signals = spm.signals;
             directions = spm.directions;
             specimens = spm.specimens;
@@ -35,14 +38,18 @@ classdef Dunnet
                         is_control = state == control;
                         if is_control, continue, end
 
+                        is_significant = table();
                         for h = 1:numel(headers)
                             header = headers{h};
                             current = data.(state)(:,:, h)';
                             control_spcm = data.(control)(:,:,h)';
 
                             spm_t = spm1d.stats.ttest2(current, control_spcm);
-                            obj.Data.(signal).(state).(direction).(header) = spm_t.inference(p_critical, 'two_tailed', true);
+                            inference = spm_t.inference(p_critical, 'two_tailed', true);
+                            obj.Data.(signal).(state).(direction).(header) = inference;
+                            is_significant.(header) = (inference.z > inference.zstar)';
                         end
+                        obj.Significance.(signal).(state).(direction) = is_significant;
                     end
                 end
             end
@@ -50,6 +57,10 @@ classdef Dunnet
             obj.States = states;
             obj.Control = control;
             obj.PCritical = p_critical;
+        end
+
+        function o = is_significant(obj)
+            o = obj.Significance;
         end
     end
 

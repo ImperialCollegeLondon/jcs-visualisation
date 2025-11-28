@@ -1,55 +1,77 @@
-function plots = visualise_landmark(t, f, config, colour_t, colour_f)
-    plots(1) = scatter3(t.medial(1), t.medial(2), t.medial(3), [], colour_t);
+function [plots, colour] = visualise_landmark(t, f, config, label, linestyle, colour)
+    arguments
+        t
+        f
+        config
+        label
+        linestyle = "-"
+        colour = []
+    end
+
+    if linestyle == ":"
+        plots(1) = scatter3(t.medial(1), t.medial(2), t.medial(3), 'Color', colour, 'DisplayName', label, 'HandleVisibility', 'off');
+    else
+        plots(1) = scatter3(t.medial(1), t.medial(2), t.medial(3), 'DisplayName', label);
+    end
+
     hold on;
     text(t.medial(1), t.medial(2), t.medial(3), "  Medial");
+    if isempty(colour)
+        colour = plots(1).CData;
+    end
 
-    scatter3(t.lateral(1), t.lateral(2), t.lateral(3), [], colour_t);
+    scatter3(t.lateral(1), t.lateral(2), t.lateral(3), [], colour, 'HandleVisibility', 'off');
     text(t.lateral(1), t.lateral(2), t.lateral(3), "  Lateral");
-    scatter3(t.distal(1), t.distal(2), t.distal(3), [], colour_t);
+    scatter3(t.distal(1), t.distal(2), t.distal(3), [], colour, 'HandleVisibility', 'off');
     text(t.distal(1), t.distal(2), t.distal(3), "  Distal");
     
 
+%% Tibia
     %% Medial lateral axis
     o = (t.medial + t.lateral)/2;
-    scatter3(o(1), o(2), o(3), colour_t, 'filled');
+    try
+    scatter3(o(1), o(2), o(3), 'MarkerFaceColor', colour, 'HandleVisibility', 'off');
+    catch ME
+        keyboard
+    end
 
     if config.is_right_knee
         med_lat = t.lateral - t.medial;
-        quiver3(t.medial(1), t.medial(2), t.medial(3), med_lat(1), med_lat(2), med_lat(3), 0, colour_t);
+        quiver3(t.medial(1), t.medial(2), t.medial(3), med_lat(1), med_lat(2), med_lat(3), 0, linestyle, "Color", colour, 'HandleVisibility', 'off');
     else
         med_lat = t.medial - t.lateral;
-        quiver3(t.lateral(1), t.lateral(2), t.lateral(3), med_lat(1), med_lat(2), med_lat(3), 0, colour_t);
+        quiver3(t.lateral(1), t.lateral(2), t.lateral(3), med_lat(1), med_lat(2), med_lat(3), 0, linestyle, "Color", colour, 'HandleVisibility', 'off');
     end
 
     %% Proximal-distal axis
     prox_dist = t.distal - o;
-    quiver3(o(1), o(2), o(3), prox_dist(1), prox_dist(2), prox_dist(3), 0, colour_t);
+    quiver3(o(1), o(2), o(3), prox_dist(1), prox_dist(2), prox_dist(3), 0, linestyle, "Color", colour, 'HandleVisibility', 'off');
 
 
-    %% Femur
+%% Femur
 
-    plots(2) = scatter3(f.medial(1), f.medial(2), f.medial(3), [], colour_f);
+    plots(2) = scatter3(f.medial(1), f.medial(2), f.medial(3), [], colour, 'HandleVisibility', 'off');
     hold on;
     text(f.medial(1), f.medial(2), f.medial(3), "  Medial");
 
-    scatter3(f.lateral(1), f.lateral(2), f.lateral(3), [], colour_f);
+    scatter3(f.lateral(1), f.lateral(2), f.lateral(3), [], colour, 'HandleVisibility', 'off', 'HandleVisibility', 'off');
     text(f.lateral(1), f.lateral(2), f.lateral(3), "  Lateral");
-    scatter3(f.distal(1), f.distal(2), f.distal(3), [], colour_f);
+    scatter3(f.distal(1), f.distal(2), f.distal(3), [], colour, 'HandleVisibility', 'off', 'HandleVisibility', 'off');
     text(f.distal(1), f.distal(2), f.distal(3), "  Proximal");
 
     %% Medial lateral axis
     o = (f.medial + f.lateral)/2;
-    scatter3(o(1), o(2), o(3), colour_f, 'filled');
+    scatter3(o(1), o(2), o(3), colour, 'filled');
 
     if config.is_right_knee
         med_lat = f.lateral - f.medial;
-        quiver3(f.medial(1), f.medial(2), f.medial(3), med_lat(1), med_lat(2), med_lat(3), 0, colour_f);
+        quiver3(f.medial(1), f.medial(2), f.medial(3), med_lat(1), med_lat(2), med_lat(3), 0, linestyle, "Color", colour, 'HandleVisibility', 'off');
     else
         med_lat = f.medial - f.lateral;
-        quiver3(f.lateral(1), f.lateral(2), f.lateral(3), med_lat(1), med_lat(2), med_lat(3), 0, colour_f);
+        quiver3(f.lateral(1), f.lateral(2), f.lateral(3), med_lat(1), med_lat(2), med_lat(3), 0, linestyle, "Color", colour, 'HandleVisibility', 'off');
     end
 
     %% Proximal-distal axis
     prox_dist = f.distal - o;
-    quiver3(o(1), o(2), o(3), prox_dist(1), prox_dist(2), prox_dist(3), 0, colour_f);
+    quiver3(o(1), o(2), o(3), prox_dist(1), prox_dist(2), prox_dist(3), 0, linestyle, "Color", colour, 'HandleVisibility', 'off');
 end

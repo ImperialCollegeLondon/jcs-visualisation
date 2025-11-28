@@ -25,30 +25,24 @@ toc
 % spss = trajectories.ap().split_flex_ext().filter_signal("jcs").spss(); % Optional arg value between angles. Default 10.
 % spss.print_to_file(root);
 %%
-spm = trajectories.ap().split_flex_ext().filter_signal("jcs").spm();
-%%
-dunn = spm.dunnet('UKA_w_ACL');
+dataset = trajectories.ap().split_flex_ext().filter_signal("jcs");
+spm = dataset.spm();
+dunn = spm.dunnett('UKA_w_ACL');
 
-states = setdiff(dunn.States, dunn.Control);
+%% Stability Envelopes
+dataset ...
+    .average() ...
+    .plot("posterior") ...
+    .add_significance(dunn);
+% ap_flex.print_to_file(root);
 
-for s = 1:numel(states)
-    state = states(s);
+% trajectories ...
+%     .ie()...
+%     .filter_signal("jcs")...
+%     .average()...
+%     .split_flex_ext()...
+%     .plot("internal_rotation");
 
-    figure;
-    sgtitle(replace(state, '_', ' '));
-
-    dunn.Data.jcs_digitised.(state).pos.posterior.plot();
-    dunn.Data.jcs_digitised.(state).ant.posterior.plot();
-end
-%%
-spm.inference.jcs_digitised.ant.posterior.plot();
-spm.inference.jcs_digitised.ant.posterior.plot_p_values();
-spm.inference.jcs_digitised.ant.posterior.plot_threshold_label();
-
-spm.inference.jcs_digitised.pos.posterior.plot();
-hold on;
-plot(spm_bs.jcs_digitised.ant.posterior.z, 'r');
-plot(spm_bs.jcs_digitised.pos.posterior.z, 'r');
 %%
 % trajectories.plot_tibia();
 
@@ -64,10 +58,8 @@ ap_flex.print_to_file(root);
 trajectories...
     .path()...
     .filter_signal("jcs")...
-    .average()...
     .split_flex_ext()...
-    .print_to_file(root)...
-    .plot("posterior");
+    .plot();
 
 %% Stability Envelopes
 [ap_flex, ap_ext] = trajectories ...
