@@ -86,9 +86,6 @@ classdef Trajectory < handle
 
         % Needs to be made considerably more ergonomic
         function o = flip_ie(obj, specimen, state, loading_condition, signal_in)
-            arguments
-                
-            end
 
             is_specimen = contains([obj.SpecimenName], specimen, "IgnoreCase", true);
             is_state = contains([obj.SpecimenState], state, "IgnoreCase", true);

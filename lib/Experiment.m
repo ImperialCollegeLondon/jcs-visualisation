@@ -130,7 +130,9 @@ classdef Experiment
             [obj.Config, state, ~] = load_config(path_trajectory_set, obj.Config);
             % Visualise landmarks
             titles = [obj.SpecimenName replace(trajectory_set, '_', ' ')];
-            visualise_digitisation(state, obj.Config, titles);
+            if obj.Config.visualise_digitisation
+                visualise_digitisation(state, obj.Config, titles);
+            end
 
             %% load in experiment run
             for t = 1:numel(trajectories)
