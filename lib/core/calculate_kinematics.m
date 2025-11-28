@@ -1,6 +1,6 @@
-function output = calculate_kinematics(data, config)
+function output = calculate_kinematics(tdms, config)
     % Get data
-    JCS_raw = extract_tdms(data, config);
+    data = extract_tdms(tdms, config);
 
     % Get important transforms from config
     W1_T_W2 = config.transforms.W1_T_W2;
@@ -10,7 +10,7 @@ function output = calculate_kinematics(data, config)
     RB1opt_T_RB1orig = config.transforms.RB1opt_T_RB1orig; %foTf
     position_offset = config.transforms.position_offset;
    
-    robot_position = JCS_raw.robot_position;
+    robot_position = data.robot_position;
     % robot_position.yaw = atan2d_north_to_east(JCS_raw.robot_position.yaw);
     % robot_position.roll = atan2d_north_to_east(JCS_raw.robot_position.roll);
 
@@ -28,17 +28,17 @@ function output = calculate_kinematics(data, config)
     RB1orig_T_RB2orig = pagemtimes(RB1orig_T_RB2, RB2opt_T_RB2orig);
     
     %% Prepare output
-    name = string(JCS_raw.specimen);
-    state = string(JCS_raw.state);
-    loading_condition = string(JCS_raw.loading_condition);
+    name = string(data.specimen);
+    state = string(data.state);
+    loading_condition = string(data.loading_condition);
     is_optimised = config.transforms.is_optimised;
     output = Trajectory(name, state, loading_condition, is_optimised);
     
 
-    output.add_data("load_cell", JCS_raw.load_cell);
-    output.add_data("jcs_optimised", JCS_raw.translation.actual);
+    output.add_data("load_cell", data.load_cell);
+    output.add_data("jcs_optimised", data.translation.actual);
     try
-        output.add_data("jcs_digitised", JCS_raw.translation.digitised);
+        output.add_data("jcs_digitised", data.translation.digitised);
     catch
     end
 

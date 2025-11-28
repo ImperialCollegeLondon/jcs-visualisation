@@ -3,7 +3,8 @@ clc;clear; close all;
 profile on;
 diary("log.txt"); % Creates a log. Important for checking which runs failed!!
 addpath(genpath('spm'));
-addpath(genpath('./lib'))
+addpath(genpath('tdmsreader'));
+addpath(genpath('lib'))
 %% Load in the Specimen folder
 defaults;
 tic
