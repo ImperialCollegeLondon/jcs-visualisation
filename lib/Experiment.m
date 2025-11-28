@@ -8,10 +8,26 @@ classdef Experiment
         SpecimenName
         i
     end
-    methods (Access = private)
-        function obj = load_specimens(obj)
-            root = obj.Root;
-            obj.Config = obj.Config;
+
+    methods
+        function obj = Experiment(root, config)
+            obj.Config = config;
+            obj.Root = root;
+            obj = load_specimens(config, root);
+            % obj = obj.load_specimens2();
+        end
+        function out = signals(obj)
+            out = obj.Trajectories.signals;
+        end
+
+    end
+end
+
+
+
+function obj = load_specimens(root, config)
+            obj.Root = root;
+            obj.Config = config;
 
             specimen_list = get_root_files(root, {'result'}).unwrap();
             path_specimens = fullfile({specimen_list.folder}, {specimen_list.name});
@@ -84,18 +100,3 @@ classdef Experiment
                 obj.i = obj.i+1;
             end
         end
-    end
-
-    methods
-        function obj = Experiment(root, config)
-            obj.Config = config;
-            obj.Root = root;
-            obj = obj.load_specimens();
-            % obj = obj.load_specimens2();
-        end
-        function out = signals(obj)
-            out = obj.Trajectories.signals;
-        end
-
-    end
-end
