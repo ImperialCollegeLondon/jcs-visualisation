@@ -5,10 +5,6 @@ classdef Experiment
         Trajectories
         RawTrajectorySets
     end
-    properties (Access = private)
-        SpecimenName
-        i
-    end
 
     methods
         function obj = Experiment(root, config)
@@ -19,6 +15,25 @@ classdef Experiment
         end
         function out = signals(obj)
             out = obj.Trajectories.signals;
+        end
+        function inspect_end_effector(self)
+            all_trajectory_sets = self.RawTrajectorySets;
+            specimens = unique([all_trajectory_sets.specimen]);
+
+            for sp = 1:numel(specimens)
+                specimen = specimens(sp);
+                is_specimen = [all_trajectory_sets.specimen] == specimen;
+                trajectory_sets = all_trajectory_sets(is_specimen);
+                states = [trajectory_sets.state];
+
+                for st = 1:numel(states)
+                    state = states(st);
+                    rTt = trajectory_sets(st).JCS.JCS_digitised.T_Sensor2_RB2;
+
+                    error("to do: Visualise matrices")
+                    error("to do: Calculate angle IE")
+                end
+            end
         end
     end
 end

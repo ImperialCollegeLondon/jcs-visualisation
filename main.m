@@ -7,7 +7,7 @@ addpath(genpath('tdmsreader'));
 addpath(genpath('lib'))
 %% Load in the Specimen folder
 defaults;
-tic
+
 % State cfg file is used to create the transforms.
 folder_exist = 7;
 if exist('data', 'dir') == folder_exist
@@ -19,8 +19,13 @@ else
 end
 if root == 0, disp("Exiting script."), return, end
 experiment = Experiment(root, config);
+
+% experiment.visualise_digitisation();
+experiment.inspect_end_effector()
+
+
+
 trajectories = experiment.Trajectories;
-toc
 %% SPSS
 % spss = trajectories.ap().split_flex_ext().filter_signal("jcs").spss(); % Optional arg value between angles. Default 10.
 % spss.print_to_file(root);
