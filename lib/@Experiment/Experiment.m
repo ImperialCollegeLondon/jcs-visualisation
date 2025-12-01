@@ -15,14 +15,10 @@ classdef Experiment
             obj.Root = root;
             obj.Config = config;
             [obj.Trajectories, obj.RawTrajectorySets] = load_specimens(config, root);
-            [obj.Trajectories, obj.Config] = load_specimens(config, root);
             % obj = obj.load_specimens2();
         end
         function out = signals(obj)
             out = obj.Trajectories.signals;
-        end
-        function visualise_digitisation(obj)
-
         end
 
     end
