@@ -11,13 +11,15 @@ classdef Experiment
 
     methods
         function obj = Experiment(root, config)
-            obj.Config = config;
             obj.Root = root;
-            obj = load_specimens(config, root);
+            [obj.Trajectories, obj.Config] = load_specimens(config, root);
             % obj = obj.load_specimens2();
         end
         function out = signals(obj)
             out = obj.Trajectories.signals;
+        end
+        function visualise_digitisation(obj)
+
         end
 
     end
@@ -25,9 +27,8 @@ end
 
 
 
-function obj = load_specimens(root, config)
+function [trajectories, config] = load_specimens(config_in, root)
             obj.Root = root;
-            obj.Config = config;
 
             specimen_list = get_root_files(root, {'result'}).unwrap();
             path_specimens = fullfile({specimen_list.folder}, {specimen_list.name});
@@ -42,31 +43,44 @@ function obj = load_specimens(root, config)
                     continue
                 end
                 trajectory_sets = trajectory_sets.unwrap();
+                is_parent_config = contains({trajectory_sets.name}, 'configuration', IgnoreCase=true);
+                trajectory_sets = trajectory_sets([trajectory_sets.isdir] & ~is_parent_config);
                 path_trajectory_sets = string(fullfile({trajectory_sets.folder}, {trajectory_sets.name}));
 
                 for ts = 1:numel(trajectory_sets) % Navigate trajectory sets
                     path_trajectory_set = path_trajectory_sets(ts);
-                    obj = obj.open_files_then_process(path_trajectory_set);
+
+                    try
+                    [config, state, setup] = load_config(path_trajectory_set, config_in);
+                    catch ME
+                        keyboard
+                    end
+                    obj.Config = config;
+
+                    % Visualise landmarks
+                    if config.visualise_digitisation
+                        [~, trajectory_set, ~] = fileparts(path_trajectory_set);
+                        titles = [obj.SpecimenName replace(trajectory_set, '_', ' ')];
+                        visualise_digitisation(state, config, titles);
+                    end
+                    %
+
+                    obj = open_files_then_process(obj, path_trajectory_set, config);
                 end
             end
-        end
+            trajectories = obj.Trajectories;
+end
 
-
-        function obj = open_files_then_process(obj, path_trajectory_set)
+function obj = open_files_then_process(obj, path_trajectory_set, config)
             [~, trajectory_set, ~] = fileparts(path_trajectory_set);
             trajectories = dir(fullfile(path_trajectory_set, "**/*processed.tdms"));
             if isempty(trajectories)
                 return
             end
+
             input_path = fullfile({trajectories.folder}, {trajectories.name});
             [~, file_name, ~] = fileparts({trajectories.name}'); % Name without extension
 
-            [obj.Config, state, ~] = load_config(path_trajectory_set, obj.Config);
-            % Visualise landmarks
-            titles = [obj.SpecimenName replace(trajectory_set, '_', ' ')];
-            if obj.Config.visualise_digitisation
-                visualise_digitisation(state, obj.Config, titles);
-            end
 
             %% load in experiment run
             for t = 1:numel(trajectories)
@@ -74,7 +88,7 @@ function obj = load_specimens(root, config)
 
                 try
                     data = TDMS_getStruct(input_path{t});
-                    trajectory = calculate_kinematics(data, obj.Config);
+                    trajectory = calculate_kinematics(data, config);
 
                     if trajectory.specimen ~= obj.SpecimenName && ts == 1 && t == 1
                         warning("Specimen %s changed to %s", trajectory.specimen, obj.SpecimenName);
@@ -89,16 +103,13 @@ function obj = load_specimens(root, config)
                     end
 
                 catch ME
-                    if obj.Config.debug
+                    if config.debug
                         rethrow(ME)
                     end
                     warning(ME.message);
                 end
-                if isempty([obj.Trajectories])
-                    obj.Trajectories = trajectory;
-                else
-                    obj.Trajectories(obj.i) = trajectory;
-                end
+
+                obj.Trajectories(obj.i) = trajectory;
                 obj.i = obj.i+1;
             end
         end
