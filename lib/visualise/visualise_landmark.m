@@ -1,8 +1,8 @@
-function [plots, colour] = visualise_landmark(t, f, config, label, linestyle, colour)
+function [plots, colour] = visualise_landmark(t, f, is_right_knee, label, linestyle, colour)
     arguments
         t
         f
-        config
+        is_right_knee
         label
         linestyle = "-"
         colour = []
@@ -35,7 +35,7 @@ function [plots, colour] = visualise_landmark(t, f, config, label, linestyle, co
         keyboard
     end
 
-    if config.is_right_knee
+    if is_right_knee
         med_lat = t.lateral - t.medial;
         quiver3(t.medial(1), t.medial(2), t.medial(3), med_lat(1), med_lat(2), med_lat(3), 0, linestyle, "Color", colour, 'HandleVisibility', 'off');
     else
@@ -63,7 +63,7 @@ function [plots, colour] = visualise_landmark(t, f, config, label, linestyle, co
     o = (f.medial + f.lateral)/2;
     scatter3(o(1), o(2), o(3), colour, 'filled');
 
-    if config.is_right_knee
+    if is_right_knee
         med_lat = f.lateral - f.medial;
         quiver3(f.medial(1), f.medial(2), f.medial(3), med_lat(1), med_lat(2), med_lat(3), 0, linestyle, "Color", colour, 'HandleVisibility', 'off');
     else

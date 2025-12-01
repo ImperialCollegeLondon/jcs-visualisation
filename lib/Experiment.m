@@ -12,22 +12,19 @@ classdef Experiment
     methods
         function obj = Experiment(root, config)
             obj.Root = root;
-            [obj.Trajectories, obj.Config] = load_specimens(config, root);
+            obj.Config = config;
+            obj.Trajectories = load_specimens(config, root);
             % obj = obj.load_specimens2();
         end
         function out = signals(obj)
             out = obj.Trajectories.signals;
-        end
-        function visualise_digitisation(obj)
-
         end
 
     end
 end
 
 
-
-function [trajectories, config] = load_specimens(config_in, root)
+function trajectories = load_specimens(config, root)
             obj.Root = root;
 
             specimen_list = get_root_files(root, {'result'}).unwrap();
@@ -50,28 +47,23 @@ function [trajectories, config] = load_specimens(config_in, root)
                 for ts = 1:numel(trajectory_sets) % Navigate trajectory sets
                     path_trajectory_set = path_trajectory_sets(ts);
 
-                    try
-                    [config, state, setup] = load_config(path_trajectory_set, config_in);
-                    catch ME
-                        keyboard
-                    end
-                    obj.Config = config;
+                    [is_right_knee, state, setup, transforms] = load_config(path_trajectory_set);
 
                     % Visualise landmarks
                     if config.visualise_digitisation
                         [~, trajectory_set, ~] = fileparts(path_trajectory_set);
                         titles = [obj.SpecimenName replace(trajectory_set, '_', ' ')];
-                        visualise_digitisation(state, config, titles);
+                        visualise_digitisation(state, is_right_knee, titles);
                     end
                     %
 
-                    obj = open_files_then_process(obj, path_trajectory_set, config);
+                    obj = open_files_then_process(obj, path_trajectory_set, transforms, config, is_right_knee);
                 end
             end
             trajectories = obj.Trajectories;
 end
 
-function obj = open_files_then_process(obj, path_trajectory_set, config)
+function obj = open_files_then_process(obj, path_trajectory_set, transforms, config, is_right_knee)
             [~, trajectory_set, ~] = fileparts(path_trajectory_set);
             trajectories = dir(fullfile(path_trajectory_set, "**/*processed.tdms"));
             if isempty(trajectories)
@@ -88,7 +80,7 @@ function obj = open_files_then_process(obj, path_trajectory_set, config)
 
                 try
                     data = TDMS_getStruct(input_path{t});
-                    trajectory = calculate_kinematics(data, config);
+                    trajectory = calculate_kinematics(data, transforms, config, is_right_knee);
 
                     if trajectory.specimen ~= obj.SpecimenName && ts == 1 && t == 1
                         warning("Specimen %s changed to %s", trajectory.specimen, obj.SpecimenName);
