@@ -21,7 +21,7 @@ if root == 0, disp("Exiting script."), return, end
 experiment = Experiment(root, config);
 
 % experiment.visualise_digitisation();
-experiment.inspect_end_effector()
+experiment.inspect_end_effector("UKA+ACL");
 
 
 
