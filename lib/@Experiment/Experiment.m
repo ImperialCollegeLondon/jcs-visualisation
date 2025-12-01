@@ -5,10 +5,6 @@ classdef Experiment
         Trajectories
         RawTrajectorySets
     end
-    properties (Access = private)
-        SpecimenName
-        i
-    end
 
     methods
         function obj = Experiment(root, config)
@@ -24,8 +20,9 @@ classdef Experiment
 end
 
 
-function [trajectories, sets] = load_specimens(config, root)
+function [trajectories, trajectory_sets] = load_specimens(config, root)
             obj.Root = root;
+            obj.Config = config;
 
             specimen_list = get_root_files(root, {'result'}).unwrap();
             path_specimens = fullfile({specimen_list.folder}, {specimen_list.name});
@@ -34,30 +31,30 @@ function [trajectories, sets] = load_specimens(config, root)
             for sp = 1:numel(path_specimens) % Navigate specimens
                 obj.SpecimenName = get_specimen_name(specimen_list(sp).name);
                 fprintf("%d. Specimen folder: %s\n", sp, obj.SpecimenName);
-                trajectory_sets = get_root_files(path_specimens{sp}, {});
-                if trajectory_sets.is_none()
+                folders_trajectory_sets = get_root_files(path_specimens{sp}, {});
+                if folders_trajectory_sets.is_none()
                     warning("Folder contains no runs");
                     continue
                 end
-                trajectory_sets = trajectory_sets.unwrap();
-                is_parent_config = contains({trajectory_sets.name}, 'configuration', IgnoreCase=true);
-                trajectory_sets = trajectory_sets([trajectory_sets.isdir] & ~is_parent_config);
-                path_trajectory_sets = string(fullfile({trajectory_sets.folder}, {trajectory_sets.name}));
+                folders_trajectory_sets = folders_trajectory_sets.unwrap();
+                is_parent_config = contains({folders_trajectory_sets.name}, 'configuration', IgnoreCase=true);
+                folders_trajectory_sets = folders_trajectory_sets([folders_trajectory_sets.isdir] & ~is_parent_config);
+                paths_trajectory_sets = string(fullfile({folders_trajectory_sets.folder}, {folders_trajectory_sets.name}));
 
-                for ts = 1:numel(trajectory_sets) % Navigate trajectory sets
-                    path_trajectory_set = path_trajectory_sets(ts);
+                for ts = 1:numel(folders_trajectory_sets) % Navigate trajectory sets
+                    path_trajectory_set = paths_trajectory_sets(ts);
 
                     [is_right_knee, JCS, setup, transforms] = load_config(path_trajectory_set);
 
-                    sets(ts).specimen = string(obj.SpecimenName);
+                    trajectory_sets(ts).specimen = string(obj.SpecimenName);
                     
                     [~, trajectory_set, ~] = fileparts(path_trajectory_set);
                     words = split(trajectory_set, '_');
 
-                    sets(ts).state = words(2);
-                    sets(ts).JCS = JCS;
-                    sets(ts).setup = setup;
-                    sets(ts).is_right_knee = is_right_knee;
+                    trajectory_sets(ts).state = words(2);
+                    trajectory_sets(ts).JCS = JCS;
+                    trajectory_sets(ts).setup = setup;
+                    trajectory_sets(ts).is_right_knee = is_right_knee;
 
 
                     obj = open_files_then_process(obj, path_trajectory_set, transforms, config, is_right_knee);
