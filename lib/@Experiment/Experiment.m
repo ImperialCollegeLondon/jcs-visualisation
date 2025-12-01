@@ -3,6 +3,7 @@ classdef Experiment
         Config
         Root
         Trajectories
+        RawTrajectorySets
     end
     properties (Access = private)
         SpecimenName
@@ -13,18 +14,17 @@ classdef Experiment
         function obj = Experiment(root, config)
             obj.Root = root;
             obj.Config = config;
-            obj.Trajectories = load_specimens(config, root);
+            [obj.Trajectories, obj.RawTrajectorySets] = load_specimens(config, root);
             % obj = obj.load_specimens2();
         end
         function out = signals(obj)
             out = obj.Trajectories.signals;
         end
-
     end
 end
 
 
-function trajectories = load_specimens(config, root)
+function [trajectories, sets] = load_specimens(config, root)
             obj.Root = root;
 
             specimen_list = get_root_files(root, {'result'}).unwrap();
@@ -47,15 +47,18 @@ function trajectories = load_specimens(config, root)
                 for ts = 1:numel(trajectory_sets) % Navigate trajectory sets
                     path_trajectory_set = path_trajectory_sets(ts);
 
-                    [is_right_knee, state, setup, transforms] = load_config(path_trajectory_set);
+                    [is_right_knee, JCS, setup, transforms] = load_config(path_trajectory_set);
 
-                    % Visualise landmarks
-                    if config.visualise_digitisation
-                        [~, trajectory_set, ~] = fileparts(path_trajectory_set);
-                        titles = [obj.SpecimenName replace(trajectory_set, '_', ' ')];
-                        visualise_digitisation(state, is_right_knee, titles);
-                    end
-                    %
+                    sets(ts).specimen = string(obj.SpecimenName);
+                    
+                    [~, trajectory_set, ~] = fileparts(path_trajectory_set);
+                    words = split(trajectory_set, '_');
+
+                    sets(ts).state = words(2);
+                    sets(ts).JCS = JCS;
+                    sets(ts).setup = setup;
+                    sets(ts).is_right_knee = is_right_knee;
+
 
                     obj = open_files_then_process(obj, path_trajectory_set, transforms, config, is_right_knee);
                 end
