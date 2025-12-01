@@ -20,7 +20,6 @@ classdef Experiment
         function out = signals(obj)
             out = obj.Trajectories.signals;
         end
-
     end
 end
 
