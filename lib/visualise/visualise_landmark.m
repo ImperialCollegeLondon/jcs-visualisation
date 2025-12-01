@@ -29,11 +29,7 @@ function [plots, colour] = visualise_landmark(t, f, is_right_knee, label, linest
 %% Tibia
     %% Medial lateral axis
     o = (t.medial + t.lateral)/2;
-    try
     scatter3(o(1), o(2), o(3), 'MarkerFaceColor', colour, 'HandleVisibility', 'off');
-    catch ME
-        keyboard
-    end
 
     if is_right_knee
         med_lat = t.lateral - t.medial;
