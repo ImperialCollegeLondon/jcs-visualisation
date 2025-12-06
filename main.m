@@ -22,8 +22,8 @@ experiment = Experiment(root, config);
 
 %%
 % experiment.visualise_digitisation();
-experiment.inspect_end_effector("UKA+ACL");
-
+control = "UKA+ACL";
+experiment.add_end_effector_correction(control);
 
 %%
 trajectories = experiment.Trajectories;
