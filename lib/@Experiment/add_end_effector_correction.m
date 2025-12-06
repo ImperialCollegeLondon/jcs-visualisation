@@ -1,4 +1,4 @@
-function self = inspect_end_effector(self, control_name)
+function self = add_end_effector_correction(self, control_name)
     arguments
         self Experiment
         control_name {mustBeText}

@@ -1,4 +1,4 @@
-classdef Experiment
+classdef Experiment < handle
     properties
         Config
         Root
