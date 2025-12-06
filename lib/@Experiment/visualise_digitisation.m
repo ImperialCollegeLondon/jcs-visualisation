@@ -11,6 +11,9 @@ function plots = visualise_digitisation(obj)
 
         figure;
         sgtitle(specimen)
+        zlabel("Superior-inferior");
+        ylabel("Anterior-posterior")
+        xlabel("Medial-lateral")
 
         colours = lines(numel(states));
         for st = 1:numel(states)
@@ -21,15 +24,22 @@ function plots = visualise_digitisation(obj)
 
             hold on; axis square;
 
-            t_certus = landmarks(data.JCS.Collected_Points_Rigid_Body_2);
+            t_digitisation_mm = data.JCS.Collected_Points_Rigid_Body_2 * 1000;
+            t_certus = landmarks(t_digitisation_mm);
             t = transform_landmark(t_certus, inv(data.JCS.T_World1_World2));
-            f_certus = landmarks(data.JCS.Collected_Points_Rigid_Body_1);
+            f_digitisation_mm = data.JCS.Collected_Points_Rigid_Body_1 * 1000;
+            f_certus = landmarks(f_digitisation_mm);
             f = transform_landmark(f_certus, inv(data.JCS.T_World1_World2));
             [plots, colour] = visualise_landmark(t, f, is_right_knee, state, "-", colour);
 
             if any(data.JCS.T_RB2_OPT_RB2_Orig ~= eye(4), "all")
-                t_opt = transform_landmark(t, data.JCS.T_RB2_OPT_RB2_Orig);
-                f_opt = transform_landmark(f, data.JCS.T_RB1_OPT_RB1_Orig);
+                tTopt = data.JCS.T_RB2_OPT_RB2_Orig;
+                tTopt(1:3, 4) = tTopt(1:3, 4) * 1000; 
+                t_opt = transform_landmark(t, tTopt);
+
+                fTopt = data.JCS.T_RB1_OPT_RB1_Orig;
+                fTopt(1:3, 4) = fTopt(1:3, 4) * 1000; 
+                f_opt = transform_landmark(f, fTopt);
                 visualise_landmark(t_opt, f_opt, is_right_knee, state,  ":", colour);
             end
             legend;
