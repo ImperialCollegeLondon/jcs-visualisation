@@ -20,11 +20,12 @@ end
 if root == 0, disp("Exiting script."), return, end
 experiment = Experiment(root, config);
 
+%%
 % experiment.visualise_digitisation();
 experiment.inspect_end_effector("UKA+ACL");
 
 
-
+%%
 trajectories = experiment.Trajectories;
 %% SPSS
 % spss = trajectories.ap().split_flex_ext().filter_signal("jcs").spss(); % Optional arg value between angles. Default 10.
