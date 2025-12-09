@@ -19,9 +19,9 @@ else
     Rz = -atan2(R(1,2,:),R(1,1,:))*180/pi;
 end
 transform = table();
-transform.flexion = squeeze(Rx);
-transform.valgus = squeeze(Ry);
-transform.internal = squeeze(Rz);
+transform.flexion = unwrap(squeeze(Rx));
+transform.valgus = unwrap(squeeze(Ry));
+transform.internal = unwrap(squeeze(Rz));
 
 transform.medial = squeeze(Tl(1,4,:)); 
 transform.posterior = squeeze(Tl(2,4,:));
