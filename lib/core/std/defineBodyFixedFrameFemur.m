@@ -23,17 +23,18 @@ uvector=@(a,b) (b-a)/norm(b-a,2); %define a function to find a unit vector from 
 %I,J,K correspond to unit base vectors in the X, Y and Z direactions
 
 origin = (med+lat)/2;
+
 if right
-    I_ = uvector(med,lat); %RIGHT KNEE, X Axis
+    tempI_ = uvector(med,lat); %RIGHT KNEE, X Axis
 else
-    I_ = uvector(lat,med); %LEFT KNEE, X Axis
+    tempI_ = uvector(lat,med); %LEFT KNEE, X Axis
 end
 
-tempK_= uvector(origin,prox); %the proximal point is approximate and thus this axis is not necessarily perpendicular to epicondylar axis
-J_ = ucross(tempK_,I_); % Y-axis
-K_ = ucross(I_,J_);%%recalculate K so perpendicular to give orthogonal coordinate system.
+K_= uvector(origin,prox);
+J_ = ucross(K_,tempI_);
+I_ = ucross(J_,K_);
 
-if any(all(cross(tempK_, I_) == zeros(3,1)) | all(cross(I_, J_) == zeros(3,1)))
+if any(all(cross(K_, I_) == zeros(3,1)) | all(cross(I_, J_) == zeros(3,1)))
 error("Cross product in Femur is zero. Double check femoral digitisation!!")
 end
 
