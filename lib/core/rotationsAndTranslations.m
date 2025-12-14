@@ -1,4 +1,8 @@
-function transform = rotationsAndTranslations( T,right )
+function motion = rotationsAndTranslations( T,right )
+arguments
+    T (4, 4, :)
+    right logical
+end
 %Takes a transformation matrix and outputs rotations and translations
 R = T;
 R(1:3, 4, :) = 0; %T is translation of the femur to the tibia in the femoral reference frame
@@ -18,13 +22,13 @@ else
     Ry = -asind(R(1,3,:));
     Rz = -atan2(R(1,2,:),R(1,1,:))*180/pi;
 end
-transform = table();
-transform.flexion = unwrap(squeeze(Rx));
-transform.valgus = unwrap(squeeze(Ry));
-transform.internal = unwrap(squeeze(Rz));
+motion = table();
+motion.flexion = unwrap(squeeze(Rx));
+motion.valgus = unwrap(squeeze(Ry));
+motion.internal = unwrap(squeeze(Rz));
 
-transform.medial = squeeze(Tl(1,4,:)); 
-transform.posterior = squeeze(Tl(2,4,:));
-transform.superior = squeeze(Tl(3,4,:));
+motion.medial = squeeze(Tl(1,4,:)); 
+motion.posterior = squeeze(Tl(2,4,:));
+motion.superior = squeeze(Tl(3,4,:));
 end
 

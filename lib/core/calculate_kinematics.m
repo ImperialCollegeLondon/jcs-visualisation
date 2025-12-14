@@ -53,8 +53,9 @@ function output = calculate_kinematics(tdms, transforms, config, is_right_knee)
     try
         output.add_data("jcs_digitised", data.translation.digitised);
     catch
-    end
+    end 
 
+    %%
     % Correctly unwrap robot pos
     robot_pos = rotationsAndTranslations(W2_T_S2, is_right_knee);
     robot_pos_arr = unwrap(table2array(robot_pos));

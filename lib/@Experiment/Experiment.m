@@ -51,7 +51,7 @@ function [trajectories, trajectory_sets] = load_specimens(config, root)
                     [~, trajectory_set, ~] = fileparts(path_trajectory_set);
                     words = split(trajectory_set, '_');
 
-                    trajectory_sets(ts).state = words(2);
+                    trajectory_sets(ts).state = state_regex(words(2));
                     trajectory_sets(ts).JCS = JCS;
                     trajectory_sets(ts).setup = setup;
                     trajectory_sets(ts).is_right_knee = is_right_knee;
