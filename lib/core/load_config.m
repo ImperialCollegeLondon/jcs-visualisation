@@ -44,26 +44,17 @@ function [is_right_knee, state, setup, transforms] = load_config(path)
     tibia = landmarks(state.JCS.Collected_Points_Rigid_Body_2);
     transforms.from_digitiser.gTt0 = defineBodyFixedFrameTibia(tibia, is_right_knee);
 
-
-    figure
-    visualise_landmark(tibia, femur, is_right_knee, '', '-', [0 0 0]);
+    R = diag([-1 -1 -1 1]);
+    visualise_matrix(transforms.from_digitiser.gTf0);
     xlabel("x"); ylabel("y"); zlabel("z");
-
-    figure
-    visualise_matrix(transforms.from_digitiser.gTf0, '-');
+    axis equal; grid on;
     hold on;
-    visualise_matrix(transforms.S1_T_RB1, '-');
+    visualise_matrix(state.JCS.T_Sensor2_RB2);
+    visualise_matrix(R * transforms.from_digitiser.gTf0);
+    visualise_matrix(transforms.from_digitiser.gTf0 * R); 
+    visualise_matrix(R * transforms.from_digitiser.gTf0 * R); 
     hold off;
-
-    legend(["From digitisation", "From simvitro"]);
-
-    figure;
-
-    visualise_matrix(state.JCS.T_World1_World2_for_Fiducials);
-    visualise_matrix(state.JCS.T_World1_World2);
-    visualise_matrix(mat_to_left_handed(state.JCS.T_World1_World2));
-    legend(["For fiducials", "Simvitro left knee", "flipped"]);
-
+    legend(["Recon","Simvitro","R*Recon", "Recon*R", "R*Recon*R"]);
 
     transforms.gTee = setup.DefineRobotCoordinateSystem.T_WORLD1_ROB;
 end
