@@ -10,12 +10,12 @@ if nargin == 0
     return;
 end
 
-init_matrix = @(n) repmat(eye(4), 1, 1, n);
+identity_mat = @(n) repmat(eye(4), 1, 1, n);
 
 n = height(eulerAngles);
-Rx = init_matrix(n);
-Ry = init_matrix(n);
-Rz = init_matrix(n);
+Rx = identity_mat(n);
+Ry = identity_mat(n);
+Rz = identity_mat(n);
 
 roll = eulerAngles(:, 1);
 pitch = eulerAngles(:, 2);
@@ -51,7 +51,7 @@ Rz(2, 2, :) = cosd(yaw);
 
 rot = pagemtimes(Rz, pagemtimes(Ry, Rx));
 
-trans = init_matrix(n);
+trans = identity_mat(n);
 trans(1:3, 4, :) = XYZ';
 
 gTtiF = pagemtimes(trans, rot);

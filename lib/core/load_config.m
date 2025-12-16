@@ -44,17 +44,19 @@ function [is_right_knee, state, setup, transforms] = load_config(path)
     tibia = landmarks(state.JCS.Collected_Points_Rigid_Body_2);
     transforms.from_digitiser.gTt0 = defineBodyFixedFrameTibia(tibia, is_right_knee);
 
-    R = diag([-1 -1 -1 1]);
-    visualise_matrix(transforms.from_digitiser.gTf0);
+    flip_med_lat = findTrackerFixedFrames([0 0 180], [0 0 0]);
+    visualise_matrix(transforms.from_digitiser.gTf0, ':'); legend(["Recon","Simvitro","Recon + Left-hand", "Recon+LH+Reorient"]);
     xlabel("x"); ylabel("y"); zlabel("z");
-    axis equal; grid on;
+    axis equal; grid on; view(30,30);
     hold on;
-    visualise_matrix(state.JCS.T_Sensor2_RB2);
-    visualise_matrix(R * transforms.from_digitiser.gTf0);
-    visualise_matrix(transforms.from_digitiser.gTf0 * R); 
-    visualise_matrix(R * transforms.from_digitiser.gTf0 * R); 
-    hold off;
-    legend(["Recon","Simvitro","R*Recon", "Recon*R", "R*Recon*R"]);
+    visualise_matrix(state.JCS.T_Sensor1_RB1); legend(["Recon","Simvitro","Recon + Left-hand", "Recon+LH+Reorient"]);
+    gTf0 = transforms.from_digitiser.gTf0;
+    gTf0_left_handed = mat_to_left_handed(gTf0);
+    gTf0_left_reorient = gTf0_left_handed * flip_med_lat;
+    visualise_matrix(gTf0_left_handed, ':'); legend(["Recon","Simvitro","Recon + Left-hand", "Recon+LH+Reorient"]);
+    visualise_matrix(gTf0_left_reorient, ':'); legend(["Recon","Simvitro","Recon + Left-hand", "Recon+LH+Reorient"]);
+    hold off; axis equal;
+    legend(["Recon","Simvitro","Recon + Left-hand", "Recon+LH+Reorient"]);
 
     transforms.gTee = setup.DefineRobotCoordinateSystem.T_WORLD1_ROB;
 end
