@@ -1,8 +1,8 @@
 function transform = coordinate2matrix(data)
 translation = repmat(eye(4), 1, 1, numel(x));
-translation(1, 4, :) = data.x;
-translation(2, 4, :) = data.y;
-translation(3, 4, :) = data.z;
+translation(1, 4, :) = x;
+translation(2, 4, :) = y;
+translation(3, 4, :) = z;
 
 roll=deg2rad(data.roll); % Rx
 pitch=deg2rad(data.pitch); % Ry

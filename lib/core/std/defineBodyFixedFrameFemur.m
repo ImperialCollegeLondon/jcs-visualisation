@@ -25,9 +25,9 @@ uvector=@(a,b) (b-a)/norm(b-a,2); %define a function to find a unit vector from 
 origin = (med+lat)/2;
 
 if right
-    tempI_ = uvector(med,lat); %RIGHT KNEE, X Axis
+    tempI_ = -uvector(med,lat); %RIGHT KNEE, X Axis
 else
-    tempI_ = uvector(lat,med); %LEFT KNEE, X Axis
+    tempI_ = -uvector(lat,med); %LEFT KNEE, X Axis
 end
 
 K_= uvector(origin,prox);

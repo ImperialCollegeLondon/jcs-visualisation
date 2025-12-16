@@ -24,17 +24,17 @@ uvector=@(a,b) (b-a)/norm(b-a,2); %define a function to find a unit vector from 
 %i,j,k correspond to unit base vectors in the x, y and z direactions
 
 origin = (med+lat)/2;
+k_= uvector(dist,origin); %the distal point is approximate and thus this axis is not necessarily perpendicular to epicondylar axis
 if right
-    i_ = uvector(med,lat); %RIGHT KNEE, x Axis
+    tempi_ = uvector(med,lat); %RIGHT KNEE, x Axis
 else
-    i_ = uvector(lat,med); %LEFT KNEE, x Axis
+    tempi_ = uvector(lat,med); %LEFT KNEE, x Axis
 end
 
-tempk_= uvector(dist,origin); %the distal point is approximate and thus this axis is not necessarily perpendicular to epicondylar axis
-j_ = ucross(tempk_,i_); % y-axis
-k_ = ucross(i_,j_); %recalculate k so perpendicular to give orthogonal coordinate system.
+j_ = ucross(k_,tempi_); % y-axis
+i_ = ucross(j_,k_); %recalculate k so perpendicular to give orthogonal coordinate system.
 
-if any(all(cross(tempk_, i_) == zeros(3,1)) | all(cross(i_, j_) == zeros(3,1)))
+if any(all(cross(k_, i_) == zeros(3,1)) | all(cross(i_, j_) == zeros(3,1)))
 error("Cross product in Tibia is zero. Double check tibial digitisation!!")
 end
 

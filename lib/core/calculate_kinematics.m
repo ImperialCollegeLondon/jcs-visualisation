@@ -20,6 +20,7 @@ function output = calculate_kinematics(tdms, transforms, config, is_right_knee)
     
     %% calculate transform from TIBIA (RB2) to FEMUR (RB1).
     % i.e., Tibia in femoral frame of reference.
+
     RB1_T_W2 = S1_T_RB1 \ W1_T_W2;
     RB1_T_S2 = pagemtimes(RB1_T_W2, W2_T_S2); % End effector in Femur CS
     RB1_T_RB2 = pagemtimes(RB1_T_S2,S2_T_RB2); % fTt
@@ -61,7 +62,7 @@ function output = calculate_kinematics(tdms, transforms, config, is_right_knee)
     robot_pos_arr = unwrap(table2array(robot_pos));
     output.add_data("robot_pos", array2table(robot_pos_arr, "VariableNames", robot_pos.Properties.VariableNames));
     kinematics = rotationsAndTranslations(RB1_T_RB2, is_right_knee);
-    output.add_data("kinematics", kinematics - position_offset_tab);
+    output.add_data("kinematics", kinematics);
     output.add_data("kinematics_orig", rotationsAndTranslations(RB1opt_T_RB2opt, is_right_knee));
    
     output.add_transforms("tTf", pageinv(RB1_T_RB2));
