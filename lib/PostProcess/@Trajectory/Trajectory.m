@@ -62,7 +62,7 @@ classdef Trajectory < handle
             end
         end
 
-        function envelope = ap(obj, name_native, name_neutral_flexion)
+        function envelope = create_ap_envelope(obj, name_native, name_neutral_flexion)
             if nargin > 1
                 envelope = obj.stability_envelope(["ant", "pos"], name_native, name_neutral_flexion);
             else
@@ -70,7 +70,7 @@ classdef Trajectory < handle
             end
         end
 
-        function envelope = vv(obj, name_native, name_neutral_flexion)
+        function envelope = create_vv_envelope(obj, name_native, name_neutral_flexion)
             if nargin > 1
                 envelope = obj.stability_envelope(["var", "val"], name_native, name_neutral_flexion);
             else
@@ -78,7 +78,7 @@ classdef Trajectory < handle
             end
         end
 
-        function envelope = ie(obj, name_native, name_neutral_flexion)
+        function envelope = create_ie_envelope(obj, name_native, name_neutral_flexion)
             if nargin > 1
                 envelope = obj.stability_envelope(["int", "ext"], name_native, name_neutral_flexion);
             else

@@ -1,0 +1,1176 @@
+21/10/2024 08:48:21     Main Program Starts
+21/10/2024 08:48:21     Switch to Idle Control
+21/10/2024 08:48:22     Control Mode Switch Complete
+21/10/2024 08:48:23     Open Setup Manager
+21/10/2024 17:50:21     Error:   -->Code:8701  Source:Variable POS_ACT is not available; must be initialized.  Message:Error 8701 occurred at Variable POS_ACT is not available; must be initialized.
+
+This error code is undefined. Undefined errors might occur for a number of reasons. For example, no one has provided a description for the code, or you might have wired a number that is not an error code to the error code input. 
+
+Additionally, undefined error codes might occur because the error relates to a third-party object, such as the operating system or ActiveX. For these third-party errors, you might be able to obtain a description of the error by searching the Web for the error code (8701) or for its hexadecimal representation (0x000021FD).--> Call Chain: BioRobotics Common Tools.lvlib:FileManager_Write to Log File.vi:4830001->BioRobotics Common Tools.lvlib:FileManager_Write to Specimen Log File.vi->SSCAD Library.lvlib:6-DOF Load.lvclass:Calculate Gravity Compensation.vi->SSCAD Library.lvlib:6-DOF Load.lvclass:Calculate Gravity Compensation.vi.ACBRProxyCaller.E2100347
+21/10/2024 18:24:27     Open Advanced Robot Interface
+21/10/2024 18:24:55     Open Setup Manager
+21/10/2024 18:40:55     Aborted By External System
+21/10/2024 18:40:55     Abort Process Start
+21/10/2024 18:40:56     Data Sampling Rate Change Process Start
+21/10/2024 18:40:56     Data Sampling Rate Change Process End
+21/10/2024 18:40:56     Abort Process End
+21/10/2024 18:40:56     Switch to Idle Control
+21/10/2024 18:40:56     Control Mode Switch Complete
+21/10/2024 18:41:04     System Reset
+21/10/2024 18:41:04     Switch to Idle Control
+21/10/2024 18:41:04     Control Mode Switch Complete
+21/10/2024 18:41:37     Switch to Active Control
+21/10/2024 18:41:42     Control Mode Switch Complete
+21/10/2024 18:43:31     Switch to Idle Control
+21/10/2024 18:43:32     Control Mode Switch Complete
+21/10/2024 18:43:33     Open Setup Manager
+21/10/2024 18:43:54     Validate Process Requested
+21/10/2024 18:43:57     Open Setup Manager
+21/10/2024 18:44:06     Validate Process Requested
+21/10/2024 18:44:06     Prepare Process Start
+21/10/2024 18:44:06     Data Sampling Rate Change Process Start
+21/10/2024 18:44:06     Data Sampling Rate Change Process End
+21/10/2024 18:44:36     Prepare Process of 002_Native_Flexion 0-90 Completed
+21/10/2024 18:44:36     Switch to Active Control
+21/10/2024 18:44:41     Control Mode Switch Complete
+21/10/2024 18:44:49     Run Process Requested
+21/10/2024 18:44:49     Run Process Start
+21/10/2024 18:48:48     Run Process End
+21/10/2024 18:48:48     End Process Start
+21/10/2024 18:48:50     Data Sampling Rate Change Process Start
+21/10/2024 18:48:50     Data Sampling Rate Change Process End
+21/10/2024 18:48:50     End Process Complete
+21/10/2024 18:48:50     Switch to Idle Control
+21/10/2024 18:48:51     Control Mode Switch Complete
+21/10/2024 18:48:52     Data Processing Start
+21/10/2024 18:49:01     Data Processing Complete
+21/10/2024 18:49:40     Validate Process Requested
+21/10/2024 18:49:40     Prepare Process Start
+21/10/2024 18:49:40     Data Sampling Rate Change Process Start
+21/10/2024 18:49:40     Data Sampling Rate Change Process End
+21/10/2024 18:50:12     Prepare Process of 003_Native_IE_optimise Completed
+21/10/2024 18:50:12     Switch to Active Control
+21/10/2024 18:50:17     Control Mode Switch Complete
+21/10/2024 18:50:23     Run Process Requested
+21/10/2024 18:50:23     Run Process Start
+21/10/2024 18:57:47     Run Process End
+21/10/2024 18:57:47     End Process Start
+21/10/2024 18:57:49     Data Sampling Rate Change Process Start
+21/10/2024 18:57:49     Data Sampling Rate Change Process End
+21/10/2024 18:57:50     End Process Complete
+21/10/2024 18:57:50     Switch to Idle Control
+21/10/2024 18:57:50     Control Mode Switch Complete
+21/10/2024 18:57:51     Data Processing Start
+21/10/2024 18:58:02     Data Processing Complete
+21/10/2024 18:58:17     Open Project Manager
+21/10/2024 19:00:01     Validate Process Requested
+21/10/2024 19:00:01     Prepare Process Start
+21/10/2024 19:00:02     Data Sampling Rate Change Process Start
+21/10/2024 19:00:02     Data Sampling Rate Change Process End
+21/10/2024 19:00:27     Prepare process of 004_Native_flex-ext 1BW 5IE 90AP was aborted by user.
+21/10/2024 19:00:27     Abort Process Start
+21/10/2024 19:00:27     Data Sampling Rate Change Process Start
+21/10/2024 19:00:27     Data Sampling Rate Change Process End
+21/10/2024 19:00:27     Abort Process End
+21/10/2024 19:00:27     Switch to Idle Control
+21/10/2024 19:00:27     Control Mode Switch Complete
+21/10/2024 19:00:44     Open Setup Manager
+21/10/2024 19:01:48     Open Project Manager
+21/10/2024 19:02:52     Validate Process Requested
+21/10/2024 19:02:52     Prepare Process Start
+21/10/2024 19:02:52     Data Sampling Rate Change Process Start
+21/10/2024 19:02:52     Data Sampling Rate Change Process End
+21/10/2024 19:03:23     Prepare Process of 005_Native_flexion to 0 Completed
+21/10/2024 19:03:23     Switch to Active Control
+21/10/2024 19:03:28     Control Mode Switch Complete
+21/10/2024 19:03:32     Run Process Requested
+21/10/2024 19:03:32     Run Process Start
+21/10/2024 19:05:33     Run Process End
+21/10/2024 19:05:33     End Process Start
+21/10/2024 19:05:35     Data Sampling Rate Change Process Start
+21/10/2024 19:05:35     Data Sampling Rate Change Process End
+21/10/2024 19:05:35     End Process Complete
+21/10/2024 19:05:35     Switch to Idle Control
+21/10/2024 19:05:36     Control Mode Switch Complete
+21/10/2024 19:05:36     Open Project Manager
+21/10/2024 19:05:37     Data Processing Start
+21/10/2024 19:05:41     Data Processing Complete
+21/10/2024 19:06:30     Switch to Active Control
+21/10/2024 19:06:36     Control Mode Switch Complete
+21/10/2024 19:08:19     Open Setup Manager
+21/10/2024 19:08:23     Abort Process Start
+21/10/2024 19:08:24     Run Aborted
+21/10/2024 19:08:24     Aborted By External System
+21/10/2024 19:08:24     Data Sampling Rate Change Process Start
+21/10/2024 19:08:24     Data Sampling Rate Change Process End
+21/10/2024 19:08:24     Abort Process End
+21/10/2024 19:08:24     Switch to Idle Control
+21/10/2024 19:08:25     Control Mode Switch Complete
+21/10/2024 19:08:25     Abort Process Start
+21/10/2024 19:08:25     Data Sampling Rate Change Process Start
+21/10/2024 19:08:25     Data Sampling Rate Change Process End
+21/10/2024 19:08:25     Error:   -->Code:1556  Source:In Place Element Structure in SSCAD Library.lvlib:State.lvclass:Read State Health.vi->SSCAD Library.lvlib:State.lvclass:Get Health.vi->SSCAD Library.lvlib:State Group.lvclass:Get Critical Health Values.vi->SSCAD Library.lvlib:Get Critical Health Values.vi->simVITRO.lvlib:simVITRO.vi  Message:Error 1556 occurred at In Place Element Structure in SSCAD Library.lvlib:State.lvclass:Read State Health.vi->SSCAD Library.lvlib:State.lvclass:Get Health.vi->SSCAD Library.lvlib:State Group.lvclass:Get Critical Health Values.vi->SSCAD Library.lvlib:Get Critical Health Values.vi->simVITRO.lvlib:simVITRO.vi
+
+Possible reason(s):
+
+LabVIEW: (Hex 0x614) The reference is invalid. This error might occur because the reference has been deleted.
+21/10/2024 19:08:25     Abort Process End
+21/10/2024 19:08:25     Abort Process Start
+21/10/2024 19:08:25     Data Sampling Rate Change Process Start
+21/10/2024 19:08:25     Data Sampling Rate Change Process End
+21/10/2024 19:08:25     Abort Process End
+21/10/2024 19:08:25     Switch to Idle Control
+21/10/2024 19:08:26     Control Mode Switch Complete
+21/10/2024 19:08:26     Switch to Idle Control
+21/10/2024 19:08:26     Control Mode Switch Complete
+21/10/2024 19:08:32     System Reset
+21/10/2024 19:08:32     Switch to Idle Control
+21/10/2024 19:08:33     Control Mode Switch Complete
+21/10/2024 19:08:44     Validate Process Requested
+21/10/2024 19:08:44     Prepare Process Start
+21/10/2024 19:08:45     Data Sampling Rate Change Process Start
+21/10/2024 19:08:45     Data Sampling Rate Change Process End
+21/10/2024 19:09:16     Prepare Process of 006_Native_flex-ext 1BW 5IE 90AP Completed
+21/10/2024 19:09:16     Switch to Active Control
+21/10/2024 19:09:21     Control Mode Switch Complete
+21/10/2024 19:09:28     Run Process Requested
+21/10/2024 19:09:28     Run Process Start
+21/10/2024 19:10:23     Abort Process Start
+21/10/2024 19:10:23     Run Aborted
+21/10/2024 19:10:23     Aborted By External System
+21/10/2024 19:10:23     Data Sampling Rate Change Process Start
+21/10/2024 19:10:23     Data Sampling Rate Change Process End
+21/10/2024 19:10:24     Abort Process End
+21/10/2024 19:10:24     Switch to Idle Control
+21/10/2024 19:10:25     Control Mode Switch Complete
+21/10/2024 19:10:25     Abort Process Start
+21/10/2024 19:10:25     Data Sampling Rate Change Process Start
+21/10/2024 19:10:25     Data Sampling Rate Change Process End
+21/10/2024 19:10:25     Abort Process End
+21/10/2024 19:10:25     Abort Process Start
+21/10/2024 19:10:25     Data Sampling Rate Change Process Start
+21/10/2024 19:10:25     Data Sampling Rate Change Process End
+21/10/2024 19:10:26     Abort Process End
+21/10/2024 19:10:26     Switch to Idle Control
+21/10/2024 19:10:26     Control Mode Switch Complete
+21/10/2024 19:10:26     Switch to Idle Control
+21/10/2024 19:10:26     Control Mode Switch Complete
+21/10/2024 19:10:31     Abort Process Start
+21/10/2024 19:10:31     Data Sampling Rate Change Process Start
+21/10/2024 19:10:31     Data Sampling Rate Change Process End
+21/10/2024 19:10:31     Abort Process End
+21/10/2024 19:10:31     Trajectory Manager Opened
+21/10/2024 19:11:48     Switch to Idle Control
+21/10/2024 19:11:49     Control Mode Switch Complete
+21/10/2024 19:11:51     Abort Process Start
+21/10/2024 19:11:51     Data Sampling Rate Change Process Start
+21/10/2024 19:11:51     Data Sampling Rate Change Process End
+21/10/2024 19:11:51     Abort Process End
+21/10/2024 19:11:51     Trajectory Manager Opened
+21/10/2024 19:12:08     Switch to Idle Control
+21/10/2024 19:12:08     Control Mode Switch Complete
+21/10/2024 19:12:10     Validate Process Requested
+21/10/2024 19:12:10     Prepare Process Start
+21/10/2024 19:12:11     Data Sampling Rate Change Process Start
+21/10/2024 19:12:11     Data Sampling Rate Change Process End
+21/10/2024 19:12:42     Prepare Process of 007_Native_flex-ext 1BW 5IE 90AP Completed
+21/10/2024 19:12:42     Switch to Active Control
+21/10/2024 19:12:47     Control Mode Switch Complete
+21/10/2024 19:12:56     Run Process Requested
+21/10/2024 19:12:57     Run Process Start
+21/10/2024 19:34:26     Run Process End
+21/10/2024 19:34:26     End Process Start
+21/10/2024 19:34:28     Data Sampling Rate Change Process Start
+21/10/2024 19:34:28     Data Sampling Rate Change Process End
+21/10/2024 19:34:28     End Process Complete
+21/10/2024 19:34:28     Switch to Idle Control
+21/10/2024 19:34:29     Control Mode Switch Complete
+21/10/2024 19:34:30     Data Processing Start
+21/10/2024 19:35:00     Data Processing Complete
+21/10/2024 19:35:30     Switch to Active Control
+21/10/2024 19:35:36     Control Mode Switch Complete
+21/10/2024 19:37:05     Switch to Idle Control
+21/10/2024 19:37:06     Control Mode Switch Complete
+21/10/2024 19:38:17     Open Advanced Robot Interface
+22/10/2024 07:35:35     System Overload
+22/10/2024 07:35:35     Abort Process Start
+22/10/2024 07:35:35     Error:   -->Code:-88709  Source:DAQmx Stop Task.vi:3590001<append>
+<B>Task Name: </B>Sensor Task_0  Message:Error -88709 occurred at DAQmx Stop Task.vi:3590001
+
+Possible reason(s):
+
+The specified operation cannot be performed because a task has been aborted or a device has been removed from the system. Handle this situation as required by the application and then, if appropriate, attempt to perform the operation again.
+
+Task Name: Sensor Task_0
+22/10/2024 07:35:35     Data Sampling Rate Change Process Start
+22/10/2024 07:35:35     Data Sampling Rate Change Process End
+22/10/2024 07:35:36     Abort Process End
+22/10/2024 07:35:36     Switch to Idle Control
+22/10/2024 07:35:36     Control Mode Switch Complete
+22/10/2024 07:35:42     Open Setup Manager
+28/11/2024 14:24:50     Main Program Starts
+28/11/2024 14:24:50     Switch to Idle Control
+28/11/2024 14:25:31     Control Mode Switch Complete
+28/11/2024 14:25:56     Error:   -->Code:56  Source:TCP Wait On Listener in TCP Listen.vi:7210002->KukaKRC4.lvlib:EKX_Communication FGV.vi->KukaKRC4.lvlib:EKX_Open.vi->KukaKRC4.lvlib:Kuka_Communication_Initialize and Connect.vi->SSCAD - Kuka KRC4.lvlib:Kuka KRC4 Robot_Actuator.lvclass:Initialize Communication.vi->6-DOF Robot_Position Sensor.lvclass:Initialize Communication.vi->SSCAD Library.lvlib:Sensor Group.lvclass:Sensor Group_Initialize DAQ.vi->simVITRO.lvlib:simVITRO.vi  Message:Error 56 occurred at TCP Wait On Listener in TCP Listen.vi:7210002->KukaKRC4.lvlib:EKX_Communication FGV.vi->KukaKRC4.lvlib:EKX_Open.vi->KukaKRC4.lvlib:Kuka_Communication_Initialize and Connect.vi->SSCAD - Kuka KRC4.lvlib:Kuka KRC4 Robot_Actuator.lvclass:Initialize Communication.vi->6-DOF Robot_Position Sensor.lvclass:Initialize Communication.vi->SSCAD Library.lvlib:Sensor Group.lvclass:Sensor Group_Initialize DAQ.vi->simVITRO.lvlib:simVITRO.vi
+
+Possible reason(s):
+
+LabVIEW: (Hex 0x38) The network operation exceeded the user-specified or system time limit.
+28/11/2024 14:26:16     System Reset
+28/11/2024 14:26:16     Switch to Idle Control
+28/11/2024 14:26:17     Control Mode Switch Complete
+28/11/2024 14:26:17     Error:   -->Code:8701  Source:Variable POS_ACT is not available; must be initialized.  Message:Error 8701 occurred at Variable POS_ACT is not available; must be initialized.
+
+This error code is undefined. Undefined errors might occur for a number of reasons. For example, no one has provided a description for the code, or you might have wired a number that is not an error code to the error code input. 
+
+Additionally, undefined error codes might occur because the error relates to a third-party object, such as the operating system or ActiveX. For these third-party errors, you might be able to obtain a description of the error by searching the Web for the error code (8701) or for its hexadecimal representation (0x000021FD).
+28/11/2024 14:27:21     System Reset
+28/11/2024 14:27:21     Switch to Idle Control
+28/11/2024 14:27:22     Control Mode Switch Complete
+28/11/2024 14:27:22     Error:   -->Code:8701  Source:Variable POS_ACT is not available; must be initialized.  Message:Error 8701 occurred at Variable POS_ACT is not available; must be initialized.
+
+This error code is undefined. Undefined errors might occur for a number of reasons. For example, no one has provided a description for the code, or you might have wired a number that is not an error code to the error code input. 
+
+Additionally, undefined error codes might occur because the error relates to a third-party object, such as the operating system or ActiveX. For these third-party errors, you might be able to obtain a description of the error by searching the Web for the error code (8701) or for its hexadecimal representation (0x000021FD).
+28/11/2024 14:27:34     Open Project Manager
+28/11/2024 14:27:39     Aborted By External System
+28/11/2024 14:27:39     Abort Process Start
+28/11/2024 14:27:40     Data Sampling Rate Change Process Start
+28/11/2024 14:27:40     Data Sampling Rate Change Process End
+28/11/2024 14:27:40     Abort Process End
+28/11/2024 14:27:40     Switch to Idle Control
+28/11/2024 14:27:40     Control Mode Switch Complete
+28/11/2024 14:28:45     Open Project Manager
+28/11/2024 14:29:12     Open Setup Manager
+28/11/2024 15:33:00     System Reset
+28/11/2024 15:33:00     Switch to Idle Control
+28/11/2024 15:33:01     Control Mode Switch Complete
+28/11/2024 15:33:18     System Overload
+28/11/2024 15:33:18     Abort Process Start
+28/11/2024 15:33:18     Data Sampling Rate Change Process Start
+28/11/2024 15:33:18     Data Sampling Rate Change Process End
+28/11/2024 15:33:19     Abort Process End
+28/11/2024 15:33:19     Switch to Idle Control
+28/11/2024 15:33:19     Control Mode Switch Complete
+28/11/2024 15:33:35     System Reset
+28/11/2024 15:33:35     Switch to Idle Control
+28/11/2024 15:33:35     Control Mode Switch Complete
+28/11/2024 16:07:26     Aborted By External System
+28/11/2024 16:07:29     Abort Process Start
+28/11/2024 16:07:29     Data Sampling Rate Change Process Start
+28/11/2024 16:07:29     Data Sampling Rate Change Process End
+28/11/2024 16:07:29     Abort Process End
+28/11/2024 16:07:29     Switch to Idle Control
+28/11/2024 16:07:29     Control Mode Switch Complete
+28/11/2024 16:07:39     System Reset
+28/11/2024 16:07:39     Switch to Idle Control
+28/11/2024 16:07:39     Control Mode Switch Complete
+28/11/2024 16:07:48     Switch to Active Control
+28/11/2024 16:08:04     Control Mode Switch Complete
+28/11/2024 16:08:04     Joint Dislocated & Outside
+Protection Limit
+28/11/2024 16:08:04     Abort Process Start
+28/11/2024 16:08:04     Data Sampling Rate Change Process Start
+28/11/2024 16:08:04     Data Sampling Rate Change Process End
+28/11/2024 16:08:05     Abort Process End
+28/11/2024 16:08:05     Switch to Idle Control
+28/11/2024 16:08:05     Control Mode Switch Complete
+28/11/2024 16:08:08     System Reset
+28/11/2024 16:08:08     Switch to Idle Control
+28/11/2024 16:08:09     Control Mode Switch Complete
+28/11/2024 16:09:00     Switch to Active Control
+28/11/2024 16:09:04     Control Mode Switch Complete
+28/11/2024 16:11:25     Switch to Idle Control
+28/11/2024 16:11:25     Control Mode Switch Complete
+28/11/2024 16:11:26     Open Setup Manager
+28/11/2024 16:13:18     Abort Process Start
+28/11/2024 16:13:18     Run Aborted
+28/11/2024 16:13:18     Aborted By External System
+28/11/2024 16:13:18     Data Sampling Rate Change Process Start
+28/11/2024 16:13:18     Data Sampling Rate Change Process End
+28/11/2024 16:13:19     Abort Process End
+28/11/2024 16:13:19     Trajectory Manager Opened
+28/11/2024 16:13:36     Switch to Idle Control
+28/11/2024 16:13:36     Control Mode Switch Complete
+28/11/2024 16:13:36     Abort Process Start
+28/11/2024 16:13:36     Data Sampling Rate Change Process Start
+28/11/2024 16:13:36     Data Sampling Rate Change Process End
+28/11/2024 16:13:37     Abort Process End
+28/11/2024 16:13:37     Abort Process Start
+28/11/2024 16:13:37     Data Sampling Rate Change Process Start
+28/11/2024 16:13:37     Data Sampling Rate Change Process End
+28/11/2024 16:13:37     Validate Process Requested
+28/11/2024 16:13:37     Abort Process End
+28/11/2024 16:13:37     Switch to Idle Control
+28/11/2024 16:13:38     Control Mode Switch Complete
+28/11/2024 16:13:38     Switch to Idle Control
+28/11/2024 16:13:38     Control Mode Switch Complete
+28/11/2024 16:13:40     Open Setup Manager
+28/11/2024 16:13:45     Validate Process Requested
+28/11/2024 16:13:45     Prepare Process Start
+28/11/2024 16:13:45     Data Sampling Rate Change Process Start
+28/11/2024 16:13:45     Data Sampling Rate Change Process End
+28/11/2024 16:14:10     Prepare Process of 008_Unoptimised_Flexion 0-90 Completed
+28/11/2024 16:14:10     Switch to Active Control
+28/11/2024 16:14:14     Control Mode Switch Complete
+28/11/2024 16:14:17     Run Process Requested
+28/11/2024 16:14:17     Run Process Start
+28/11/2024 16:18:28     Run Process End
+28/11/2024 16:18:28     End Process Start
+28/11/2024 16:18:30     Data Sampling Rate Change Process Start
+28/11/2024 16:18:30     Data Sampling Rate Change Process End
+28/11/2024 16:18:30     End Process Complete
+28/11/2024 16:18:30     Switch to Idle Control
+28/11/2024 16:18:31     Control Mode Switch Complete
+28/11/2024 16:18:52     Data Processing Start
+28/11/2024 16:19:01     Data Processing Complete
+28/11/2024 16:19:01     Abort Process Start
+28/11/2024 16:19:01     Data Sampling Rate Change Process Start
+28/11/2024 16:19:01     Data Sampling Rate Change Process End
+28/11/2024 16:19:01     Abort Process End
+28/11/2024 16:19:01     Trajectory Manager Opened
+28/11/2024 16:19:27     Switch to Idle Control
+28/11/2024 16:19:28     Control Mode Switch Complete
+28/11/2024 16:19:38     Validate Process Requested
+28/11/2024 16:19:38     Prepare Process Start
+28/11/2024 16:19:38     Data Sampling Rate Change Process Start
+28/11/2024 16:19:38     Data Sampling Rate Change Process End
+28/11/2024 16:20:01     Prepare Process of 010_Unoptimised_IE_optimise Completed
+28/11/2024 16:20:01     Switch to Active Control
+28/11/2024 16:20:05     Control Mode Switch Complete
+28/11/2024 16:20:09     Run Process Requested
+28/11/2024 16:20:09     Run Process Start
+28/11/2024 16:27:48     Run Process End
+28/11/2024 16:27:48     End Process Start
+28/11/2024 16:27:50     Data Sampling Rate Change Process Start
+28/11/2024 16:27:50     Data Sampling Rate Change Process End
+28/11/2024 16:27:50     End Process Complete
+28/11/2024 16:27:50     Switch to Idle Control
+28/11/2024 16:27:51     Control Mode Switch Complete
+28/11/2024 16:27:52     Data Processing Start
+28/11/2024 16:28:02     Data Processing Complete
+28/11/2024 16:28:02     Abort Process Start
+28/11/2024 16:28:02     Data Sampling Rate Change Process Start
+28/11/2024 16:28:02     Data Sampling Rate Change Process End
+28/11/2024 16:28:03     Abort Process End
+28/11/2024 16:28:03     Trajectory Manager Opened
+28/11/2024 16:28:29     Switch to Idle Control
+28/11/2024 16:28:30     Control Mode Switch Complete
+28/11/2024 16:29:05     Validate Process Requested
+28/11/2024 16:29:05     Prepare Process Start
+28/11/2024 16:29:05     Data Sampling Rate Change Process Start
+28/11/2024 16:29:05     Data Sampling Rate Change Process End
+28/11/2024 16:29:31     Prepare Process of 012_Unoptimised_flexion to 0 Completed
+28/11/2024 16:29:31     Switch to Active Control
+28/11/2024 16:29:35     Control Mode Switch Complete
+28/11/2024 16:29:41     Run Process Requested
+28/11/2024 16:29:41     Run Process Start
+28/11/2024 16:31:37     Run Process End
+28/11/2024 16:31:37     End Process Start
+28/11/2024 16:31:38     Data Sampling Rate Change Process Start
+28/11/2024 16:31:38     Data Sampling Rate Change Process End
+28/11/2024 16:31:38     End Process Complete
+28/11/2024 16:31:38     Switch to Idle Control
+28/11/2024 16:31:39     Control Mode Switch Complete
+28/11/2024 16:31:40     Data Processing Start
+28/11/2024 16:31:44     Data Processing Complete
+28/11/2024 16:31:50     Switch to Active Control
+28/11/2024 16:31:56     Control Mode Switch Complete
+28/11/2024 16:34:10     Switch to Idle Control
+28/11/2024 16:34:10     Control Mode Switch Complete
+28/11/2024 16:34:12     Open Setup Manager
+28/11/2024 16:34:18     Open Project Manager
+28/11/2024 16:34:19     Aborted By External System
+28/11/2024 16:34:19     Abort Process Start
+28/11/2024 16:34:19     Data Sampling Rate Change Process Start
+28/11/2024 16:34:19     Data Sampling Rate Change Process End
+28/11/2024 16:34:20     Abort Process End
+28/11/2024 16:34:20     Switch to Idle Control
+28/11/2024 16:34:20     Control Mode Switch Complete
+28/11/2024 16:36:30     Open Setup Manager
+28/11/2024 16:36:43     Validate Process Requested
+28/11/2024 16:36:43     Prepare Process Start
+28/11/2024 16:36:43     Data Sampling Rate Change Process Start
+28/11/2024 16:36:43     Data Sampling Rate Change Process End
+28/11/2024 16:37:11     Prepare Process of 013_UKA+ACL_Flexion 0-90 Completed
+28/11/2024 16:37:11     Switch to Active Control
+28/11/2024 16:37:15     Control Mode Switch Complete
+28/11/2024 16:37:21     Abort Process Start
+28/11/2024 16:37:21     Run Aborted
+28/11/2024 16:37:21     Aborted By External System
+28/11/2024 16:37:21     Data Sampling Rate Change Process Start
+28/11/2024 16:37:21     Data Sampling Rate Change Process End
+28/11/2024 16:37:21     Abort Process End
+28/11/2024 16:37:21     Switch to Idle Control
+28/11/2024 16:37:22     Control Mode Switch Complete
+28/11/2024 16:37:22     Abort Process Start
+28/11/2024 16:37:22     Data Sampling Rate Change Process Start
+28/11/2024 16:37:22     Data Sampling Rate Change Process End
+28/11/2024 16:37:22     Abort Process End
+28/11/2024 16:37:22     Abort Process Start
+28/11/2024 16:37:22     Data Sampling Rate Change Process Start
+28/11/2024 16:37:22     Data Sampling Rate Change Process End
+28/11/2024 16:37:23     Abort Process End
+28/11/2024 16:37:23     Switch to Idle Control
+28/11/2024 16:37:23     Control Mode Switch Complete
+28/11/2024 16:37:23     Switch to Idle Control
+28/11/2024 16:37:23     Control Mode Switch Complete
+28/11/2024 16:37:24     Switch to Active Control
+28/11/2024 16:37:29     Control Mode Switch Complete
+28/11/2024 16:40:18     Open Setup Manager
+28/11/2024 16:40:21     Abort Process Start
+28/11/2024 16:40:21     Run Aborted
+28/11/2024 16:40:21     Aborted By External System
+28/11/2024 16:40:21     Data Sampling Rate Change Process Start
+28/11/2024 16:40:22     Data Sampling Rate Change Process End
+28/11/2024 16:40:22     Abort Process End
+28/11/2024 16:40:22     Switch to Idle Control
+28/11/2024 16:40:22     Error:   -->Code:1556  Source:In Place Element Structure in SSCAD Library.lvlib:State.lvclass:Read State Health.vi->SSCAD Library.lvlib:State.lvclass:Get Health.vi->SSCAD Library.lvlib:State Group.lvclass:Get Critical Health Values.vi->SSCAD Library.lvlib:Get Critical Health Values.vi->simVITRO.lvlib:simVITRO.vi  Message:Error 1556 occurred at In Place Element Structure in SSCAD Library.lvlib:State.lvclass:Read State Health.vi->SSCAD Library.lvlib:State.lvclass:Get Health.vi->SSCAD Library.lvlib:State Group.lvclass:Get Critical Health Values.vi->SSCAD Library.lvlib:Get Critical Health Values.vi->simVITRO.lvlib:simVITRO.vi
+
+Possible reason(s):
+
+LabVIEW: (Hex 0x614) The reference is invalid. This error might occur because the reference has been deleted.
+28/11/2024 16:40:23     Control Mode Switch Complete
+28/11/2024 16:40:23     Abort Process Start
+28/11/2024 16:40:23     Data Sampling Rate Change Process Start
+28/11/2024 16:40:23     Data Sampling Rate Change Process End
+28/11/2024 16:40:23     Abort Process End
+28/11/2024 16:40:23     Abort Process Start
+28/11/2024 16:40:23     Data Sampling Rate Change Process Start
+28/11/2024 16:40:23     Data Sampling Rate Change Process End
+28/11/2024 16:40:24     Abort Process End
+28/11/2024 16:40:24     Switch to Idle Control
+28/11/2024 16:40:24     Control Mode Switch Complete
+28/11/2024 16:40:24     Switch to Idle Control
+28/11/2024 16:40:24     Control Mode Switch Complete
+28/11/2024 16:40:30     Validate Process Requested
+28/11/2024 16:40:30     Prepare Process Start
+28/11/2024 16:40:30     Data Sampling Rate Change Process Start
+28/11/2024 16:40:30     Data Sampling Rate Change Process End
+28/11/2024 16:40:56     Prepare Process of 014_UKA+ACL_Flexion 0-90 Completed
+28/11/2024 16:40:56     Switch to Active Control
+28/11/2024 16:41:00     Control Mode Switch Complete
+28/11/2024 16:41:06     Run Process Requested
+28/11/2024 16:41:06     Run Process Start
+28/11/2024 16:45:09     Run Process End
+28/11/2024 16:45:09     End Process Start
+28/11/2024 16:45:11     Data Sampling Rate Change Process Start
+28/11/2024 16:45:11     Data Sampling Rate Change Process End
+28/11/2024 16:45:11     End Process Complete
+28/11/2024 16:45:11     Switch to Idle Control
+28/11/2024 16:45:12     Control Mode Switch Complete
+28/11/2024 16:45:13     Data Processing Start
+28/11/2024 16:45:20     Data Processing Complete
+28/11/2024 16:45:32     Switch to Active Control
+28/11/2024 16:45:38     Control Mode Switch Complete
+28/11/2024 16:46:52     Switch to Idle Control
+28/11/2024 16:46:52     Control Mode Switch Complete
+28/11/2024 16:47:02     Validate Process Requested
+28/11/2024 16:47:02     Prepare Process Start
+28/11/2024 16:47:03     Data Sampling Rate Change Process Start
+28/11/2024 16:47:03     Data Sampling Rate Change Process End
+28/11/2024 16:47:29     Prepare Process of 015_UKA+ACL_flex-ext 0.5BW 5IE 90AP Completed
+28/11/2024 16:47:29     Switch to Active Control
+28/11/2024 16:47:33     Control Mode Switch Complete
+28/11/2024 16:47:40     Run Process Requested
+28/11/2024 16:47:40     Run Process Start
+28/11/2024 17:09:47     Run Process End
+28/11/2024 17:09:47     End Process Start
+28/11/2024 17:09:49     Data Sampling Rate Change Process Start
+28/11/2024 17:09:49     Data Sampling Rate Change Process End
+28/11/2024 17:09:49     End Process Complete
+28/11/2024 17:09:49     Switch to Idle Control
+28/11/2024 17:09:50     Control Mode Switch Complete
+28/11/2024 17:09:51     Data Processing Start
+28/11/2024 17:10:21     Data Processing Complete
+28/11/2024 17:10:46     Validate Process Requested
+28/11/2024 17:10:46     Prepare Process Start
+28/11/2024 17:10:46     Data Sampling Rate Change Process Start
+28/11/2024 17:10:46     Data Sampling Rate Change Process End
+28/11/2024 17:11:13     Prepare Process of 016_UKA+ACL_Flexion 0-90 Completed
+28/11/2024 17:11:13     Switch to Active Control
+28/11/2024 17:11:17     Control Mode Switch Complete
+28/11/2024 17:13:35     Run Process Requested
+28/11/2024 17:13:35     Run Process Start
+28/11/2024 17:17:36     Run Process End
+28/11/2024 17:17:36     End Process Start
+28/11/2024 17:17:37     Data Sampling Rate Change Process Start
+28/11/2024 17:17:37     Data Sampling Rate Change Process End
+28/11/2024 17:17:37     End Process Complete
+28/11/2024 17:17:37     Switch to Idle Control
+28/11/2024 17:17:38     Control Mode Switch Complete
+28/11/2024 17:17:39     Data Processing Start
+28/11/2024 17:17:48     Data Processing Complete
+28/11/2024 17:17:55     Switch to Active Control
+28/11/2024 17:18:00     Control Mode Switch Complete
+28/11/2024 17:18:20     Switch to Idle Control
+28/11/2024 17:18:21     Control Mode Switch Complete
+28/11/2024 17:20:14     Abort Process Start
+28/11/2024 17:20:14     Run Aborted
+28/11/2024 17:20:14     Aborted By External System
+28/11/2024 17:20:14     Data Sampling Rate Change Process Start
+28/11/2024 17:20:14     Data Sampling Rate Change Process End
+28/11/2024 17:20:14     Abort Process End
+28/11/2024 17:20:14     Trajectory Manager Opened
+28/11/2024 17:26:54     Error:   -->Code:43  Source:File Dialog->simVITRO.lvlib:Trajectory Termination Condition.lvclass:Condition Editor.vi->simVITRO.lvlib:Trajectory Manager.vi->simVITRO.lvlib:simVITRO.vi
+  Message:Error 43 occurred at File Dialog->simVITRO.lvlib:Trajectory Termination Condition.lvclass:Condition Editor.vi->simVITRO.lvlib:Trajectory Manager.vi->simVITRO.lvlib:simVITRO.vi
+
+Possible reason(s):
+
+LabVIEW: (Hex 0x2B) Operation cancelled by user.--> Call Chain: BioRobotics Common Tools.lvlib:FileManager_Write to Log File.vi:4830001->BioRobotics Common Tools.lvlib:FileManager_Write to Specimen Log File.vi->simVITRO.lvlib:Trajectory Termination Condition.lvclass:Condition Editor.vi->simVITRO.lvlib:Trajectory Manager.vi->simVITRO.lvlib:simVITRO.vi
+28/11/2024 17:27:09     Switch to Idle Control
+28/11/2024 17:27:09     Control Mode Switch Complete
+28/11/2024 17:27:09     Abort Process Start
+28/11/2024 17:27:09     Data Sampling Rate Change Process Start
+28/11/2024 17:27:09     Data Sampling Rate Change Process End
+28/11/2024 17:27:09     Abort Process End
+28/11/2024 17:27:09     Abort Process Start
+28/11/2024 17:27:09     Data Sampling Rate Change Process Start
+28/11/2024 17:27:09     Data Sampling Rate Change Process End
+28/11/2024 17:27:10     Abort Process End
+28/11/2024 17:27:10     Switch to Idle Control
+28/11/2024 17:27:10     Control Mode Switch Complete
+28/11/2024 17:27:10     Switch to Idle Control
+28/11/2024 17:27:11     Control Mode Switch Complete
+28/11/2024 17:27:18     Validate Process Requested
+28/11/2024 17:27:18     Prepare Process Start
+28/11/2024 17:27:18     Data Sampling Rate Change Process Start
+28/11/2024 17:27:18     Data Sampling Rate Change Process End
+28/11/2024 17:27:42     Prepare process of 017_UKA+ACL_Lachman1 was aborted by user.
+28/11/2024 17:27:42     Abort Process Start
+28/11/2024 17:27:42     Data Sampling Rate Change Process Start
+28/11/2024 17:27:42     Data Sampling Rate Change Process End
+28/11/2024 17:27:42     Abort Process End
+28/11/2024 17:27:42     Switch to Idle Control
+28/11/2024 17:27:42     Control Mode Switch Complete
+28/11/2024 17:27:43     Abort Process Start
+28/11/2024 17:27:43     Data Sampling Rate Change Process Start
+28/11/2024 17:27:43     Data Sampling Rate Change Process End
+28/11/2024 17:27:43     Abort Process End
+28/11/2024 17:27:43     Trajectory Manager Opened
+28/11/2024 17:28:09     Switch to Idle Control
+28/11/2024 17:28:09     Control Mode Switch Complete
+28/11/2024 17:28:12     Validate Process Requested
+28/11/2024 17:28:12     Prepare Process Start
+28/11/2024 17:28:12     Data Sampling Rate Change Process Start
+28/11/2024 17:28:12     Data Sampling Rate Change Process End
+28/11/2024 17:28:42     Prepare Process of 018_UKA+ACL_Lachman1 Completed
+28/11/2024 17:28:42     Switch to Active Control
+28/11/2024 17:28:46     Control Mode Switch Complete
+28/11/2024 17:28:50     Run Process Requested
+28/11/2024 17:28:50     Run Process Start
+28/11/2024 17:30:49     Run Process End
+28/11/2024 17:30:49     End Process Start
+28/11/2024 17:30:50     Data Sampling Rate Change Process Start
+28/11/2024 17:30:50     Data Sampling Rate Change Process End
+28/11/2024 17:30:50     End Process Complete
+28/11/2024 17:30:50     Switch to Idle Control
+28/11/2024 17:30:51     Control Mode Switch Complete
+28/11/2024 17:30:52     Data Processing Start
+28/11/2024 17:30:55     Data Processing Complete
+28/11/2024 17:50:51     Position Robot for JCS 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000
+28/11/2024 17:51:00     Position Robot for JCS 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000
+28/11/2024 17:51:16     System Reset
+28/11/2024 17:51:16     Switch to Idle Control
+28/11/2024 17:51:16     Control Mode Switch Complete
+11/12/2024 09:37:26     Main Program Starts
+11/12/2024 09:37:26     Switch to Idle Control
+11/12/2024 09:37:27     Control Mode Switch Complete
+11/12/2024 09:37:34     Error:   -->Code:60  Source:TCP Create Listener in Internecine Avoider.vi->TCP Listen.vi:7210002->KukaKRC4.lvlib:EKX_Communication FGV.vi->KukaKRC4.lvlib:EKX_Open.vi->KukaKRC4.lvlib:Kuka_Communication_Initialize and Connect.vi->SSCAD - Kuka KRC4.lvlib:Kuka KRC4 Robot_Actuator.lvclass:Initialize Communication.vi->6-DOF Robot_Position Sensor.lvclass:Initialize Communication.vi->SSCAD Library.lvlib:Sensor Group.lvclass:Sensor Group_Initialize DAQ.vi->simVITRO.lvlib:simVITRO.vi  Message:Error 60 occurred at TCP Create Listener in Internecine Avoider.vi->TCP Listen.vi:7210002->KukaKRC4.lvlib:EKX_Communication FGV.vi->KukaKRC4.lvlib:EKX_Open.vi->KukaKRC4.lvlib:Kuka_Communication_Initialize and Connect.vi->SSCAD - Kuka KRC4.lvlib:Kuka KRC4 Robot_Actuator.lvclass:Initialize Communication.vi->6-DOF Robot_Position Sensor.lvclass:Initialize Communication.vi->SSCAD Library.lvlib:Sensor Group.lvclass:Sensor Group_Initialize DAQ.vi->simVITRO.lvlib:simVITRO.vi
+
+Possible reason(s):
+
+LabVIEW: (Hex 0x3C) The specified port or network address is currently in use. Select an available port or network address.
+11/12/2024 09:37:43     Open Project Manager
+11/12/2024 09:37:47     Open Setup Manager
+11/12/2024 09:38:26     Quit Program
+11/12/2024 09:38:27     Error:   -->Code:1556  Source:In Place Element Structure in simVITRO.lvlib:simVITRO Project.lvclass:Get Names.vi->simVITRO.lvlib:simVITRO Project Manager.vi  Message:Error 1556 occurred at In Place Element Structure in simVITRO.lvlib:simVITRO Project.lvclass:Get Names.vi->simVITRO.lvlib:simVITRO Project Manager.vi
+
+Possible reason(s):
+
+LabVIEW: (Hex 0x614) The reference is invalid. This error might occur because the reference has been deleted.--> Call Chain: BioRobotics Common Tools.lvlib:FileManager_Write to Log File.vi:4830001->BioRobotics Common Tools.lvlib:FileManager_Write to Specimen Log File.vi->simVITRO.lvlib:simVITRO Project Manager.vi
+11/12/2024 09:54:19     Main Program Starts
+11/12/2024 09:54:19     Switch to Idle Control
+11/12/2024 09:54:20     Control Mode Switch Complete
+11/12/2024 09:54:26     Error:   -->Code:60  Source:TCP Create Listener in Internecine Avoider.vi->TCP Listen.vi:7210002->KukaKRC4.lvlib:EKX_Communication FGV.vi->KukaKRC4.lvlib:EKX_Open.vi->KukaKRC4.lvlib:Kuka_Communication_Initialize and Connect.vi->SSCAD - Kuka KRC4.lvlib:Kuka KRC4 Robot_Actuator.lvclass:Initialize Communication.vi->6-DOF Robot_Position Sensor.lvclass:Initialize Communication.vi->SSCAD Library.lvlib:Sensor Group.lvclass:Sensor Group_Initialize DAQ.vi->simVITRO.lvlib:simVITRO.vi  Message:Error 60 occurred at TCP Create Listener in Internecine Avoider.vi->TCP Listen.vi:7210002->KukaKRC4.lvlib:EKX_Communication FGV.vi->KukaKRC4.lvlib:EKX_Open.vi->KukaKRC4.lvlib:Kuka_Communication_Initialize and Connect.vi->SSCAD - Kuka KRC4.lvlib:Kuka KRC4 Robot_Actuator.lvclass:Initialize Communication.vi->6-DOF Robot_Position Sensor.lvclass:Initialize Communication.vi->SSCAD Library.lvlib:Sensor Group.lvclass:Sensor Group_Initialize DAQ.vi->simVITRO.lvlib:simVITRO.vi
+
+Possible reason(s):
+
+LabVIEW: (Hex 0x3C) The specified port or network address is currently in use. Select an available port or network address.
+11/12/2024 09:55:21     Open Setup Manager
+11/12/2024 09:57:32     Quit Program
+11/12/2024 10:00:10     Main Program Starts
+11/12/2024 10:00:10     Switch to Idle Control
+11/12/2024 10:00:11     Control Mode Switch Complete
+11/12/2024 10:00:14     Open Setup Manager
+11/12/2024 10:00:15     Error:   -->Code:60  Source:TCP Create Listener in Internecine Avoider.vi->TCP Listen.vi:7210002->KukaKRC4.lvlib:EKX_Communication FGV.vi->KukaKRC4.lvlib:EKX_Open.vi->KukaKRC4.lvlib:Kuka_Communication_Initialize and Connect.vi->SSCAD - Kuka KRC4.lvlib:Kuka KRC4 Robot_Actuator.lvclass:Initialize Communication.vi->6-DOF Robot_Position Sensor.lvclass:Initialize Communication.vi->SSCAD Library.lvlib:Sensor Group.lvclass:Sensor Group_Initialize DAQ.vi->simVITRO.lvlib:simVITRO.vi  Message:Error 60 occurred at TCP Create Listener in Internecine Avoider.vi->TCP Listen.vi:7210002->KukaKRC4.lvlib:EKX_Communication FGV.vi->KukaKRC4.lvlib:EKX_Open.vi->KukaKRC4.lvlib:Kuka_Communication_Initialize and Connect.vi->SSCAD - Kuka KRC4.lvlib:Kuka KRC4 Robot_Actuator.lvclass:Initialize Communication.vi->6-DOF Robot_Position Sensor.lvclass:Initialize Communication.vi->SSCAD Library.lvlib:Sensor Group.lvclass:Sensor Group_Initialize DAQ.vi->simVITRO.lvlib:simVITRO.vi
+
+Possible reason(s):
+
+LabVIEW: (Hex 0x3C) The specified port or network address is currently in use. Select an available port or network address.
+11/12/2024 10:04:43     System Reset
+11/12/2024 10:04:43     Switch to Idle Control
+11/12/2024 10:04:43     Control Mode Switch Complete
+11/12/2024 10:04:43     Error:   -->Code:6000  Source:Commands don't match  Message:Error 6000 occurred at Commands don't match
+
+This error code is undefined. Undefined errors might occur for a number of reasons. For example, no one has provided a description for the code, or you might have wired a number that is not an error code to the error code input. 
+
+Additionally, undefined error codes might occur because the error relates to a third-party object, such as the operating system or ActiveX. For these third-party errors, you might be able to obtain a description of the error by searching the Web for the error code (6000) or for its hexadecimal representation (0x00001770).
+11/12/2024 10:04:43     Error:   -->Code:6000  Source:Commands don't match  Message:Error 6000 occurred at Commands don't match
+
+This error code is undefined. Undefined errors might occur for a number of reasons. For example, no one has provided a description for the code, or you might have wired a number that is not an error code to the error code input. 
+
+Additionally, undefined error codes might occur because the error relates to a third-party object, such as the operating system or ActiveX. For these third-party errors, you might be able to obtain a description of the error by searching the Web for the error code (6000) or for its hexadecimal representation (0x00001770).
+11/12/2024 10:05:14     Open Setup Manager
+11/12/2024 10:05:25     Quit Program
+11/12/2024 10:07:55     Main Program Starts
+11/12/2024 10:07:56     Switch to Idle Control
+11/12/2024 10:07:56     Control Mode Switch Complete
+11/12/2024 10:08:03     Error:   -->Code:60  Source:TCP Create Listener in Internecine Avoider.vi->TCP Listen.vi:7210002->KukaKRC4.lvlib:EKX_Communication FGV.vi->KukaKRC4.lvlib:EKX_Open.vi->KukaKRC4.lvlib:Kuka_Communication_Initialize and Connect.vi->SSCAD - Kuka KRC4.lvlib:Kuka KRC4 Robot_Actuator.lvclass:Initialize Communication.vi->6-DOF Robot_Position Sensor.lvclass:Initialize Communication.vi->SSCAD Library.lvlib:Sensor Group.lvclass:Sensor Group_Initialize DAQ.vi->simVITRO.lvlib:simVITRO.vi  Message:Error 60 occurred at TCP Create Listener in Internecine Avoider.vi->TCP Listen.vi:7210002->KukaKRC4.lvlib:EKX_Communication FGV.vi->KukaKRC4.lvlib:EKX_Open.vi->KukaKRC4.lvlib:Kuka_Communication_Initialize and Connect.vi->SSCAD - Kuka KRC4.lvlib:Kuka KRC4 Robot_Actuator.lvclass:Initialize Communication.vi->6-DOF Robot_Position Sensor.lvclass:Initialize Communication.vi->SSCAD Library.lvlib:Sensor Group.lvclass:Sensor Group_Initialize DAQ.vi->simVITRO.lvlib:simVITRO.vi
+
+Possible reason(s):
+
+LabVIEW: (Hex 0x3C) The specified port or network address is currently in use. Select an available port or network address.
+11/12/2024 10:08:31     Open Setup Manager
+11/12/2024 10:16:42     Main Program Starts
+11/12/2024 10:16:42     Switch to Idle Control
+11/12/2024 10:16:42     Control Mode Switch Complete
+11/12/2024 10:16:47     Open Setup Manager
+11/12/2024 10:17:39     System Reset
+11/12/2024 10:17:39     Switch to Idle Control
+11/12/2024 10:17:39     Control Mode Switch Complete
+11/12/2024 10:17:40     Error:   -->Code:8701  Source:Variable POS_ACT is not available; must be initialized.  Message:Error 8701 occurred at Variable POS_ACT is not available; must be initialized.
+
+This error code is undefined. Undefined errors might occur for a number of reasons. For example, no one has provided a description for the code, or you might have wired a number that is not an error code to the error code input. 
+
+Additionally, undefined error codes might occur because the error relates to a third-party object, such as the operating system or ActiveX. For these third-party errors, you might be able to obtain a description of the error by searching the Web for the error code (8701) or for its hexadecimal representation (0x000021FD).
+11/12/2024 10:18:10     System Reset
+11/12/2024 10:18:10     Switch to Idle Control
+11/12/2024 10:18:10     Control Mode Switch Complete
+11/12/2024 10:18:10     Error:   -->Code:8701  Source:Variable POS_ACT is not available; must be initialized.  Message:Error 8701 occurred at Variable POS_ACT is not available; must be initialized.
+
+This error code is undefined. Undefined errors might occur for a number of reasons. For example, no one has provided a description for the code, or you might have wired a number that is not an error code to the error code input. 
+
+Additionally, undefined error codes might occur because the error relates to a third-party object, such as the operating system or ActiveX. For these third-party errors, you might be able to obtain a description of the error by searching the Web for the error code (8701) or for its hexadecimal representation (0x000021FD).
+11/12/2024 10:18:22     Position Robot for JCS 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000
+11/12/2024 10:18:22     Delta Position Limits Exceeded.  Move distance may be coerced.
+11/12/2024 10:18:35     System Reset
+11/12/2024 10:18:35     Switch to Idle Control
+11/12/2024 10:18:35     Control Mode Switch Complete
+11/12/2024 10:18:47     Position Robot for JCS 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000
+11/12/2024 10:18:47     Delta Position Limits Exceeded.  Move distance may be coerced.
+11/12/2024 10:18:54     Position Robot for JCS 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000
+11/12/2024 10:22:56     Open Setup Manager
+11/12/2024 10:32:13     System Reset
+11/12/2024 10:32:13     Switch to Idle Control
+11/12/2024 10:32:13     Control Mode Switch Complete
+11/12/2024 10:32:54     Switch to Active Control
+11/12/2024 10:33:10     Control Mode Switch Complete
+11/12/2024 10:33:11     Joint Dislocated & Outside
+Protection Limit
+11/12/2024 10:33:11     Abort Process Start
+11/12/2024 10:33:11     Data Sampling Rate Change Process Start
+11/12/2024 10:33:11     Data Sampling Rate Change Process End
+11/12/2024 10:33:11     Abort Process End
+11/12/2024 10:33:11     Switch to Idle Control
+11/12/2024 10:33:12     Control Mode Switch Complete
+11/12/2024 10:33:18     System Reset
+11/12/2024 10:33:18     Switch to Idle Control
+11/12/2024 10:33:19     Control Mode Switch Complete
+11/12/2024 10:33:39     Switch to Active Control
+11/12/2024 10:33:44     Control Mode Switch Complete
+11/12/2024 10:34:51     Switch to Idle Control
+11/12/2024 10:34:51     Control Mode Switch Complete
+11/12/2024 10:34:52     Open Project Manager
+11/12/2024 10:34:54     Aborted By External System
+11/12/2024 10:34:54     Abort Process Start
+11/12/2024 10:34:55     Data Sampling Rate Change Process Start
+11/12/2024 10:34:55     Data Sampling Rate Change Process End
+11/12/2024 10:34:55     Abort Process End
+11/12/2024 10:34:55     Switch to Idle Control
+11/12/2024 10:34:55     Control Mode Switch Complete
+11/12/2024 10:34:57     Open Setup Manager
+11/12/2024 10:35:08     Validate Process Requested
+11/12/2024 10:35:08     Prepare Process Start
+11/12/2024 10:35:08     Data Sampling Rate Change Process Start
+11/12/2024 10:35:08     Data Sampling Rate Change Process End
+11/12/2024 10:35:46     Prepare Process of 019_UKA+pACLR_Flexion 0-90 Completed
+11/12/2024 10:35:46     Switch to Active Control
+11/12/2024 10:35:51     Control Mode Switch Complete
+11/12/2024 10:35:55     Run Process Requested
+11/12/2024 10:35:55     Run Process Start
+11/12/2024 10:40:02     Run Process End
+11/12/2024 10:40:02     End Process Start
+11/12/2024 10:40:03     Data Sampling Rate Change Process Start
+11/12/2024 10:40:03     Data Sampling Rate Change Process End
+11/12/2024 10:40:04     End Process Complete
+11/12/2024 10:40:04     Switch to Idle Control
+11/12/2024 10:40:04     Control Mode Switch Complete
+11/12/2024 10:40:25     Data Processing Start
+11/12/2024 10:40:32     Data Processing Complete
+11/12/2024 10:41:11     Validate Process Requested
+11/12/2024 10:41:11     Prepare Process Start
+11/12/2024 10:41:11     Data Sampling Rate Change Process Start
+11/12/2024 10:41:11     Data Sampling Rate Change Process End
+11/12/2024 10:41:39     Prepare Process of 020_UKA+pACLR_flex-ext 0.5BW 5IE 90AP Completed
+11/12/2024 10:41:40     Switch to Active Control
+11/12/2024 10:41:45     Control Mode Switch Complete
+11/12/2024 10:41:50     Run Process Requested
+11/12/2024 10:41:50     Run Process Start
+11/12/2024 11:04:55     Run Process End
+11/12/2024 11:04:55     End Process Start
+11/12/2024 11:04:56     Data Sampling Rate Change Process Start
+11/12/2024 11:04:56     Data Sampling Rate Change Process End
+11/12/2024 11:04:57     End Process Complete
+11/12/2024 11:04:57     Switch to Idle Control
+11/12/2024 11:04:57     Control Mode Switch Complete
+11/12/2024 11:04:58     Data Processing Start
+11/12/2024 11:05:28     Data Processing Complete
+11/12/2024 11:05:43     Switch to Active Control
+11/12/2024 11:05:49     Control Mode Switch Complete
+11/12/2024 11:08:12     Abort Process Start
+11/12/2024 11:08:12     Critical Health Issue with Robot Actuator: Program Overide: 30.000000
+Operating Mode: AUTOMATIC EXTERNAL
+Program Status: Program stopped
+Auto Enable Status: OFF
+Drives OFF: ON
+Protective Stop Status: OFF
+Emergency Stop Status: Undefined
+Deadman Switch Status: Undefined
+Robot in Operation: OFF
+Move Enable: ON
+Drives ON: OFF
+Drives Ready: OFF
+
+11/12/2024 11:08:12     Run Aborted
+11/12/2024 11:08:12     Aborted By External System
+11/12/2024 11:08:12     Data Sampling Rate Change Process Start
+11/12/2024 11:08:12     Data Sampling Rate Change Process End
+11/12/2024 11:08:12     Abort Process End
+11/12/2024 11:08:12     Switch to Idle Control
+11/12/2024 11:08:13     Control Mode Switch Complete
+11/12/2024 11:08:13     Abort Process Start
+11/12/2024 11:08:13     Data Sampling Rate Change Process Start
+11/12/2024 11:08:13     Data Sampling Rate Change Process End
+11/12/2024 11:08:13     Abort Process End
+11/12/2024 11:08:13     Abort Process Start
+11/12/2024 11:08:13     Data Sampling Rate Change Process Start
+11/12/2024 11:08:13     Data Sampling Rate Change Process End
+11/12/2024 11:08:14     Abort Process End
+11/12/2024 11:08:14     Switch to Idle Control
+11/12/2024 11:08:14     Control Mode Switch Complete
+11/12/2024 11:08:14     Switch to Idle Control
+11/12/2024 11:08:14     Control Mode Switch Complete
+11/12/2024 11:18:50     Validate Process Requested
+11/12/2024 11:18:50     Prepare Process Start
+11/12/2024 11:18:50     Data Sampling Rate Change Process Start
+11/12/2024 11:18:50     Data Sampling Rate Change Process End
+11/12/2024 11:19:25     Prepare Process of 021_UKA+pACL_Flexion 0-90 Completed
+11/12/2024 11:19:25     Switch to Active Control
+11/12/2024 11:19:30     Control Mode Switch Complete
+11/12/2024 11:19:52     Run Process Requested
+11/12/2024 11:19:52     Run Process Start
+11/12/2024 11:23:59     Run Process End
+11/12/2024 11:23:59     End Process Start
+11/12/2024 11:24:00     Data Sampling Rate Change Process Start
+11/12/2024 11:24:00     Data Sampling Rate Change Process End
+11/12/2024 11:24:01     End Process Complete
+11/12/2024 11:24:01     Switch to Idle Control
+11/12/2024 11:24:01     Control Mode Switch Complete
+11/12/2024 11:24:02     Data Processing Start
+11/12/2024 11:24:10     Data Processing Complete
+11/12/2024 11:24:10     Switch to Active Control
+11/12/2024 11:24:17     Control Mode Switch Complete
+11/12/2024 11:29:41     Switch to Idle Control
+11/12/2024 11:29:41     Control Mode Switch Complete
+11/12/2024 11:29:48     Validate Process Requested
+11/12/2024 11:29:48     Prepare Process Start
+11/12/2024 11:29:48     Data Sampling Rate Change Process Start
+11/12/2024 11:29:48     Data Sampling Rate Change Process End
+11/12/2024 11:30:16     Prepare Process of 022_UKA+pACL_flex-ext 0.5BW 5IE 90AP Completed
+11/12/2024 11:30:16     Switch to Active Control
+11/12/2024 11:30:21     Control Mode Switch Complete
+11/12/2024 11:30:24     Run Process Requested
+11/12/2024 11:30:24     Run Process Start
+11/12/2024 11:36:39     Abort Process Start
+11/12/2024 11:36:39     Run Aborted
+11/12/2024 11:36:39     Aborted By External System
+11/12/2024 11:36:39     Data Sampling Rate Change Process Start
+11/12/2024 11:36:39     Data Sampling Rate Change Process End
+11/12/2024 11:36:40     Abort Process End
+11/12/2024 11:36:40     Switch to Idle Control
+11/12/2024 11:36:40     Control Mode Switch Complete
+11/12/2024 11:36:40     Abort Process Start
+11/12/2024 11:36:40     Data Sampling Rate Change Process Start
+11/12/2024 11:36:40     Data Sampling Rate Change Process End
+11/12/2024 11:36:40     Abort Process End
+11/12/2024 11:36:40     Abort Process Start
+11/12/2024 11:36:40     Data Sampling Rate Change Process Start
+11/12/2024 11:36:40     Data Sampling Rate Change Process End
+11/12/2024 11:36:41     Abort Process End
+11/12/2024 11:36:49     Data Processing Start
+11/12/2024 11:36:49     Error:   -->Code:118  Source:TDMS Open in simVITRO.lvlib:simVITRO.vi  Message:Error 118 occurred at TDMS Open in simVITRO.lvlib:simVITRO.vi
+
+Possible reason(s):
+
+LabVIEW: (Hex 0x76) The supplied folder path does not exist.
+11/12/2024 11:36:49     Switch to Idle Control
+11/12/2024 11:36:49     Control Mode Switch Complete
+11/12/2024 11:36:49     Switch to Idle Control
+11/12/2024 11:36:50     Control Mode Switch Complete
+11/12/2024 11:37:46     Switch to Active Control
+11/12/2024 11:37:52     Control Mode Switch Complete
+11/12/2024 11:44:09     Switch to Idle Control
+11/12/2024 11:44:09     Control Mode Switch Complete
+11/12/2024 12:48:33     Open Setup Manager
+11/12/2024 12:54:25     System Reset
+11/12/2024 12:54:25     Switch to Idle Control
+11/12/2024 12:54:25     Control Mode Switch Complete
+11/12/2024 12:54:32     Switch to Active Control
+11/12/2024 12:54:37     Control Mode Switch Complete
+11/12/2024 12:55:41     Switch to Idle Control
+11/12/2024 12:55:42     Control Mode Switch Complete
+11/12/2024 12:55:45     Validate Process Requested
+11/12/2024 12:55:45     Prepare Process Start
+11/12/2024 12:55:45     Data Sampling Rate Change Process Start
+11/12/2024 12:55:45     Data Sampling Rate Change Process End
+11/12/2024 12:56:33     Prepare Process of 024_UKA+ACLR_Flexion 0-90 Completed
+11/12/2024 12:56:34     Switch to Active Control
+11/12/2024 12:56:38     Control Mode Switch Complete
+11/12/2024 12:56:43     Run Process Requested
+11/12/2024 12:56:43     Run Process Start
+11/12/2024 13:00:43     Run Process End
+11/12/2024 13:00:43     End Process Start
+11/12/2024 13:00:45     Data Sampling Rate Change Process Start
+11/12/2024 13:00:45     Data Sampling Rate Change Process End
+11/12/2024 13:00:46     End Process Complete
+11/12/2024 13:00:46     Switch to Idle Control
+11/12/2024 13:00:46     Control Mode Switch Complete
+11/12/2024 13:00:47     Data Processing Start
+11/12/2024 13:00:58     Data Processing Complete
+11/12/2024 13:01:28     Validate Process Requested
+11/12/2024 13:01:28     Prepare Process Start
+11/12/2024 13:01:28     Data Sampling Rate Change Process Start
+11/12/2024 13:01:28     Data Sampling Rate Change Process End
+11/12/2024 13:01:56     Prepare Process of 025_UKA+ACLR_flex-ext 0.5BW 5IE 90AP Completed
+11/12/2024 13:01:56     Switch to Active Control
+11/12/2024 13:02:01     Control Mode Switch Complete
+11/12/2024 13:02:03     Run Process Requested
+11/12/2024 13:02:03     Run Process Start
+11/12/2024 13:24:45     Run Process End
+11/12/2024 13:24:45     End Process Start
+11/12/2024 13:24:47     Data Sampling Rate Change Process Start
+11/12/2024 13:24:47     Data Sampling Rate Change Process End
+11/12/2024 13:24:48     End Process Complete
+11/12/2024 13:24:48     Switch to Idle Control
+11/12/2024 13:24:48     Control Mode Switch Complete
+11/12/2024 13:24:49     Data Processing Start
+11/12/2024 13:25:19     Data Processing Complete
+11/12/2024 13:25:39     Switch to Active Control
+11/12/2024 13:25:45     Control Mode Switch Complete
+11/12/2024 13:27:13     Switch to Idle Control
+11/12/2024 13:27:13     Control Mode Switch Complete
+11/12/2024 13:27:14     Abort Process Start
+11/12/2024 13:27:14     Run Aborted
+11/12/2024 13:27:14     Aborted By External System
+11/12/2024 13:27:14     Data Sampling Rate Change Process Start
+11/12/2024 13:27:14     Data Sampling Rate Change Process End
+11/12/2024 13:27:15     Abort Process End
+11/12/2024 13:27:15     Trajectory Manager Opened
+11/12/2024 13:27:46     Switch to Idle Control
+11/12/2024 13:27:46     Control Mode Switch Complete
+11/12/2024 13:27:46     Abort Process Start
+11/12/2024 13:27:47     Data Sampling Rate Change Process Start
+11/12/2024 13:27:47     Data Sampling Rate Change Process End
+11/12/2024 13:27:47     Abort Process End
+11/12/2024 13:27:47     Abort Process Start
+11/12/2024 13:27:47     Data Sampling Rate Change Process Start
+11/12/2024 13:27:47     Data Sampling Rate Change Process End
+11/12/2024 13:27:48     Abort Process End
+11/12/2024 13:27:48     Switch to Idle Control
+11/12/2024 13:27:48     Control Mode Switch Complete
+11/12/2024 13:27:48     Switch to Idle Control
+11/12/2024 13:27:48     Control Mode Switch Complete
+11/12/2024 13:27:50     Switch to Active Control
+11/12/2024 13:27:56     Control Mode Switch Complete
+11/12/2024 13:28:53     Switch to Idle Control
+11/12/2024 13:28:53     Control Mode Switch Complete
+11/12/2024 13:28:54     Abort Process Start
+11/12/2024 13:28:54     Run Aborted
+11/12/2024 13:28:54     Aborted By External System
+11/12/2024 13:28:54     Data Sampling Rate Change Process Start
+11/12/2024 13:28:54     Data Sampling Rate Change Process End
+11/12/2024 13:28:55     Abort Process End
+11/12/2024 13:28:55     Trajectory Manager Opened
+11/12/2024 13:29:26     Switch to Idle Control
+11/12/2024 13:29:26     Control Mode Switch Complete
+11/12/2024 13:29:26     Abort Process Start
+11/12/2024 13:29:26     Data Sampling Rate Change Process Start
+11/12/2024 13:29:26     Data Sampling Rate Change Process End
+11/12/2024 13:29:27     Abort Process End
+11/12/2024 13:29:27     Abort Process Start
+11/12/2024 13:29:27     Data Sampling Rate Change Process Start
+11/12/2024 13:29:27     Data Sampling Rate Change Process End
+11/12/2024 13:29:27     Abort Process End
+11/12/2024 13:29:27     Switch to Idle Control
+11/12/2024 13:29:27     Control Mode Switch Complete
+11/12/2024 13:29:27     Switch to Idle Control
+11/12/2024 13:29:28     Control Mode Switch Complete
+11/12/2024 13:29:32     Validate Process Requested
+11/12/2024 13:29:32     Prepare Process Start
+11/12/2024 13:29:32     Data Sampling Rate Change Process Start
+11/12/2024 13:29:32     Data Sampling Rate Change Process End
+11/12/2024 13:30:00     Prepare Process of 026_UKA+ACLR_Lachman1 Completed
+11/12/2024 13:30:00     Switch to Active Control
+11/12/2024 13:30:05     Control Mode Switch Complete
+11/12/2024 13:30:15     Run Process Requested
+11/12/2024 13:30:15     Run Process Start
+11/12/2024 13:31:38     Run Process End
+11/12/2024 13:31:38     End Process Start
+11/12/2024 13:31:39     Data Sampling Rate Change Process Start
+11/12/2024 13:31:39     Data Sampling Rate Change Process End
+11/12/2024 13:31:40     End Process Complete
+11/12/2024 13:31:40     Switch to Idle Control
+11/12/2024 13:31:40     Control Mode Switch Complete
+11/12/2024 13:31:41     Data Processing Start
+11/12/2024 13:31:46     Data Processing Complete
+11/12/2024 13:32:57     Switch to Active Control
+11/12/2024 13:33:03     Control Mode Switch Complete
+11/12/2024 13:33:37     Switch to Idle Control
+11/12/2024 13:33:37     Control Mode Switch Complete
+11/12/2024 13:39:36     System Reset
+11/12/2024 13:39:36     Switch to Idle Control
+11/12/2024 13:39:36     Control Mode Switch Complete
+11/12/2024 13:40:11     Validate Process Requested
+11/12/2024 13:40:11     Prepare Process Start
+11/12/2024 13:40:11     Data Sampling Rate Change Process Start
+11/12/2024 13:40:11     Data Sampling Rate Change Process End
+11/12/2024 13:40:39     Prepare Process of 027_UKA+ACLR_Flexion 0-90 Completed
+11/12/2024 13:40:39     Switch to Active Control
+11/12/2024 13:40:44     Control Mode Switch Complete
+11/12/2024 13:42:39     Run Process Requested
+11/12/2024 13:42:39     Run Process Start
+11/12/2024 13:47:05     Run Process End
+11/12/2024 13:47:05     End Process Start
+11/12/2024 13:47:07     Data Sampling Rate Change Process Start
+11/12/2024 13:47:07     Data Sampling Rate Change Process End
+11/12/2024 13:47:08     End Process Complete
+11/12/2024 13:47:08     Switch to Idle Control
+11/12/2024 13:47:08     Control Mode Switch Complete
+11/12/2024 13:47:09     Data Processing Start
+11/12/2024 13:47:17     Data Processing Complete
+11/12/2024 13:47:27     Abort Process Start
+11/12/2024 13:47:27     Data Sampling Rate Change Process Start
+11/12/2024 13:47:27     Data Sampling Rate Change Process End
+11/12/2024 13:47:27     Abort Process End
+11/12/2024 13:47:27     Trajectory Manager Opened
+11/12/2024 13:47:41     Switch to Idle Control
+11/12/2024 13:47:41     Control Mode Switch Complete
+11/12/2024 13:47:46     Validate Process Requested
+11/12/2024 13:47:46     Prepare Process Start
+11/12/2024 13:47:47     Data Sampling Rate Change Process Start
+11/12/2024 13:47:47     Data Sampling Rate Change Process End
+11/12/2024 13:48:14     Prepare Process of 028_UKA+ACLR_flex-ext 0.5BW 5IE 90AP Completed
+11/12/2024 13:48:14     Switch to Active Control
+11/12/2024 13:48:19     Control Mode Switch Complete
+11/12/2024 13:48:24     Abort Process Start
+11/12/2024 13:48:24     Critical Health Issue with Robot Actuator: Program Overide: 30.000000
+Operating Mode: AUTOMATIC EXTERNAL
+Program Status: Program stopped
+Auto Enable Status: OFF
+Drives OFF: ON
+Protective Stop Status: ON
+Emergency Stop Status: Undefined
+Deadman Switch Status: Undefined
+Robot in Operation: OFF
+Move Enable: ON
+Drives ON: OFF
+Drives Ready: ON
+
+11/12/2024 13:48:24     Run Aborted
+11/12/2024 13:48:24     Aborted By External System
+11/12/2024 13:48:24     Data Sampling Rate Change Process Start
+11/12/2024 13:48:24     Data Sampling Rate Change Process End
+11/12/2024 13:48:25     Abort Process End
+11/12/2024 13:48:25     Switch to Idle Control
+11/12/2024 13:48:25     Control Mode Switch Complete
+11/12/2024 13:48:25     Abort Process Start
+11/12/2024 13:48:25     Data Sampling Rate Change Process Start
+11/12/2024 13:48:25     Data Sampling Rate Change Process End
+11/12/2024 13:48:26     Abort Process End
+11/12/2024 13:48:26     Abort Process Start
+11/12/2024 13:48:26     Data Sampling Rate Change Process Start
+11/12/2024 13:48:26     Data Sampling Rate Change Process End
+11/12/2024 13:48:26     Abort Process End
+11/12/2024 13:48:26     Switch to Idle Control
+11/12/2024 13:48:26     Control Mode Switch Complete
+11/12/2024 13:48:26     Switch to Idle Control
+11/12/2024 13:48:27     Control Mode Switch Complete
+11/12/2024 13:48:33     Validate Process Requested
+11/12/2024 13:48:33     Prepare Process Start
+11/12/2024 13:48:33     Data Sampling Rate Change Process Start
+11/12/2024 13:48:33     Data Sampling Rate Change Process End
+11/12/2024 13:49:02     Prepare Process of 029_UKA+ACLR_flex-ext 0.5BW 5IE 90AP Completed
+11/12/2024 13:49:02     Switch to Active Control
+11/12/2024 13:49:07     Control Mode Switch Complete
+11/12/2024 13:49:46     Run Process Requested
+11/12/2024 13:49:46     Run Process Start
+11/12/2024 13:56:05     Abort Process Start
+11/12/2024 13:56:05     Run Aborted
+11/12/2024 13:56:05     Aborted By External System
+11/12/2024 13:56:05     Data Sampling Rate Change Process Start
+11/12/2024 13:56:05     Data Sampling Rate Change Process End
+11/12/2024 13:56:05     Abort Process End
+11/12/2024 13:56:05     Switch to Idle Control
+11/12/2024 13:56:06     Control Mode Switch Complete
+11/12/2024 13:56:06     Abort Process Start
+11/12/2024 13:56:06     Data Sampling Rate Change Process Start
+11/12/2024 13:56:06     Data Sampling Rate Change Process End
+11/12/2024 13:56:06     Abort Process End
+11/12/2024 13:56:06     Abort Process Start
+11/12/2024 13:56:06     Data Sampling Rate Change Process Start
+11/12/2024 13:56:06     Data Sampling Rate Change Process End
+11/12/2024 13:56:07     Abort Process End
+11/12/2024 13:56:24     Data Processing Start
+11/12/2024 13:56:24     Error:   -->Code:118  Source:TDMS Open in simVITRO.lvlib:simVITRO.vi  Message:Error 118 occurred at TDMS Open in simVITRO.lvlib:simVITRO.vi
+
+Possible reason(s):
+
+LabVIEW: (Hex 0x76) The supplied folder path does not exist.
+11/12/2024 13:56:24     Switch to Idle Control
+11/12/2024 13:56:25     Control Mode Switch Complete
+11/12/2024 13:56:25     Switch to Idle Control
+11/12/2024 13:56:25     Control Mode Switch Complete
+11/12/2024 13:56:53     Switch to Active Control
+11/12/2024 13:56:59     Control Mode Switch Complete
+11/12/2024 13:58:20     Switch to Idle Control
+11/12/2024 13:58:21     Control Mode Switch Complete
+11/12/2024 13:58:24     Abort Process Start
+11/12/2024 13:58:24     Run Aborted
+11/12/2024 13:58:24     Aborted By External System
+11/12/2024 13:58:24     Data Sampling Rate Change Process Start
+11/12/2024 13:58:24     Data Sampling Rate Change Process End
+11/12/2024 13:58:25     Abort Process End
+11/12/2024 13:58:25     Trajectory Manager Opened
+11/12/2024 13:58:35     Switch to Idle Control
+11/12/2024 13:58:35     Control Mode Switch Complete
+11/12/2024 13:58:35     Abort Process Start
+11/12/2024 13:58:35     Data Sampling Rate Change Process Start
+11/12/2024 13:58:35     Data Sampling Rate Change Process End
+11/12/2024 13:58:36     Abort Process End
+11/12/2024 13:58:36     Abort Process Start
+11/12/2024 13:58:36     Data Sampling Rate Change Process Start
+11/12/2024 13:58:36     Data Sampling Rate Change Process End
+11/12/2024 13:58:36     Abort Process End
+11/12/2024 13:58:36     Switch to Idle Control
+11/12/2024 13:58:37     Control Mode Switch Complete
+11/12/2024 13:58:37     Switch to Idle Control
+11/12/2024 13:58:37     Control Mode Switch Complete
+11/12/2024 13:58:46     Validate Process Requested
+11/12/2024 13:58:46     Prepare Process Start
+11/12/2024 13:58:46     Data Sampling Rate Change Process Start
+11/12/2024 13:58:46     Data Sampling Rate Change Process End
+11/12/2024 13:59:12     Prepare Process of 031_UKA+ACLR_Lachman1 Completed
+11/12/2024 13:59:13     Switch to Active Control
+11/12/2024 13:59:17     Control Mode Switch Complete
+11/12/2024 13:59:19     Run Process Requested
+11/12/2024 13:59:19     Run Process Start
+11/12/2024 14:00:46     Run Process End
+11/12/2024 14:00:46     End Process Start
+11/12/2024 14:00:47     Data Sampling Rate Change Process Start
+11/12/2024 14:00:47     Data Sampling Rate Change Process End
+11/12/2024 14:00:48     End Process Complete
+11/12/2024 14:00:48     Switch to Idle Control
+11/12/2024 14:00:48     Control Mode Switch Complete
+11/12/2024 14:00:49     Data Processing Start
+11/12/2024 14:00:54     Data Processing Complete
+11/12/2024 14:01:46     Switch to Active Control
+11/12/2024 14:01:52     Control Mode Switch Complete
+11/12/2024 14:03:05     Abort Process Start
+11/12/2024 14:03:05     Critical Health Issue with Robot Actuator: Program Overide: 30.000000
+Operating Mode: AUTOMATIC EXTERNAL
+Program Status: Program stopped
+Auto Enable Status: OFF
+Drives OFF: ON
+Protective Stop Status: OFF
+Emergency Stop Status: Undefined
+Deadman Switch Status: Undefined
+Robot in Operation: OFF
+Move Enable: ON
+Drives ON: OFF
+Drives Ready: OFF
+
+11/12/2024 14:03:05     Run Aborted
+11/12/2024 14:03:05     Aborted By External System
+11/12/2024 14:03:05     Data Sampling Rate Change Process Start
+11/12/2024 14:03:05     Data Sampling Rate Change Process End
+11/12/2024 14:03:06     Abort Process End
+11/12/2024 14:03:06     Switch to Idle Control
+11/12/2024 14:03:06     Control Mode Switch Complete
+11/12/2024 14:03:06     Abort Process Start
+11/12/2024 14:03:06     Data Sampling Rate Change Process Start
+11/12/2024 14:03:06     Data Sampling Rate Change Process End
+11/12/2024 14:03:06     Abort Process End
+11/12/2024 14:03:06     Abort Process Start
+11/12/2024 14:03:06     Data Sampling Rate Change Process Start
+11/12/2024 14:03:06     Data Sampling Rate Change Process End
+11/12/2024 14:03:07     Abort Process End
+11/12/2024 14:03:07     Switch to Idle Control
+11/12/2024 14:03:07     Control Mode Switch Complete
+11/12/2024 14:03:07     Switch to Idle Control
+11/12/2024 14:03:08     Control Mode Switch Complete
+11/12/2024 14:06:27     Validate Process Requested
+11/12/2024 14:06:27     Prepare Process Start
+11/12/2024 14:06:27     Data Sampling Rate Change Process Start
+11/12/2024 14:06:27     Data Sampling Rate Change Process End
+11/12/2024 14:07:03     Prepare Process of 032_UKA-ACL_Flexion 0-90 Completed
+11/12/2024 14:07:03     Switch to Active Control
+11/12/2024 14:07:08     Control Mode Switch Complete
+11/12/2024 14:07:13     Run Process Requested
+11/12/2024 14:07:13     Run Process Start
+11/12/2024 14:11:27     Run Process End
+11/12/2024 14:11:27     End Process Start
+11/12/2024 14:11:28     Data Sampling Rate Change Process Start
+11/12/2024 14:11:28     Data Sampling Rate Change Process End
+11/12/2024 14:11:29     End Process Complete
+11/12/2024 14:11:29     Switch to Idle Control
+11/12/2024 14:11:29     Control Mode Switch Complete
+11/12/2024 14:11:30     Data Processing Start
+11/12/2024 14:11:38     Data Processing Complete
+11/12/2024 14:12:37     Validate Process Requested
+11/12/2024 14:12:37     Prepare Process Start
+11/12/2024 14:12:37     Data Sampling Rate Change Process Start
+11/12/2024 14:12:37     Data Sampling Rate Change Process End
+11/12/2024 14:13:05     Prepare Process of 033_UKA-ACL_flex-ext 0.5BW 5IE 90AP Completed
+11/12/2024 14:13:06     Switch to Active Control
+11/12/2024 14:13:11     Control Mode Switch Complete
+11/12/2024 14:13:14     Run Process Requested
+11/12/2024 14:13:14     Run Process Start
+11/12/2024 14:35:52     Run Process End
+11/12/2024 14:35:52     End Process Start
+11/12/2024 14:35:54     Data Sampling Rate Change Process Start
+11/12/2024 14:35:54     Data Sampling Rate Change Process End
+11/12/2024 14:35:55     End Process Complete
+11/12/2024 14:35:55     Switch to Idle Control
+11/12/2024 14:35:55     Control Mode Switch Complete
+11/12/2024 14:35:56     Data Processing Start
+11/12/2024 14:36:27     Data Processing Complete
+11/12/2024 14:36:46     Abort Process Start
+11/12/2024 14:36:46     Data Sampling Rate Change Process Start
+11/12/2024 14:36:46     Data Sampling Rate Change Process End
+11/12/2024 14:36:47     Abort Process End
+11/12/2024 14:36:47     Trajectory Manager Opened
+11/12/2024 14:36:59     Switch to Idle Control
+11/12/2024 14:36:59     Control Mode Switch Complete
+11/12/2024 14:37:02     Switch to Active Control
+11/12/2024 14:37:08     Control Mode Switch Complete
+11/12/2024 14:38:15     Switch to Idle Control
+11/12/2024 14:38:15     Control Mode Switch Complete
+11/12/2024 14:38:36     Switch to Active Control
+11/12/2024 14:38:41     Control Mode Switch Complete
+11/12/2024 16:18:31     Quit Program
+11/12/2024 16:18:35     Error:   -->Code:1556  Source:In Place Element Structure in simVITRO.lvlib:simVITRO Project.lvclass:Get Names.vi->simVITRO.lvlib:simVITRO Project Manager.vi  Message:Error 1556 occurred at In Place Element Structure in simVITRO.lvlib:simVITRO Project.lvclass:Get Names.vi->simVITRO.lvlib:simVITRO Project Manager.vi
+
+Possible reason(s):
+
+LabVIEW: (Hex 0x614) The reference is invalid. This error might occur because the reference has been deleted.--> Call Chain: BioRobotics Common Tools.lvlib:FileManager_Write to Log File.vi:4830001->BioRobotics Common Tools.lvlib:FileManager_Write to Specimen Log File.vi->simVITRO.lvlib:simVITRO Project Manager.vi

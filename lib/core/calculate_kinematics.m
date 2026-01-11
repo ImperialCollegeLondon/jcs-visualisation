@@ -31,14 +31,32 @@ function output = calculate_kinematics(tdms, transforms, config, is_right_knee)
     RB1opt_T_RB2opt = pagemrdivide(RB1opt_T_RB2, RB2opt_T_RB2orig);
 
     %% From scratch
-    gTee = transforms.gTee;
-    gTf0 = transforms.from_digitiser.gTf0;
-    gTt0 = transforms.from_digitiser.gTt0;
-    
-    f0Tee = pagemtimes(gTf0 \ W1_T_W2, W2_T_S2);
+    gTr_right_handed = mat_to_left_handed(transforms.gTr);
+    gTf0 = mat_to_left_handed(transforms.from_digitiser.gTf0);
+    gTt0 = mat_to_left_handed(transforms.from_digitiser.gTt0);
+    rTee = W2_T_S2;
+    gTr = W1_T_W2;
+
+    assert(all(gTr_right_handed == gTr, "all"));
+
+    gTee = gTr * mat_to_left_handed(rTee(:, :, 1));
+
     eeTt0 = gTee \ gTt0;
 
-    fTt = pagemtimes(f0Tee, eeTt0);
+    figure;
+    visualise_matrix(eeTt0);
+    hold on;
+    visualise_matrix(S2_T_RB2);
+    legend(["Tibia in end-effector", "Recreation"]);
+    keyboard
+    % 
+    % f0Tee = pagemtimes(gTf0 \ W1_T_W2, );
+    % 
+    % rTt0 = gTr \ gTt0;
+    % eeTt0 = pagemldivide(rTee, rTt0);
+    % 
+    % 
+    % fTt = pagemtimes(f0Tee, rTt0);
 
 
     %% Prepare output

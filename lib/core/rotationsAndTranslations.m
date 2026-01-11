@@ -14,18 +14,18 @@ Tl=pagemldivide(R, T);%Tl is translation of the femur to the tibia in the tibial
 
 %For the knee
 if right
-    Rx = atan2(R(2,3,:),R(3,3,:))*180/pi;
-    Ry = asind(R(1,3,:));
-    Rz = atan2(R(1,2,:),R(1,1,:))*180/pi;
+    Rx = -atan2(R(2,3,:),R(3,3,:));
+    Ry = asin(R(1,3,:));
+    Rz = -atan2(R(1,2,:),R(1,1,:));
 else
-    Rx = atan2(R(2,3,:),R(3,3,:))*180/pi;
-    Ry = -asind(R(1,3,:));
-    Rz = -atan2(R(1,2,:),R(1,1,:))*180/pi;
+    Rx = -atan2(R(2,3,:),R(3,3,:));
+    Ry = -asin(R(1,3,:));
+    Rz = atan2(R(1,2,:),R(1,1,:));
 end
 motion = table();
-motion.flexion = unwrap(squeeze(Rx));
-motion.valgus = unwrap(squeeze(Ry));
-motion.internal = unwrap(squeeze(Rz));
+motion.flexion = rad2deg(unwrap(squeeze(Rx)));
+motion.valgus = rad2deg(unwrap(squeeze(Ry)));
+motion.internal = rad2deg(unwrap(squeeze(Rz)));
 
 motion.medial = squeeze(Tl(1,4,:)); 
 motion.posterior = squeeze(Tl(2,4,:));

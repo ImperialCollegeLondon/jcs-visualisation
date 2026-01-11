@@ -1,12 +1,13 @@
 function transform = coordinate2matrix(data)
-translation = repmat(eye(4), 1, 1, numel(x));
-translation(1, 4, :) = x;
-translation(2, 4, :) = y;
-translation(3, 4, :) = z;
+translation = repmat(eye(4), 1, 1, height(data));
+translation(1, 4, :) = data.x/1000;
+translation(2, 4, :) = data.y/1000;
+translation(3, 4, :) = data.z/1000;
 
-roll=deg2rad(data.roll); % Rx
-pitch=deg2rad(data.pitch); % Ry
-yaw=deg2rad(data.yaw); % Rz
+%Negative signs to recreate simvitro's left-handed coordinate system
+roll=deg2rad(-data.roll); % Rx 
+pitch=deg2rad(-data.pitch); % Ry
+yaw=deg2rad(-data.yaw); % Rz
 
 Qx = repmat(eye(4), 1, 1, numel(roll));
 Qy = repmat(eye(4), 1, 1, numel(pitch));
