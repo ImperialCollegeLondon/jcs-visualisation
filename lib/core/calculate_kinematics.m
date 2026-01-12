@@ -48,7 +48,7 @@ function output = calculate_kinematics(tdms, transforms, config, is_right_knee)
     hold on;
     visualise_matrix(S2_T_RB2);
     legend(["Tibia in end-effector", "Recreation"]);
-    keyboard
+    % keyboard
     % 
     % f0Tee = pagemtimes(gTf0 \ W1_T_W2, );
     % 
@@ -87,7 +87,8 @@ function output = calculate_kinematics(tdms, transforms, config, is_right_knee)
     output.add_transforms("rTt", S2_T_RB2);
     
 
-    output.add_data("reconstructed", rotationsAndTranslations(fTt, is_right_knee));
+    % output.add_data("reconstructed", rotationsAndTranslations(fTt, is_right_knee));
+
     % output.add_data("sensors", JCS_raw.sensor);
     % 
     % output.add_data("forces_actual", JCS_raw.forces.actual);
