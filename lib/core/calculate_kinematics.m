@@ -17,6 +17,7 @@ function output = calculate_kinematics(tdms, transforms, config, is_right_knee)
     % robot_position.roll = atan2d_north_to_east(JCS_raw.robot_position.roll);
 
     W2_T_S2 = coordinate2matrix(robot_position); % End effector in Robot coordinate system throughout arc of flexion
+    % W2_T_S2 = coord2mat(robot_position); % End effector in Robot coordinate system throughout arc of flexion
     
     %% calculate transform from TIBIA (RB2) to FEMUR (RB1).
     % i.e., Tibia in femoral frame of reference.
@@ -34,13 +35,12 @@ function output = calculate_kinematics(tdms, transforms, config, is_right_knee)
     gTr_right_handed = mat_to_left_handed(transforms.gTr);
     gTf0 = mat_to_left_handed(transforms.from_digitiser.gTf0);
     gTt0 = mat_to_left_handed(transforms.from_digitiser.gTt0);
-    rTee = W2_T_S2;
-    gTr = W1_T_W2;
+    rTee = mat_to_left_handed(W2_T_S2(:, :, 1));
+    gTr = mat_to_left_handed(W1_T_W2);
 
-    assert(all(gTr_right_handed == gTr, "all"));
+    assert(all(gTr_right_handed == gTr, "all"), "W1_T_W2 should be right-handed. Use 'with fiducials'");
 
-    gTee = gTr * mat_to_left_handed(rTee(:, :, 1));
-
+    gTee = gTr * rTee;
     eeTt0 = gTee \ gTt0;
 
     figure;
@@ -48,7 +48,8 @@ function output = calculate_kinematics(tdms, transforms, config, is_right_knee)
     hold on;
     visualise_matrix(S2_T_RB2);
     legend(["Tibia in end-effector", "Recreation"]);
-    % keyboard
+    view(30, 45); grid on; axis equal;
+    keyboard
     % 
     % f0Tee = pagemtimes(gTf0 \ W1_T_W2, );
     % 

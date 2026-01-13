@@ -4,10 +4,9 @@ translation(1, 4, :) = data.x/1000;
 translation(2, 4, :) = data.y/1000;
 translation(3, 4, :) = data.z/1000;
 
-%Negative signs to recreate simvitro's left-handed coordinate system
-roll=deg2rad(-data.roll); % Rx 
-pitch=deg2rad(-data.pitch); % Ry
-yaw=deg2rad(-data.yaw); % Rz
+roll=deg2rad(data.roll); % Rx 
+pitch=deg2rad(data.pitch); % Ry
+yaw=deg2rad(data.yaw); % Rz
 
 Qx = repmat(eye(4), 1, 1, numel(roll));
 Qy = repmat(eye(4), 1, 1, numel(pitch));
@@ -26,7 +25,7 @@ Qz(1, 1, :) = cos(yaw);  Qz(1, 2, :) = -sin(yaw);%                     0
 Qz(2, 1, :) = sin(yaw);  Qz(2, 2, :) = cos(yaw);%                      0
 % 0                                   0                                1
 
-rotation = pagemtimes(pagemtimes(Qz, Qy), Qx);
-
+% rotation = pagemtimes(pagemtimes(Qz, Qy), Qx);
+rotation = pagemtimes(pagemtimes(Qx, Qy), Qz);
 transform = pagemtimes(translation, rotation);
 end

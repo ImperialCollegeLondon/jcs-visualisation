@@ -11,8 +11,8 @@ function [is_right_knee, state, setup, transforms] = load_config(path)
     state = serialise(fp_knee_state);
 
     % Get the bits we care about out of the serialised config
-    transforms.W1_T_W2 = state.JCS.T_World1_World2; % Left-handed
-    % transforms.W1_T_W2 = state.JCS.T_World1_World2_for_Fiducials; % Always right-handed
+    % transforms.W1_T_W2 = state.JCS.T_World1_World2; % Left-handed
+    transforms.W1_T_W2 = state.JCS.T_World1_World2_for_Fiducials; % Always right-handed
     transforms.S1_T_RB1 = state.JCS.T_Sensor1_RB1; %Transformation from Certus to Rigid Body 1 (Femur)
     transforms.S2_T_RB2 = state.JCS.T_Sensor2_RB2; %Transformation from Sensor 2 (Load Cell/Robot end effector) to Rigid Body 2 (Tibia)
     transforms.RB2opt_T_RB2orig = state.JCS.T_RB2_OPT_RB2_Orig;
@@ -33,7 +33,10 @@ function [is_right_knee, state, setup, transforms] = load_config(path)
 
     setup = serialise(fp_setup);
     transforms.T_W1_Robot = setup.DefineRobotCoordinateSystem.T_WORLD1_ROB;
-    transforms.robot_position = setup.DetermineNeutralPosition.Robot_Position;
+    robot_pos_neutral = setup.DetermineNeutralPosition.Robot_Position;
+    robot_pos_neutral(1:3) = robot_pos_neutral(1:3)/1000;
+    robot_pos_neutral(4:6) = robot_pos_neutral(4:6);
+    transforms.robot_position = coord2mat(robot_pos_neutral);
 
     is_right_knee = strcmpi(setup.RecordSpecimenInfo.Specimen_Side, "right");
 
