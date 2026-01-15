@@ -9,15 +9,14 @@ function output = calculate_kinematics(tdms, transforms, config, is_right_knee)
     RB2opt_T_RB2orig = transforms.RB2opt_T_RB2orig; %toTt
     RB1opt_T_RB1orig = transforms.RB1opt_T_RB1orig; %foTf
     position_offset = transforms.position_offset;
-    position_offset_tab = array2table(position_offset(:)', 'VariableNames', {'medial', 'posterior', 'superior', 'flexion', 'valgus', 'internal'});
+    % position_offset_tab = array2table(position_offset(:)', 'VariableNames', {'medial', 'posterior', 'superior', 'flexion', 'valgus', 'internal'});
 
    
     robot_position = data.robot_position;
     % robot_position.yaw = atan2d_north_to_east(JCS_raw.robot_position.yaw);
     % robot_position.roll = atan2d_north_to_east(JCS_raw.robot_position.roll);
 
-    W2_T_S2 = coordinate2matrix(robot_position); % End effector in Robot coordinate system throughout arc of flexion
-    % W2_T_S2 = coord2mat(robot_position); % End effector in Robot coordinate system throughout arc of flexion
+    W2_T_S2 = coordinate2matrix(robot_position, is_right_knee); % End effector in Robot coordinate system throughout arc of flexion
     
     %% calculate transform from TIBIA (RB2) to FEMUR (RB1).
     % i.e., Tibia in femoral frame of reference.
@@ -35,19 +34,23 @@ function output = calculate_kinematics(tdms, transforms, config, is_right_knee)
     gTr_right_handed = mat_to_left_handed(transforms.gTr);
     gTf0 = mat_to_left_handed(transforms.from_digitiser.gTf0);
     gTt0 = mat_to_left_handed(transforms.from_digitiser.gTt0);
-    rTee = mat_to_left_handed(W2_T_S2(:, :, 1));
+    rTee = W2_T_S2;
     gTr = mat_to_left_handed(W1_T_W2);
+
+    rTee0 = transforms.robot_position;
 
     assert(all(gTr_right_handed == gTr, "all"), "W1_T_W2 should be right-handed. Use 'with fiducials'");
 
-    gTee = gTr * rTee;
-    eeTt0 = gTee \ gTt0;
+    eeTt = (gTr * rTee(:, :, 1)) \ gTt0;
+    eeTt0 = (gTr * rTee0) \ gTt0;
 
     figure;
-    visualise_matrix(eeTt0);
+    visualise_matrix(eeTt);
     hold on;
     visualise_matrix(S2_T_RB2);
-    legend(["Tibia in end-effector", "Recreation"]);
+
+    visualise_matrix(eeTt0);
+    legend(["Tibia in end-effector", "Recreation", "Recreation InitRobotPos"]);
     view(30, 45); grid on; axis equal;
     keyboard
     % 
