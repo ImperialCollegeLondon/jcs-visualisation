@@ -19,7 +19,7 @@ function [is_right_knee, state, setup, transforms] = load_config(path)
     robot_position.roll = robot_pos_neutral(4);
     robot_position.pitch = robot_pos_neutral(5);
     robot_position.yaw = robot_pos_neutral(6);
-    transforms.robot_position = coordinate2matrix(robot_position, is_right_knee);
+    transforms.robot_position_neutral = coordinate2matrix(robot_position, is_right_knee);
     
     %% State: transforms, optimisations, etc
     state = serialise(fp_knee_state);
@@ -35,8 +35,8 @@ function [is_right_knee, state, setup, transforms] = load_config(path)
     identity = eye(4);
     transforms.is_optimised = ~all(state.JCS.T_RB2_OPT_RB2_Orig == identity, "all");
 
-    transforms.T_S1_RB1_Orig = state.JCS.Initial_T_Sen1_RB1;
-    transforms.T_S2_RB2_Orig = state.JCS.Initial_T_Sen2_RB2;
+    transforms.T_S1_RB1_init = state.JCS.Initial_T_Sen1_RB1;
+    transforms.T_S2_RB2_init = state.JCS.Initial_T_Sen2_RB2;
     position_offset = state.JCS.Position_Offset; %Neutral position offset, defined as the zero point to calculate kinematics
 
     offset.x     = position_offset(1)*1000; 
@@ -48,6 +48,7 @@ function [is_right_knee, state, setup, transforms] = load_config(path)
 
     transforms.position_offset = coordinate2matrix(offset, is_right_knee);
 
+    transforms.offset = offset;
     % transforms.position_offset = [position_offset(1:3)*1000; rad2deg(position_offset(4:6))];
 
     %% Introspection
@@ -56,17 +57,23 @@ function [is_right_knee, state, setup, transforms] = load_config(path)
     tibia = landmarks(state.JCS.Collected_Points_Rigid_Body_2);
     transforms.from_digitiser.gTt0 = defineBodyFixedFrameTibia(tibia, is_right_knee);
 
-    % visualise_matrix(transforms.from_digitiser.gTf0);
-    % xlabel("x"); ylabel("y"); zlabel("z");
-    % axis equal; grid on; view(30,30);
-    % hold on;
-    % visualise_matrix(state.JCS_digitised.T_Sensor1_RB1);
     gTf0 = transforms.from_digitiser.gTf0;
-    gTf0_left_handed = mat_to_left_handed(gTf0);
-    % visualise_matrix(gTf0_left_handed);     legend(["Correct","Simvitro","Correct => Left-hand"]);
-    % hold off; axis equal;
 
-    assert(all(state.JCS_digitised.T_Sensor1_RB1 - gTf0_left_handed < 1e-6, "all"))
+    visualise_matrix(transforms.from_digitiser.gTf0);
+    xlabel("x"); ylabel("y"); zlabel("z");
+    axis equal; grid on; view(30,30);
+    hold on;
+    visualise_matrix(state.JCS_digitised.T_Sensor1_RB1);
+    if is_right_knee
+        legend(["Correct", "Simvitro"]);
+        title("Both should overlap")
+    else
+        gTf0_left_handed = mat_to_left_handed(gTf0);
+        assert(all(state.JCS_digitised.T_Sensor1_RB1 - gTf0_left_handed < 1e-6, "all"))
+        visualise_matrix(gTf0_left_handed);     legend(["Correct","Simvitro","Correct => Left-hand"]);
+    end
+    hold off; axis equal;
+
 
 
     transforms.gTr = setup.DefineRobotCoordinateSystem.T_WORLD1_ROB;

@@ -19,9 +19,9 @@ function plots = visualise_matrix(matrix, linestyle)
     tip_x = o + x;
     tip_y = o + y;
     tip_z = o + z;
-    text(tip_x(1), tip_x(2), tip_x(3), "  Superior");
+    text(tip_x(1), tip_x(2), tip_x(3), "  Medial");
     text(tip_y(1), tip_y(2), tip_y(3), "  Anterior");
-    text(tip_z(1), tip_z(2), tip_z(3), "  Medial");
+    text(tip_z(1), tip_z(2), tip_z(3), "  Superior");
 
     hold off;
     
