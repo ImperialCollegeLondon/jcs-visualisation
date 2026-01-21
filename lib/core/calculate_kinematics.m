@@ -20,25 +20,7 @@ function output = calculate_kinematics(tdms, transforms, config, is_right_knee)
     %% calculate transform from TIBIA (RB2) to FEMUR (RB1).
     % i.e., Tibia in femoral frame of reference.
 
-    W2_T_S2 = W2_T_S2(:, :, 1);
-    RB1opt_T_W2 = S1_T_RB1opt \ W1_T_W2;
-    RB1opt_T_S2 = RB1opt_T_W2 * W2_T_S2; % End effector in Femur CS
-    RB1opt_T_RB2opt = RB1opt_T_S2 * S2_T_RB2opt; % fTt
-    % RB1_T_RB2 = pagemtimes(RB1_T_RB2, position_offset);
-
-    % Invert the optimisations
-    RB1orig_T_RB2opt = RB1opt_T_RB1orig \ RB1opt_T_RB2opt;
-    RB1_T_RB2 = RB1orig_T_RB2opt * RB2opt_T_RB2orig;
-
-
-        %%%%% Recreate order of operations
-    S2_T_RB2orig = S2_T_RB2opt * RB2opt_T_RB2orig;
-    S1_T_RB1orig = S1_T_RB1opt * RB1opt_T_RB1orig;
-    RB1orig_T_W2 = S1_T_RB1orig \ S1_T_W1 * W1_T_W2;
-    RB1orig_T_S2 = RB1orig_T_W2 * W2_T_S2; % End effector in Femur CS
-    RB1orig_T_RB2orig = RB1orig_T_S2 * S2_T_RB2orig; % fTt digitised
-    % RB1_T_RB2 = pagemtimes(RB1_T_RB2, position_offset);
-    %%%
+    [RB1_T_RB2, RB1opt_T_RB2opt] = calculate_relative_motion(W1_T_W2, W2_T_S2, S1_T_W1, S1_T_RB1opt, S2_T_RB2opt, RB2opt_T_RB2orig, RB1opt_T_RB1orig);
 
     %% From scratch
     gTr_right_handed = transforms.gTr;

@@ -39,16 +39,15 @@ function [is_right_knee, state, setup, transforms] = load_config(path)
     transforms.T_S2_RB2_init = state.JCS.Initial_T_Sen2_RB2;
     position_offset = state.JCS.Position_Offset; %Neutral position offset, defined as the zero point to calculate kinematics
 
-    offset.x     = position_offset(1)*1000; 
-    offset.y     = position_offset(2)*1000;
-    offset.z     = position_offset(3)*1000;
-    offset.roll  = position_offset(4); 
-    offset.pitch = position_offset(5);
-    offset.yaw   = position_offset(6);
+    offset = table();
+    offset.medial     = position_offset(1)*1000; 
+    offset.posterior     = position_offset(2)*1000;
+    offset.superior     = position_offset(3)*1000;
+    offset.flexion  = position_offset(4); 
+    offset.valgus = position_offset(5);
+    offset.internal_rotation   = position_offset(6);
 
-    transforms.position_offset = coordinate2matrix(offset, is_right_knee);
-
-    transforms.offset = offset;
+    transforms.position_offset = offset;
     % transforms.position_offset = [position_offset(1:3)*1000; rad2deg(position_offset(4:6))];
 
     %% Introspection
