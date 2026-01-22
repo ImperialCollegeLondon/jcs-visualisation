@@ -50,28 +50,6 @@ function [is_right_knee, state, setup, transforms] = load_config(path)
     transforms.position_offset = offset;
     % transforms.position_offset = [position_offset(1:3)*1000; rad2deg(position_offset(4:6))];
 
-    %% Introspection
-    femur = landmarks(state.JCS.Collected_Points_Rigid_Body_1);
-    transforms.from_digitiser.gTf0 = defineBodyFixedFrameFemur(femur, is_right_knee);
-    tibia = landmarks(state.JCS.Collected_Points_Rigid_Body_2);
-    transforms.from_digitiser.gTt0 = defineBodyFixedFrameTibia(tibia, is_right_knee);
-
-    gTf0 = transforms.from_digitiser.gTf0;
-
-    visualise_matrix(transforms.from_digitiser.gTf0);
-    xlabel("x"); ylabel("y"); zlabel("z");
-    axis equal; grid on; view(30,30);
-    hold on;
-    visualise_matrix(state.JCS_digitised.T_Sensor1_RB1);
-    if is_right_knee
-        legend(["Correct", "Simvitro"]);
-        title("Both should overlap")
-    else
-        gTf0_left_handed = mat_to_left_handed(gTf0);
-        assert(all(state.JCS_digitised.T_Sensor1_RB1 - gTf0_left_handed < 1e-6, "all"))
-        visualise_matrix(gTf0_left_handed);     legend(["Correct","Simvitro","Correct => Left-hand"]);
-    end
-    hold off; axis equal;
 
 
 

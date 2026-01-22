@@ -22,58 +22,36 @@ function output = calculate_kinematics(tdms, transforms, config, is_right_knee)
 
     [RB1_T_RB2, RB1opt_T_RB2opt] = calculate_relative_motion(W1_T_W2, W2_T_S2, S1_T_W1, S1_T_RB1opt, S2_T_RB2opt, RB2opt_T_RB2orig, RB1opt_T_RB1orig);
 
-    %% From scratch
-    gTr_right_handed = transforms.gTr;
-    gTf0 = transforms.from_digitiser.gTf0;
-    gTt0 = transforms.from_digitiser.gTt0;
-    rTee = W2_T_S2;
-    gTr = W1_T_W2;
-
-    if ~is_right_knee
-        gTr_right_handed = mat_to_left_handed(gTr_right_handed); 
-        gTf0 = mat_to_left_handed(gTf0); 
-        gTt0 = mat_to_left_handed(gTt0); 
-        rTee = mat_to_left_handed(rTee);
-        gTr = mat_to_left_handed(gTr);
-    end
-
-    rTee_neutral = transforms.robot_position_neutral;
-
-    assert(all(gTr_right_handed == gTr, "all"), "W1_T_W2 should be right-handed. Use 'with fiducials'");
-
-    eeTt = (gTr * rTee(:, :, 1)) \ gTt0;
-    eeTt0 = (gTr * rTee_neutral) \ gTt0;
-
-    figure;
-    visualise_matrix(eeTt);
-    hold on;
-    visualise_matrix(S2_T_RB2opt);
-
-    visualise_matrix(eeTt0);
-    legend(["Tibia in end-effector", "Recreation", "Recreation from neutral position"]);
-    view(30, 45); grid on; axis equal; hold off;
-
-
-    figure;
-    visualise_matrix(transforms.from_digitiser.gTf0);
-    xlabel("x"); ylabel("y"); zlabel("z");
-    axis equal; grid on; view(30,30);
-    hold on;
-    visualise_matrix(S1_T_RB1opt * RB1opt_T_RB1orig);
-    legend(["From digitiser", "Recreation"]);
-
-    keyboard
-
-
+    % %% From scratch
+    % gTr_right_handed = transforms.gTr;
+    % gTf0 = transforms.from_digitiser.gTf0;
+    % gTt0 = transforms.from_digitiser.gTt0;
+    % rTee = W2_T_S2;
+    % gTr = W1_T_W2;
     % 
-    % f0Tee = pagemtimes(gTf0 \ W1_T_W2, );
+    % if ~is_right_knee
+    %     gTr_right_handed = mat_to_left_handed(gTr_right_handed); 
+    %     gTf0 = mat_to_left_handed(gTf0); 
+    %     gTt0 = mat_to_left_handed(gTt0); 
+    %     rTee = mat_to_left_handed(rTee);
+    %     gTr = mat_to_left_handed(gTr);
+    % end
     % 
-    % rTt0 = gTr \ gTt0;
-    % eeTt0 = pagemldivide(rTee, rTt0);
+    % rTee_neutral = transforms.robot_position_neutral;
     % 
+    % assert(all(gTr_right_handed == gTr, "all"), "W1_T_W2 should be right-handed. Use 'with fiducials'");
     % 
-    % fTt = pagemtimes(f0Tee, rTt0);
-
+    % eeTt = (gTr * rTee(:, :, 1)) \ gTt0;
+    % eeTt0 = (gTr * rTee_neutral) \ gTt0;
+    % 
+    % figure;
+    % visualise_matrix(eeTt);
+    % hold on;
+    % visualise_matrix(S2_T_RB2opt * RB2opt_T_RB2orig);
+    % 
+    % visualise_matrix(eeTt0);
+    % legend(["Tibia in end-effector", "Recreation", "Recreation from neutral position"]);
+    % view(30, 45); grid on; axis equal; hold off;
 
     %% Prepare output
     name = string(data.specimen);
@@ -98,7 +76,6 @@ function output = calculate_kinematics(tdms, transforms, config, is_right_knee)
     kinematics = rotationsAndTranslations(RB1opt_T_RB2opt, is_right_knee);
     output.add_data("kinematics_opt", kinematics);
     output.add_data("kinematics_orig", rotationsAndTranslations(RB1_T_RB2, is_right_knee));
-    output.add_data("kinematics_orig_m2", rotationsAndTranslations(RB1orig_T_RB2orig, is_right_knee));
    
     output.add_transforms("tTf", pageinv(RB1opt_T_RB2opt));
     output.add_transforms("rTt", S2_T_RB2opt);
@@ -115,4 +92,6 @@ function output = calculate_kinematics(tdms, transforms, config, is_right_knee)
     % output.RB1opt_T_RB1orig = transforms.RB1opt_T_RB1orig; %foTf
     % output.kinematics.flexion = transforms.shift_flex(output.kinematics.flexion); % Offset so extension is 0 deg
     % output.error = output.kinematics - JCS_raw.translations.actual;
+
+    keyboard
 end
