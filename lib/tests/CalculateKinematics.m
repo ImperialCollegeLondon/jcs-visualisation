@@ -27,7 +27,7 @@ classdef CalculateKinematics < matlab.unittest.TestCase
             test_case.assertEqual(RB1_T_RB2(:, :, 1), RB1orig_T_RB2orig, 'AbsTol', 1e-8);
         end
 
-        function digitisation_left(test_case)
+        % function digitisation_left(test_case)
             % JCS_digitised.T_Sensor1_RB1 = [0.1097 -0.5219 -0.8459 -0.2301;0.8631 0.4722 -0.1793 -0.1974;0.493 -0.7104 0.5022 -2.1837;0 0 0 1];
             % femur_digitised = [-0.2377 -0.2368 -2.2043 -0.2224 -0.1579 -2.1631;-0.2953 -0.2022 -2.1329 -0.2969 -0.1988 -2.1578;-0.2991 -0.2285 -2.1525 -0.2913 -0.2157 -2.1356];
             % femur = landmarks(femur_digitised);
@@ -58,7 +58,7 @@ classdef CalculateKinematics < matlab.unittest.TestCase
             %     visualise_matrix(gTf0_left_handed);     legend(["Correct","Simvitro","Correct => Left-hand"]);
             % end
             % hold off; axis equal;
-        end
+        % end
         function digitisation_right(test_case)
             JCS_digitised.T_Sensor1_RB1 = [0.1097 -0.5219 -0.8459 -0.2301;0.8631 0.4722 -0.1793 -0.1974;0.493 -0.7104 0.5022 -2.1837;0 0 0 1];
             femur_digitised = [-0.2377 -0.2368 -2.2043 -0.2224 -0.1579 -2.1631;-0.2953 -0.2022 -2.1329 -0.2969 -0.1988 -2.1578;-0.2991 -0.2285 -2.1525 -0.2913 -0.2157 -2.1356];
@@ -69,15 +69,15 @@ classdef CalculateKinematics < matlab.unittest.TestCase
             gTf = defineBodyFixedFrameFemur(femur, is_right_knee);
             test_case.assertEqual(JCS_digitised.T_Sensor1_RB1, gTf, 'AbsTol', 1e-3)
 
-            figure;
-            visualise_matrix(JCS_digitised.T_Sensor1_RB1);
-            hold on;
-            visualise_matrix(gTf);
-            legend(["Simvitro", "From digitiser"]);
-            title("Digitisations. Expect complete overlap");
+            % figure;
+            % visualise_matrix(JCS_digitised.T_Sensor1_RB1);
+            % hold on;
+            % visualise_matrix(gTf);
+            % legend(["Simvitro", "From digitiser"]);
+            % title("Digitisations. Expect complete overlap");
         end
 
-        function reconstruction_left(test_case)
+        % function reconstruction_left(test_case)
             % if ~is_right_knee
             %     gTr_right_handed = mat_to_left_handed(gTr_right_handed);
             %     gTf0 = mat_to_left_handed(gTf0);
@@ -85,7 +85,7 @@ classdef CalculateKinematics < matlab.unittest.TestCase
             %     rTee = mat_to_left_handed(rTee);
             %     gTr = mat_to_left_handed(gTr);
             % end
-        end
+        % end
 
         function reconstruction_right(test_case)
             % Reconstructed from digitiser
@@ -104,12 +104,12 @@ classdef CalculateKinematics < matlab.unittest.TestCase
             eeTt0 = (gTr * rTee_neutral) \ gTt0;
 
             figure;
-            visualise_matrix(eeTt);
-            hold on;
             visualise_matrix(S2_T_RB2opt * RB2opt_T_RB2orig);
+            hold on;
+            visualise_matrix(eeTt);
 
             visualise_matrix(eeTt0);
-            legend(["Tibia in end-effector", "Recreation", "Recreation from neutral position"]);
+            legend(["Simvitro", "Recreation", "Recreation from neutral position"]);
             view(30, 45); grid on; axis equal; hold off;
         end
     end

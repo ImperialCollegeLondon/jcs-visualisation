@@ -1,5 +1,5 @@
 function transform = coordinate2matrix(data, right)
-    % Expects DATA to have fields X,Y,Z,ROLL,PITCH,YAW, XYZ in meters; angles in degrees.
+    % Expects DATA to have fields X,Y,Z,ROLL,PITCH,YAW, XYZ in mm; angles in degrees.
 
     translation = repmat(eye(4), 1, 1, height(data));
     Qx = repmat(eye(4), 1, 1, height(data));

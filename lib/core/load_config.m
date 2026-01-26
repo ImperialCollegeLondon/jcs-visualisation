@@ -40,12 +40,12 @@ function [is_right_knee, state, setup, transforms] = load_config(path)
     position_offset = state.JCS.Position_Offset; %Neutral position offset, defined as the zero point to calculate kinematics
 
     offset = table();
-    offset.medial     = position_offset(1)*1000; 
-    offset.posterior     = position_offset(2)*1000;
-    offset.superior     = position_offset(3)*1000;
-    offset.flexion  = position_offset(4); 
-    offset.valgus = position_offset(5);
-    offset.internal_rotation   = position_offset(6);
+    offset.medial = position_offset(1)*1000; 
+    offset.posterior = position_offset(2)*1000;
+    offset.superior = position_offset(3)*1000;
+    offset.flexion = rad2deg(position_offset(4)); 
+    offset.valgus = rad2deg(position_offset(5));
+    offset.internal = rad2deg(position_offset(6));
 
     transforms.position_offset = offset;
     % transforms.position_offset = [position_offset(1:3)*1000; rad2deg(position_offset(4:6))];

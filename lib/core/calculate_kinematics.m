@@ -22,37 +22,6 @@ function output = calculate_kinematics(tdms, transforms, config, is_right_knee)
 
     [RB1_T_RB2, RB1opt_T_RB2opt] = calculate_relative_motion(W1_T_W2, W2_T_S2, S1_T_W1, S1_T_RB1opt, S2_T_RB2opt, RB2opt_T_RB2orig, RB1opt_T_RB1orig);
 
-    % %% From scratch
-    % gTr_right_handed = transforms.gTr;
-    % gTf0 = transforms.from_digitiser.gTf0;
-    % gTt0 = transforms.from_digitiser.gTt0;
-    % rTee = W2_T_S2;
-    % gTr = W1_T_W2;
-    % 
-    % if ~is_right_knee
-    %     gTr_right_handed = mat_to_left_handed(gTr_right_handed); 
-    %     gTf0 = mat_to_left_handed(gTf0); 
-    %     gTt0 = mat_to_left_handed(gTt0); 
-    %     rTee = mat_to_left_handed(rTee);
-    %     gTr = mat_to_left_handed(gTr);
-    % end
-    % 
-    % rTee_neutral = transforms.robot_position_neutral;
-    % 
-    % assert(all(gTr_right_handed == gTr, "all"), "W1_T_W2 should be right-handed. Use 'with fiducials'");
-    % 
-    % eeTt = (gTr * rTee(:, :, 1)) \ gTt0;
-    % eeTt0 = (gTr * rTee_neutral) \ gTt0;
-    % 
-    % figure;
-    % visualise_matrix(eeTt);
-    % hold on;
-    % visualise_matrix(S2_T_RB2opt * RB2opt_T_RB2orig);
-    % 
-    % visualise_matrix(eeTt0);
-    % legend(["Tibia in end-effector", "Recreation", "Recreation from neutral position"]);
-    % view(30, 45); grid on; axis equal; hold off;
-
     %% Prepare output
     name = string(data.specimen);
     state = string(data.state);
@@ -74,7 +43,10 @@ function output = calculate_kinematics(tdms, transforms, config, is_right_knee)
     robot_pos_arr = unwrap(table2array(robot_pos));
     output.add_data("robot_pos", array2table(robot_pos_arr, "VariableNames", robot_pos.Properties.VariableNames));
     kinematics = rotationsAndTranslations(RB1opt_T_RB2opt, is_right_knee);
-    output.add_data("kinematics_opt", kinematics);
+    kinematics.medial = kinematics.medial * 1000;
+    kinematics.superior = kinematics.superior * 1000;
+    kinematics.posterior = kinematics.posterior * 1000;
+    output.add_data("kinematics_opt", kinematics - position_offset);
     output.add_data("kinematics_orig", rotationsAndTranslations(RB1_T_RB2, is_right_knee));
    
     output.add_transforms("tTf", pageinv(RB1opt_T_RB2opt));
@@ -92,6 +64,4 @@ function output = calculate_kinematics(tdms, transforms, config, is_right_knee)
     % output.RB1opt_T_RB1orig = transforms.RB1opt_T_RB1orig; %foTf
     % output.kinematics.flexion = transforms.shift_flex(output.kinematics.flexion); % Offset so extension is 0 deg
     % output.error = output.kinematics - JCS_raw.translations.actual;
-
-    keyboard
 end

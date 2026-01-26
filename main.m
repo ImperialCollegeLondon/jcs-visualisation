@@ -22,7 +22,7 @@ experiment = Experiment(root, config);
 
 %%
 % experiment.visualise_digitisation();
-control = "UKA_w_ACL";
+control = "Native";
 experiment.add_end_effector_correction(control);
 experiment.correct_end_effector();
 

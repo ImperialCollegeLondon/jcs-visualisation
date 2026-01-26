@@ -1,7 +1,8 @@
-function self = add_end_effector_correction(self, control_name)
+function self = add_end_effector_correction(self, control_name, forced_angle)
     arguments
         self Experiment
         control_name {mustBeText}
+        forced_angle = [];
     end
     all_trajectory_sets = self.RawTrajectorySets;
     specimens = unique([all_trajectory_sets.specimen]);
@@ -27,9 +28,13 @@ function self = add_end_effector_correction(self, control_name)
         plots = gobjects(1, numel(states));
         for st = 1:numel(states)
             state = states(st);
-            rTt = trajectory_sets(st).JCS.JCS_digitised.T_Sensor2_RB2;
-            control_rTt = control.JCS.JCS_digitised.T_Sensor2_RB2;
+            rTt = trajectory_sets(st).JCS.JCS.Initial_T_Sen2_RB2; % Equivalent to JCS_digitised.T_Sensor2_RB2;
+            control_rTt = control.JCS.JCS.Initial_T_Sen2_RB2; % Equivalent to JCS_digitised.T_Sensor2_RB2;
             theta = get_angle(rTt, control_rTt);
+
+            if ~isempty(forced_angle)
+                theta = forced_angle;
+            end
 
             mat = eye(4);
             mat(1,1) = cos(theta);
