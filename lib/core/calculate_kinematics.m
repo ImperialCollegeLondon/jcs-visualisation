@@ -1,5 +1,12 @@
 function output = calculate_kinematics(tdms, transforms, config, is_right_knee)
-    % Get data
+    %
+    % S1: Sensor 1 (Certus)
+    % S2: Sensor 2 (Load Cell/Robot end effector)
+    % W1: World 1 (Certus world coordinate system)
+    % W2: World 2 (Robot world coordinate system)
+    % RB1: Rigid Body 1 (Femur)
+    % RB2: Rigid Body 2 (Tibia)
+
     data = extract_tdms(tdms, config);
 
     % Get important transforms from config
@@ -20,7 +27,9 @@ function output = calculate_kinematics(tdms, transforms, config, is_right_knee)
     %% calculate transform from TIBIA (RB2) to FEMUR (RB1).
     % i.e., Tibia in femoral frame of reference.
 
+
     [RB1_T_RB2, RB1opt_T_RB2opt] = calculate_relative_motion(W1_T_W2, W2_T_S2, S1_T_W1, S1_T_RB1opt, S2_T_RB2opt, RB2opt_T_RB2orig, RB1opt_T_RB1orig);
+
 
     %% Prepare output
     name = string(data.specimen);
@@ -49,8 +58,18 @@ function output = calculate_kinematics(tdms, transforms, config, is_right_knee)
     output.add_data("kinematics_opt", kinematics - position_offset);
     output.add_data("kinematics_orig", rotationsAndTranslations(RB1_T_RB2, is_right_knee));
    
-    output.add_transforms("tTf", pageinv(RB1opt_T_RB2opt));
+    output.add_transforms("fTt", RB1opt_T_RB2opt);
     output.add_transforms("rTt", S2_T_RB2opt);
+
+
+
+    fTt = RB1_T_RB2;
+    gTf0 = S1_T_RB1opt * RB1opt_T_RB1orig;
+    gTt = pagemtimes(gTf0, fTt);
+
+    gTtt = transforms.landmarks.tibia_digitisation.pre_multiply(gTt);
+
+    output.add_landmark("tibia", gTtt);
     
 
     % output.add_data("reconstructed", rotationsAndTranslations(fTt, is_right_knee));

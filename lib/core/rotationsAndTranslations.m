@@ -6,7 +6,7 @@ end
 %Takes a transformation matrix and outputs rotations and translations
 R = T;
 R(1:3, 4, :) = 0; %T is translation of the femur to the tibia in the femoral reference frame
-Tl=pagemldivide(R, T);%Tl is translation of the femur to the tibia in the tibial reference frame
+Tl=pagemldivide(R, T);%Tl is translation of the tibia to the femur in the femoral reference frame
 
 
 %RotationMatrixSymbolic.m is useful for seeing full rotation matricies and
@@ -30,5 +30,9 @@ motion.internal = rad2deg(unwrap(squeeze(Rz)));
 motion.medial = squeeze(Tl(1,4,:)); 
 motion.posterior = squeeze(Tl(2,4,:));
 motion.superior = squeeze(Tl(3,4,:));
+
+% motion.external = -motion.internal; % Simvitro defaults to internal rotation being positive
+% motion.lateral= -motion.medial; % Simvitro defaults to medial translation being positive
+% motion.anterior= -motion.posterior; % Simvitro defaults to posterior translation being positive
 end
 

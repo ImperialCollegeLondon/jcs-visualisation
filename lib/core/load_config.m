@@ -54,4 +54,7 @@ function [is_right_knee, state, setup, transforms] = load_config(path)
 
 
     transforms.gTr = setup.DefineRobotCoordinateSystem.T_WORLD1_ROB;
+
+    transforms.landmarks.tibia_digitisation = Landmark(state.JCS.Collected_Points_Rigid_Body_2);
+    transforms.landmarks.femur_digitisation = Landmark(state.JCS.Collected_Points_Rigid_Body_1);
 end
