@@ -49,7 +49,7 @@ Rz(2, 1, :) = sind(yaw);
 Rz(2, 2, :) = cosd(yaw);
 
 
-rot = pagemtimes(Rz, pagemtimes(Ry, Rx));
+rot = pagemtimes(Rx, pagemtimes(Ry, Rz));
 
 trans = identity_mat(n);
 trans(1:3, 4, :) = XYZ';
