@@ -1,3 +1,4 @@
+function config = generate_config()
 config.visualise_digitisation = true; % Plots the landmark digitisation
 %% Important post-processing definitions
 % These are sensible defaults.
@@ -28,3 +29,4 @@ config.debug = true;
 
 warning('off', 'backtrace'); warning('off', 'MATLAB:MKDIR:DirectoryExists');
 % set(0,'defaulttextinterpreter','latex');
+end
