@@ -24,22 +24,23 @@ function plots = visualise_digitisation(obj)
 
             hold on; axis square;
 
-            t_certus = landmarks(data.JCS.Collected_Points_Rigid_Body_2);
-            t = pre_multiply(t_certus, inv(data.JCS.T_World1_World2));
-            f_certus = landmarks(data.JCS.Collected_Points_Rigid_Body_1);
-            f = pre_multiply(f_certus, inv(data.JCS.T_World1_World2));
-            [plots, colour] = visualise_landmark(to_mm(t), to_mm(f), is_right_knee, state, "-", colour);
+            tibia_digitisation = landmarks(data.JCS.Collected_Points_Rigid_Body_2);
+            tibia = pre_multiply(tibia_digitisation, inv(data.JCS.T_World1_World2));
+            femur_digitisation = landmarks(data.JCS.Collected_Points_Rigid_Body_1);
+            femur = pre_multiply(femur_digitisation, inv(data.JCS.T_World1_World2));
+            [plots, colour] = visualise_landmark(to_mm(tibia), to_mm(femur), is_right_knee, state, "-", colour);
 
-            if any(data.JCS.T_RB2_OPT_RB2_Orig ~= eye(4), "all")
-                tTopt = data.JCS.T_RB2_OPT_RB2_Orig;
-                tTopt(1:3, 4) = tTopt(1:3, 4); 
-                t_opt = post_multiply(t, tTopt);
-
-                fTopt = data.JCS.T_RB1_OPT_RB1_Orig;
-                fTopt(1:3, 4) = fTopt(1:3, 4); 
-                f_opt = post_multiply(f, fTopt);
-                visualise_landmark(to_mm(t_opt), to_mm(f_opt), is_right_knee, state,  ":", colour);
-            end
+            % is_optimised = any(data.JCS.T_RB2_OPT_RB2_Orig ~= eye(4), "all");
+            % if is_optimised
+            %     tTopt = data.JCS.T_RB2_OPT_RB2_Orig;
+            %     tTopt(1:3, 4) = tTopt(1:3, 4); 
+            %     t_opt = post_multiply(tibia, tTopt);
+            %
+            %     fTopt = data.JCS.T_RB1_OPT_RB1_Orig;
+            %     fTopt(1:3, 4) = fTopt(1:3, 4); 
+            %     f_opt = post_multiply(femur, fTopt);
+            %     visualise_landmark(to_mm(t_opt), to_mm(f_opt), is_right_knee, state,  ":", colour);
+            % end
             legend;
             grid on;
             hold off;
@@ -51,15 +52,15 @@ function plots = visualise_digitisation(obj)
 end
 
 
-function res = pre_multiply(rb, t)
-    res.lateral = t * rb.lateral;
-    res.medial = t * rb.medial;
-    res.distal = t * rb.distal;
+function res = pre_multiply(rigid_body, transform)
+    res.lateral = transform * rigid_body.lateral;
+    res.medial = transform * rigid_body.medial;
+    res.distal = transform * rigid_body.distal;
 end
-function res = post_multiply(rb, t)
-    res.lateral = rb.lateral' * t;
-    res.medial  = rb.medial' * t;
-    res.distal  = rb.distal' * t;
+function res = post_multiply(rigid_body, transform)
+    res.lateral = rigid_body.lateral' * transform;
+    res.medial  = rigid_body.medial' * transform;
+    res.distal  = rigid_body.distal' * transform;
 end
 
 function res = to_mm(rb)

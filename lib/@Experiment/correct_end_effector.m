@@ -45,7 +45,7 @@ for sp = 1:numel(specimens)
                 rxryrz = [datum.flexion, datum.valgus, datum.internal_rotation];
 
                 mat = findTrackerFixedFrames(rxryrz, xyz);
-                corrected_mat = pagemtimes(mat, correction_matrix);
+                corrected_mat = pagemtimes(correction_matrix, mat);
 
                 motion = rotationsAndTranslations(corrected_mat, is_right_knee);
 
