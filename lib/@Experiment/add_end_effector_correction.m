@@ -1,7 +1,8 @@
-function self = add_end_effector_correction(self, control_name)
+function self = add_end_effector_correction(self, control_name, forced_angle)
     arguments
         self Experiment
         control_name {mustBeText}
+        forced_angle = [];
     end
     all_trajectory_sets = self.RawTrajectorySets;
     specimens = unique([all_trajectory_sets.specimen]);
@@ -27,9 +28,16 @@ function self = add_end_effector_correction(self, control_name)
         plots = gobjects(1, numel(states));
         for st = 1:numel(states)
             state = states(st);
-            rTt = trajectory_sets(st).JCS.JCS_digitised.T_Sensor2_RB2;
-            control_rTt = control.JCS.JCS_digitised.T_Sensor2_RB2;
-            theta = get_angle(rTt, control_rTt);
+            rTt = trajectory_sets(st).JCS.JCS.Initial_T_Sen2_RB2; % Equivalent to JCS_digitised.T_Sensor2_RB2;
+            control_rTt = control.JCS.JCS.Initial_T_Sen2_RB2; % Equivalent to JCS_digitised.T_Sensor2_RB2;
+            theta = get_angle(control_rTt, rTt);
+
+            if ~isempty(forced_angle)
+                theta = deg2rad(forced_angle);
+            end
+
+            plots(st) = visualise_matrix(rTt);
+
 
             mat = eye(4);
             mat(1,1) = cos(theta);
@@ -37,27 +45,27 @@ function self = add_end_effector_correction(self, control_name)
             mat(1,2) = -sin(theta);
             mat(2,2) = cos(theta);
 
-            correction_matrix{i} = mat;
+            correction_matrix{i} = rTt \ mat * rTt; % From end-effector CS to tibial CS.
 
 
-            rTt_corrected = rTt * correction_matrix{i};
 
+            rTt_corrected = correction_matrix{i} * rTt;
 
             % Draw
             c_centre = control_rTt(1:3, 4);
-            start_point = c_centre + control_rTt(1:3, 2);
+            start_point = c_centre + rTt(1:3, 2);
             arc = draw_arc(c_centre, start_point, [0 0 1], theta(1), 50);
     
-            plots(st) = visualise_matrix(rTt);
-            visualise_matrix(rTt_corrected, ":");
+            corrected(st) = visualise_matrix(rTt_corrected, ":");
 
             hold on;
             plot3(arc(1, :), arc(2, :), arc(3, :), ':');
             hold off;
 
             i = i + 1;
+
         end
-        legend(plots, states);
+        legend(plots, state_regex_inv(states));
     end
     [self.RawTrajectorySets.correction_matrix] = deal(correction_matrix{:});
 end
@@ -72,15 +80,28 @@ function theta = get_angle(mat1, mat2)
     % 
     % q = quatmultiply(q2, conj(q1));
     % theta = quat2eul(q, 'ZYX');
-    v1 = mat1(1:3,1);
-    v2 = mat2(1:3,1);
+    % From http://www.boris-belousov.net/2016/12/01/quat-dist/
+    p = mat1(1:3, 1:3);
+    q = mat2(1:3, 1:3);
 
-    theta = acos(dot(v1 / norm(v1), v2 / norm(v2)));
+    R = p*q';
+
+    % Rotation about Z: Rz = 
+    % ( cos  -sin   0 ]
+    % [ sin  cos    0 ]
+    % [ 0    0      1 ]
+    % We can extract angle from finding calling atan on sin/cos, but the sign is ambiguous. So we use atan2. 
+    theta = atan2(R(2,1), R(1,1));
+
+    % v1 = mat1(1:3,1);
+    % v2 = mat2(1:3,1);
+    % 
+    % theta = acos(dot(v1 / norm(v1), v2 / norm(v2)));
 end
 
-function arc = draw_arc(center, start, axis, theta, n_points)
+function arc = draw_arc(centre, start, axis, theta, n_points)
     arguments
-        center (1,3)
+        centre (1,3)
         start (1,3)
         axis (1,3)
         theta (1,1)
@@ -88,7 +109,7 @@ function arc = draw_arc(center, start, axis, theta, n_points)
     end
 
     axis = axis / norm(axis); 
-    start = start - center; 
+    start = start - centre; 
     r = norm(start);
     start = start/r;
 
@@ -97,7 +118,21 @@ function arc = draw_arc(center, start, axis, theta, n_points)
 
     for i = 1:n_points
         % Rodrigues rotation formula
-        v = start*cos(t(i)) + cross(-axis, start)*sin(t(i)) + (-axis)*dot(-axis,start)*(1 - cos(t(i)));
-        arc(:,i) = center(:) + v(:);
+        v = start*cos(t(i)) + cross(axis, start)*sin(t(i)) + (axis)*dot(axis,start)*(1 - cos(t(i)));
+        arc(:,i) = centre(:) + v(:);
+    end
+
+    if abs(theta) > deg2rad(5)
+        v_end = arc(:, end) - centre(:);
+        tangent = cross(axis(:), v_end);
+        tangent = tangent/norm(tangent);
+        tangent = tangent * sign(theta);
+        arrow_length = 0.2 * r;
+        arrow_vec = tangent * arrow_length;
+        arrow_base = arc(:,end);
+        hold on;
+        quiver3(arrow_base(1), arrow_base(2), arrow_base(3), ...
+            arrow_vec(1), arrow_vec(2), arrow_vec(3), ...
+            0, 'LineWidth', 2, 'MaxHeadSize', 2);
     end
 end

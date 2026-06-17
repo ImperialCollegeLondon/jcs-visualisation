@@ -1,3 +1,4 @@
+function config = generate_config()
 config.visualise_digitisation = true; % Plots the landmark digitisation
 %% Important post-processing definitions
 % These are sensible defaults.
@@ -22,9 +23,10 @@ config.interspecimen_smooth_diff = @(x) smoothdata(x, "gaussian", 10); % Smooth 
 
 
 config.intact_name = "Native"; % Name for the native state. Used for interspecimen comparisons
-config.debug = false;
+config.debug = true;
 
 %% Other nice stuff
 
 warning('off', 'backtrace'); warning('off', 'MATLAB:MKDIR:DirectoryExists');
 % set(0,'defaulttextinterpreter','latex');
+end

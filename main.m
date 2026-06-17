@@ -22,11 +22,18 @@ experiment = Experiment(root, config);
 
 %%
 % experiment.visualise_digitisation();
-control = "UKA+ACL";
+control = "Native";
 experiment.add_end_effector_correction(control);
+experiment.correct_end_effector();
 
 %%
 trajectories = experiment.Trajectories;
+
+trajectories...
+    .path()...
+    .filter_signal("jcs")...
+    .split_flex_ext()...
+    .plot();
 %% SPSS
 % spss = trajectories.ap().split_flex_ext().filter_signal("jcs").spss(); % Optional arg value between angles. Default 10.
 % spss.print_to_file(root);
